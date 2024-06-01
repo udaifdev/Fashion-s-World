@@ -1,0 +1,180 @@
+<%-include('adminHead.ejs') %>
+
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order detail</h2>
+                <p>Details for Order ID : &nbsp;&nbsp; <%= order.orderId %></p>
+            </div>
+        </div>
+        <div class="container mt-5 text-center">
+            <div class="row">
+                <div class="col-12 col-md-10 hh-grayBox mx-auto text-center pt-4 pb-4">
+                    <div class="order-tracking-flow">
+                        <% if (order.status === 'pending') { %>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p class="bg-primary rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Ordered
+                                </p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p >Processing</p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p >Shipped</p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p >Delivered</p>
+                            </div>
+                        <% } else if (order.status === 'processing') { %>
+                            <!-- Adjusted alignment -->
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p >Ordered</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p class="bg-primary rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Processing
+                                </p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p >Shipped</p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p >Delivered</p>
+                            </div>
+                        <% } else if (order.status === 'shipped') { %>
+                            <!-- Adjusted alignment -->
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p >Ordered</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p >Processing</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p class="bg-primary rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Shipped
+                                </p>
+                            </div>
+                            <div class="order-tracking-item">
+                                <span class="is-complete"></span>
+                                <p  >Delivered</p>
+                            </div>
+                        <% } else if (order.status === 'delivered') { %>
+                            <!-- Adjusted alignment -->
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p >Ordered</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p >Processing</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p  >Shipped</p>
+                            </div>
+                            <div class="order-tracking-item completed">
+                                <span class="is-complete"></span>
+                                <p class="bg-primary rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Delivered
+                                </p>
+                            </div>
+                        <% } else if (order.status === 'Cancelled') { %>
+                            <!-- Adjusted alignment -->
+                            <div class="order-tracking-item completed cancelled">
+                                <span class="is-complete"></span>
+                                <p >Ordered</p>
+                            </div>
+                            <div class="order-tracking-item completed cancelled">
+                                <span class="is-complete"></span>
+                                <p  >Cancel Requested</p>
+                            </div>
+                            <div class="order-tracking-item completed cancelled">
+                                <span class="is-complete"></span>
+                                <p >Accepted</p>
+                            </div>
+                            <div class="order-tracking-item completed cancelled">
+                                <span class="is-complete"></span>
+                                <p class="bg-primary rounded px-3 text-white">
+                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %><br>Cancelled
+                                </p>
+                            </div>
+                        <% } else if (order.status === 'paymentPending') { %>
+                            <div>
+                                <h2 class="text-danger" >Order is Pending due to Unfinished Payment.</h2>
+                            </div>
+                        <% } else { %>
+                            <div>
+                                <h2 >Unknown Order Status</h2>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        
+            <h5 >Order ID: <span id="orderId"><%= order.orderId %></span></h5>
+            <p class="mb-4">Delivery Address: <%= order.address[0].save_as %>, <%= order.address[0].housename %>, <%= order.address[0].city %>, <%= order.address[0].pincode %></p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product Image</th>
+                            <th>Size</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% order.items.forEach(item => { %>
+                        <tr>
+                            <td class="align-middle"><%= item.productId.name %></td>
+                            <td class="align-middle"><img src="/<%= item.productId.image[0] %>" width="85" alt="image"></td>
+                            <td class="align-middle"><%= item.size %></td>
+                            <td class="align-middle"><%= item.quantity %></td>
+                            <td class="align-middle"><%= item.price %></td>
+                            <td class="align-middle"><%= item.quantity * item.price %></td>
+                            <td class="align-middle"><%= order.payment %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                    
+                </table>
+                <div class="mt-5 pt-4 ">
+                  <h4 class="">Total Amount  <span style="font-size: x-small;">(with delivered charge)</span> </h4>
+                    ₹<span id="total" class="font-weight-bold text-size-large text-right"><%= order.amount %></span>
+                </div>
+            </div>
+        
+    </section> <!-- content-main end// -->
+
+
+    
+    </main>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Scr/public/ipt -->
+    <script src="/public/assets/js/main.js" type="text/javascript"></script>
+    </body>
+
+
+    <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+
+    </html>

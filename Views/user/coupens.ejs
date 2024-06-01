@@ -1,0 +1,221 @@
+ 
+
+  <%-include('navbar')-%>
+
+
+  <style>
+     
+    .card {
+        transition: transform 0.2s;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card-header {
+        font-size: 1.25rem;
+        font-weight: bold;
+        background-color: #7a803c;
+        color: rgb(255, 255, 255);
+        border-bottom: none;
+    }
+    .card-body {
+        background-color: #fdfd96;
+        padding: 1.5rem;
+    }
+    .card-body p {
+        margin-bottom: 0.5rem;
+    }
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: none;
+    }
+    .btn-primary {
+        background-color: #4caf50;
+        border-color: #4caf50;
+    }
+    .btn-primary:hover {
+        background-color: #81c585;
+        border-color: #45a049;
+    }
+    .alert-danger {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .card-title {
+        margin-bottom: 0;
+    }
+</style>
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Coupon's</h4>
+                        <div class="breadcrumb__links">
+                            <a href="/profile">Profile</a>
+                            <span>coupons</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+   
+
+    <div class="container my-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            <% if (locals.coupons && locals.coupons.length > 0) { %>
+                <% locals.coupons.forEach(function(data) { %>
+                    <div class="col">
+                        <div class="card border border-dark shadow-sm">
+                            <div class="card-header text-center text-white  border-bottom-0">
+                                <h5 class="card-title mb-0"><%= data.couponCode %></h5>
+                            </div>
+                            <div class="card-body bg-light">
+                                <p class="card-text"><strong>Type:</strong> <%= data.type %></p>
+                                <p class="card-text"><strong>Minimum Price:</strong> ₹<%= data.minimumPrice %></p>
+                                <p class="card-text"><strong>Discount:</strong>
+                                    <% if(data.type == 'flatDiscount') { %>
+                                        ₹<%= data.discount %>
+                                    <% } %>
+                                    <% if(data.type == 'percentageDiscount') { %>
+                                        <%= data.discount %>%
+                                    <% } %>
+                                </p>
+                                <p class="card-text"><strong>Max Redeemable:</strong> ₹<%= data.maxRedeem %></p>
+                                <p class="card-text"><strong>Expiry:</strong> <%= new Date(data.expiry).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) %></p>
+                            </div>
+                            <div class="card-footer bg-white border-top-0 text-center">
+                                <button class="btn btn-primary" onclick="copyCouponCode('<%= data.couponCode %>')">Copy Coupon Code</button>
+                            </div>                        
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col text-center">
+                    <div class="alert alert-danger p-4" role="alert">
+                        <h5>No coupons available.</h5>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="#"><img src="img/payment.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Clothing Store</a></li>
+                            <li><a href="#">Trending Shoes</a></li>
+                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Delivary</a></li>
+                            <li><a href="#">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <script>
+        function copyCouponCode(code) {
+            var tempInput = document.createElement("input");
+            tempInput.value = code;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            Swal.fire({
+                icon: 'success',
+                title: 'Coupon Code Copied!',
+                text: 'Coupon code ' + code + ' has been copied to the clipboard.',
+            });
+        }
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

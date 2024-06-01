@@ -1,0 +1,141 @@
+<%- include('adminHead.ejs') %>
+
+<section class="content-main">
+    <div class="row">
+        <div class="col-9">
+            <div class="content-header">
+                <h1 class="mb-4">Update Coupons</h1>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="container form-container">
+                        <div class="col-lg-9">
+                            <section class="content-body p-xl-4">
+                                <form id="updateCouponForm" action="/admin/updateCoupon" method="post" onsubmit="return validateForm()">
+                                    <div class="row mb-4">
+                                        <label for="couponCode" class="col-lg-3 col-form-label">Coupon Code*</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" class="form-control" id="couponCode" name="couponCode"
+                                                value="<%=coupon.couponCode%>" required placeholder="Type here">
+                                            <span id="couponCodeError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label for="couponType" class="col-lg-3 col-form-label">Coupon Type*</label>
+                                        <div class="col-lg-9">
+                                            <small class="text-muted font-sm mb-10">Select</small>
+                                            <select class="form-select" id="couponType" name="couponType" onchange="updateMaxRedeem()" required>
+                                                <option value="percentageDiscount" <%= coupon.type === 'percentageDiscount' ? 'selected' : '' %>>Percentage Discount</option>
+                                                <option value="flatDiscount" <%= coupon.type === 'flatDiscount' ? 'selected' : '' %>>Flat Discount</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label for="minimumPrice" class="col-lg-3 col-form-label">Minimum Price</label>
+                                        <div class="col-lg-4">
+                                            <input type="number" class="form-control" id="minimumPrice" name="minimumPrice"
+                                                value="<%=coupon.minimumPrice%>" required placeholder="000">
+                                            <span id="minimumPriceError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label for="discount" class="col-lg-3 col-form-label">Discount Price</label>
+                                        <div class="col-lg-4">
+                                            <input type="number" class="form-control" id="discount" name="discount" oninput="updateMaxRedeem()"
+                                                value="<%=coupon.discount%>" required placeholder="000">
+                                            <span id="discountError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label for="maxRedeem" class="col-lg-3 col-form-label">Max Redeemable Amount</label>
+                                        <div class="col-lg-4">
+                                            <input type="number" class="form-control" id="maxRedeem" name="maxRedeem"
+                                                value="<%=coupon.maxRedeem%>" required placeholder="000">
+                                            <span id="maxRedeemError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
+                                        <label for="expiry" class="col-lg-3 col-form-label">Expiry</label>
+                                        <div class="col-lg-4">
+                                            <input type="date" class="form-control" id="expiry" name="expiry"
+                                                value="<%= new Date(coupon.expiry).toISOString().slice(0, 10) %>" required>
+                                            <span id="expiryError" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" id="couponId" name="couponId" value="<%= coupon._id %>">
+                                    <button class="btn btn-primary" type="submit">Update Coupon</button>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+
+                    <script>
+                        function validateForm() {
+                            var couponCode = document.getElementById('couponCode').value;
+                            var minimumPrice = document.getElementById('minimumPrice').value;
+                            var discount = document.getElementById('discount').value;
+                            var maxRedeem = document.getElementById('maxRedeem').value;
+                            var expiry = document.getElementById('expiry').value;
+
+                            var couponCodeError = document.getElementById('couponCodeError');
+                            var minimumPriceError = document.getElementById('minimumPriceError');
+                            var discountError = document.getElementById('discountError');
+                            var maxRedeemError = document.getElementById('maxRedeemError');
+                            var expiryError = document.getElementById('expiryError');
+
+                            couponCodeError.innerHTML = '';
+                            minimumPriceError.innerHTML = '';
+                            discountError.innerHTML = '';
+                            maxRedeemError.innerHTML = '';
+                            expiryError.innerHTML = '';
+
+                            if (!/^[a-zA-Z0-9]+$/.test(couponCode)) {
+                                couponCodeError.innerHTML = 'Coupon code must be alphanumeric without spaces.';
+                                return false;
+                            }
+
+                            if (isNaN(discount) || parseFloat(discount) <= 0) {
+                                discountError.innerHTML = 'Discount must be a positive number.';
+                                return false;
+                            }
+
+                            if (isNaN(minimumPrice) || parseFloat(minimumPrice) <= 0) {
+                                minimumPriceError.innerHTML = 'Minimum price must be a positive number.';
+                                return false;
+                            }
+
+                            if (isNaN(maxRedeem) || parseFloat(maxRedeem) <= 0) {
+                                maxRedeemError.innerHTML = 'Max redeemable amount must be a positive number.';
+                                return false;
+                            }
+
+                            return true;
+                        }
+
+                        function updateMaxRedeem() {
+                            var couponType = document.getElementById("couponType").value;
+                            var maxRedeemInput = document.getElementById("maxRedeem");
+                            var discountInput = document.getElementById("discount");
+                            var discountValue = parseFloat(discountInput.value);
+
+                            if (couponType === "flatDiscount") {
+                                maxRedeemInput.value = discountValue;
+                                maxRedeemInput.readOnly = true;
+                            } else if (couponType === "percentageDiscount") {
+                                maxRedeemInput.readOnly = false;
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

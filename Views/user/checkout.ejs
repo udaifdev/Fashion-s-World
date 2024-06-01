@@ -1,0 +1,884 @@
+<%-include('navbar')-%>
+
+<style>
+/* Hide default radio button */
+.radio-container input[type="radio"] {
+  display: none;
+}
+
+/* Style for custom square radio button */
+.radio-container {
+  display: inline-block;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.radio-container input[type="radio"] + .radio {
+  border: 2px solid #aaa;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  position: absolute;
+  cursor: pointer;
+}
+
+.radio-container input[type="radio"]:checked + .radio::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  display: block;
+  background: #ff0000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.form-check-input {
+  width: 20px;
+  height: 20px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid rgb(56, 56, 56);
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-left: 1px;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.form-check-input:checked {
+  background-color: rgb(248, 25, 25);
+}
+
+.form-check-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 20px;
+  border: solid rgb(212, 14, 14);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.checkout__address-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.checkout__address-option {
+  border: 2px solid #e2e2e2;
+  border-radius: 5px;
+  padding: 10px;
+  width: calc(50% - 15px); /* 2 per row with gap considered */
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 1px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.checkout__address-option:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transform: translateY(-5px);
+}
+
+.checkout__address-option.selected {
+  border-color: #333;
+  background-color: #f5f5f5;
+}
+
+.checkout__address-details {
+  margin-bottom: 5px;
+}
+
+.checkout__address-details p {
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+
+.site-btn {
+  display: block;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkout__address-option h4 {
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (max-width: 768px) {
+  .checkout__address-option {
+    width: 100%;
+  }
+}
+
+</style>
+
+
+
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-option">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="breadcrumb__text">
+            <h4>Check Out</h4>
+            <div class="breadcrumb__links">
+              <a href="/">Home</a>
+              <a href="/shop">Shop</a>
+              <span>Check Out</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Breadcrumb Section End -->
+
+
+
+  <button onclick="openModal()" class="btn bg-dark text-white d-block mx-auto mt-3" style="border-radius: 10px;">
+    <h3> Click Available Coupons</h3>
+  </button>
+
+  <div id="couponModal" class="modal">
+    <div class="modal-content">
+      <span class="close ml-4 mt-2 mb-2 hover" onclick="closeModal()" style="cursor: pointer;">&times;</span>
+      <ul>
+        <% if(availableCoupons.length> 0) { %>
+          <% availableCoupons.forEach(coupon=> { %>
+            <li>
+              <div class="row">
+                <div class="col-3 text-dark ml-4">
+                  &nbsp;&nbsp;<%= coupon.couponCode %>
+                    <% if (coupon.type==="percentageDiscount" ) { %>
+                      <p class="ml-4">
+                        <%= coupon.discount %>% off on Rs.<%= coupon.minimumPrice %> purchase (Maximum
+                            Redeemable: <%= coupon.maxRedeem %>)
+                      </p><br>
+                      <% } else { %>
+                        <p class="ml-4">Flat Rs. <%= coupon.discount %> off on <%= coupon.minimumPrice %> purchase</p>
+                        <br>
+                        <% } %>
+                </div>
+                <div class="col-3 mt-2">
+                  <button onclick="copyToClipboard('<%= coupon.couponCode %>')" class="btn btn-primary">
+                    Copy Code
+                  </button>
+                </div>
+              </div>
+            </li>
+            <% }); %>
+              <% } else { %>
+                <p>No coupons available</p>
+                <% } %>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <!-- Checkout Section Begin -->
+  <section class="checkout spad">
+    <div class="container">
+      <div class="checkout__form">
+
+        <form id="orderform">
+
+          <div class="row">
+
+            <div class="col-lg-8 col-md-6">
+    <h6 class="checkout__title">Choose Your Delivery Address</h6>
+    <button class="site-btn m-3">
+        <a class="p-2" href="/addAddress">Add Address</a>
+    </button>
+    <div class="checkout__address-options">
+        <% if (addresses && addresses.length > 0) { %>
+            <% addresses.forEach((address, index) => { %>
+                <div class="checkout__address-option p-4">
+                    <label for="address<%= index + 1 %>">
+                        <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>" value="<%= index %>" data-address-id="<%= address._id %>">
+                        <h4 class="mb-3 ml-4"><%= address.save_as %></h4>
+                        <div class="checkout__address-details">
+                            <p><strong>Name:</strong> <%= address.name %></p>
+                            <p><strong>House/Flat No:</strong> <%= address.housename %></p>
+                            <p><strong>Street:</strong> <%= address.street %></p>
+                            <p><strong>City:</strong> <%= address.city %></p>
+                            <p><strong>Pin-code:</strong> <%= address.pincode %></p>
+                            <p><strong>State:</strong> <%= address.state %></p>
+                            <p><strong>Country:</strong> <%= address.country %></p>
+                        </div>
+                    </label>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <h4 class="p-3 mt-3">No addresses found.</h4>
+        <% } %>
+    </div>
+</div>
+
+            
+
+            <!-- ================================ Apply Coupon ========================================= -->
+            <div class="col-lg-4 col-md-6 text-white">
+              <div class="cart__discount">
+                <h6>Discount codes</h6>
+                <!-- Coupon code input form -->
+                <form>
+                  <label for="c_code" class="text-dark mb-3">Enter your coupon code if you have one.</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="c_code" placeholder="Coupon Code"
+                      aria-label="Coupon Code" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-dark" type="button" id="button-addon2" onclick="couponApply()">
+                        Apply
+                      </button>
+                    </div>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-dark" type="button" id="button-addon3" onclick="couponRevoke()">
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+
+
+              <div class="checkout__order text-white" style="background-color: #3d3d3d;">
+
+                <input type="hidden" id="pay" name="pay" value="0" />
+
+                <h4 class="order__title text-white">Your order</h4>
+                <div class="checkout__order__products text-white font-weight-bold display-2">Product <span
+                    class="h5">Total</span></div>
+                <% cartItems.forEach(item=> { %>
+                  <ul class="checkout__total__products text-white">
+                    <li class="text-white">
+                      <%= item.name %>
+                        <h6 class="badge badge-secondary">
+                          <%= item._doc.size %> X <%= item._doc.quantity %>
+                        </h6>
+                        <span class="text-white">₹ <%= item._doc.Product_total %></span>
+                    </li>
+                  </ul>
+                  <hr>
+                  <% }) %>
+
+                    <ul class="checkout__total__all ">
+                      <input type="hidden" name="cartId" value="<%= cart._id %> ">
+                      <input type="hidden" id="amount" name="amount" value="<%= cart.Cart_total %>">
+                      <input type="hidden" id="wallet" name="wallet" value="0" />
+
+                      <li class="text-white">Subtotal <span class="text-white" id="subt">₹ <%= cart.Cart_total %></span>
+                      </li>
+                      <li class="text-white">Discount <span class="text-white" id="dicprice">₹0</span></li>
+                      <li class="text-white wallet-row">wallet <span class="text-white" id="walletReduce">₹0</span></li>
+                      <li class="text-white">Delivery Charge <span class="text-white" id="deliveryCharge">₹ <%=
+                            deliveryCharge %></span></li>
+                      <li class="text-white">Total <span class="text-white" id="total">₹ <%= Cart_total %></span></li>
+                    </ul>
+
+                    <input type="Number" id="cart-total" value="<%= Cart_total %>" hidden>
+
+                    <div class="checkout__input__radio">
+                      <label for="cod" class="text-white">
+                        <div class="radio-container">
+                          <input type="radio" onclick="handlePaymentMethodSelection();handleRadio(this);" id="cod"
+                            name="payment_method" value="COD">
+                          <div class="radio"></div>
+                        </div>
+                        Cash on delivery
+                      </label>
+                    </div>
+                    <div class="checkout__input__radio">
+                      <label for="razorpay" class="text-white">
+                        <div class="radio-container">
+                          <input type="radio" onclick="handlePaymentMethodSelection();handleRadio(this)" id="razorpay"
+                            name="payment_method" value="upi">
+                          <div class="radio"></div>
+                        </div>
+                        UPI / Netbanking
+                      </label>
+                    </div>
+
+                    <div class="checkout__input__radio">
+                      <label for="test" class="text-white">
+                        <div class="radio-container">
+                          <input type="radio" onclick="handlePaymentMethodSelection();handleRadio(this);" id="test"
+                            name="payment_method" value="testingWallet">
+                          <div class="radio"></div>
+                        </div>
+                        Wallet
+                      </label>
+                    </div>
+
+                    <!-- <input type="hidden" id="payment_method" value=""> -->
+
+                    <button id="placeOrderBtn" class="site-btn bg-light text-dark" type="submit">
+                      PLACE ORDER
+                    </button>
+
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </section>
+  <!-- Checkout Section End -->
+
+  <!-- Footer Section Begin -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+          <div class="footer__about">
+            <div class="footer__logo">
+              <a href="#"><img src="img/footer-logo.png" alt=""></a>
+            </div>
+            <p>The customer is at the heart of our unique business model, which includes design.</p>
+            <a href="#"><img src="img/payment.png" alt=""></a>
+          </div>
+        </div>
+        <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+          <div class="footer__widget">
+            <h6>Shopping</h6>
+            <ul>
+              <li><a href="#">Clothing Store</a></li>
+              <li><a href="#">Trending Shoes</a></li>
+              <li><a href="#">Accessories</a></li>
+              <li><a href="#">Sale</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-6">
+          <div class="footer__widget">
+            <h6>Shopping</h6>
+            <ul>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Payment Methods</a></li>
+              <li><a href="#">Delivary</a></li>
+              <li><a href="#">Return & Exchanges</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+          <div class="footer__widget">
+            <h6>NewLetter</h6>
+            <div class="footer__newslatter">
+              <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+              <form action="#">
+                <input type="text" placeholder="Your email">
+                <button type="submit"><span class="icon_mail_alt"></span></button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 text-center">
+          <div class="footer__copyright__text">
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            <p>Copyright ©
+              <script>
+                document.write(new Date().getFullYear());
+              </script>2020
+              All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                href="https://colorlib.com" target="_blank">Colorlib</a>
+            </p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Footer Section End -->
+
+  <!-- Search Begin -->
+  <div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+      <div class="search-close-switch">+</div>
+      <form class="search-model-form">
+        <input type="text" id="search-input" placeholder="Search here.....">
+      </form>
+    </div>
+  </div>
+  <!-- Search End -->
+
+
+
+
+  <script>
+    function handleRadio(radio) {
+      // Uncheck all other radio buttons with the same name
+      const radios = document.getElementsByName(radio.name);
+      radios.forEach(rb => {
+        if (rb !== radio) {
+          rb.checked = false;
+        }
+      });
+    }
+  </script>
+
+  <!-- ==================================================================================================== -->
+
+  <script>
+
+    function openModal() {
+      var modal = document.getElementById('couponModal');
+      modal.style.display = 'block';
+    }
+
+    function closeModal() {
+      var modal = document.getElementById('couponModal');
+      modal.style.display = 'none';
+    }
+
+    function copyToClipboard(couponCode) {
+      var tempInput = document.createElement('input');
+      tempInput.value = couponCode;
+      document.body.appendChild(tempInput);
+
+      tempInput.select();
+      document.execCommand('copy');
+
+      document.body.removeChild(tempInput);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Close the modal if the user clicks outside of it
+      window.addEventListener('click', function (event) {
+        var modal = document.getElementById('couponModal');
+        if (event.target === modal) {
+          closeModal();
+        }
+      });
+    });
+
+  </script>
+
+
+  <script>
+
+    function handlePaymentMethodSelection() {
+
+      console.log("handle_payment_method_selected {_________>>>________}  11");
+
+      const selectedPaymentMethod = document.querySelector(
+        'input[name="payment_method"]:checked'
+      );
+      if (selectedPaymentMethod) {
+        const hiddenInput = document.getElementById("pay");
+        hiddenInput.value = selectedPaymentMethod.value;
+      }
+    }
+    console.log("handle_payment_method_selected {_________>>>________}  22");
+
+    document.getElementById('placeOrderBtn').addEventListener('click', function (event) {
+      event.preventDefault();
+      proceedToOrder();
+    });
+
+    async function proceedToOrder() {
+      var selectedAddress = document.querySelector('input[name="address"]:checked');
+      var selectedPayment = document.querySelector('input[name="payment_method"]:checked');
+
+      console.log("handle_payment_method_selected {_________>>>________}  33");
+
+      if (!selectedAddress) {
+        console.log("Address not selected");
+        Swal.fire({
+          text: "Select the delivery address",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            title: "text-danger",
+            popup: "swal2-popup-custom",
+            confirmButton: "btn btn-danger",
+          },
+          showCancelButton: false,
+          showCloseButton: true,
+          showLoaderOnConfirm: false
+        });
+      } else if (!selectedPayment) {
+        console.log("Payment option not selected ------->");
+        Swal.fire({
+          text: "Select a Payment option",
+          icon: "error",
+          confirmButtonText: "OK",
+          customClass: {
+            title: "text-danger",
+            popup: "swal2-popup-custom",
+            confirmButton: "btn btn-danger",
+          },
+          showCancelButton: false,
+          showCloseButton: true,
+          showLoaderOnConfirm: false
+        });
+
+
+        // ======================================= upi ============================
+
+      } else if (selectedPayment.value == 'upi') {
+
+        console.log("upi reached ----------> ");
+
+        const amt = document.getElementById("total").textContent.trim();
+
+        console.log("amt reached ---------->  ", amt);
+
+        const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
+
+        console.log("amount reached ---------->  ", amount);
+
+        var options = {
+          key: 'rzp_test_Q0LnymZbvUcLVu',
+          amount: amount * 100,
+          currency: "INR",
+          name: "MaleFashion's",
+          description: "Test Transaction",
+          image: "img/logo.png",
+          order_id: orderId,
+          handler: function (response) {
+
+            console.log("option reached ---------->  ", options);
+
+            console.log("option response reached ---------->  ", response);
+
+            alert(response.razorpay_payment_id);
+
+            console.log("post reached ---------->  ", amount);
+
+            document.getElementById("amount").value = `${parseFloat(amount)}`;
+            document.getElementById("orderform").method = "post";
+            document.getElementById("orderform").action = "/order";
+            document.getElementById("orderform").submit();
+          },
+
+          theme: {
+            color: "#4285F4",
+          },
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on("payment.failed", function (response) {
+          const amountElement = document.getElementById("amount");
+          if (amountElement) {
+            Swal.fire({
+              title: 'Payment Failed',
+              text: 'There was an issue processing your payment.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                console.log('failed confirmed reached --------->  ');
+                document.getElementById("pay").value = "paymentPending";
+                amountElement.value = `${parseFloat(amount)}`;
+                document.getElementById("orderform").action = "/order";
+                document.getElementById("orderform").method = "post";
+                document.getElementById("orderform").submit();
+              }
+            });
+          } else {
+            console.error("Amount element not found .  -----------> ");
+          }
+        });
+        rzp1.open();
+        event.preventDefault();
+
+        var orderId;
+
+        console.error(" orderId .  -----------> 1 ", orderId);
+
+        $(document).ready(function () {
+          console.error(" orderId .  ----------->  2 ", orderId);
+          var settings = {
+            url: "/create/orderId",
+            method: "POST",
+            timeout: 0,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+              amount: parseFloat(amount) * 100,
+            }),
+          };
+
+          console.error(" orderId .  -----------> 3  ", orderId);
+
+          $.ajax(settings).done(function (response) {
+            orderId = response.orderId;
+            console.log(orderId);
+            $("button").show();
+          });
+        });
+
+        // ============================================================
+
+
+      } else if (selectedPayment.value == "COD") {
+
+        console.log("Cash on Delivery selected //////////////////////////");
+
+        const amt = document.getElementById("total").textContent.trim();
+        const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
+        console.log(" ejs check out amount =======>>>>>  ", amount);
+        if (amount > 1000) {
+          Swal.fire({
+            title: 'COD Not Available',
+            text: "Cash on Delivery Not available for order above ₹1000.",
+            icon: "error",
+            confirmButtonText: "OK",
+            customClass: {
+              title: "text-danger",
+              popup: "swal2-popup-custom",
+              confirmButton: "btn btn-danger",
+            },
+            showCancelButton: false,
+            showCloseButton: true,
+            showLoaderOnConfirm: false,
+          });
+          return false;
+        }
+        document.getElementById("orderform").action = "/order";
+        document.getElementById("orderform").method = "post";
+        document.getElementById("orderform").submit();
+        document.getElementById("total").innerText = `${amount}`;
+        document.getElementById("amount").value = `${amount}`;
+
+      }
+
+
+      // =========================== Wallet ===================================
+
+      else if (selectedPayment.value == 'testingWallet') {
+        console.log("reache to the wallet else if condion {{{{{{{{{{}}}}}}}}}} -------->>  ");
+        try {
+          const amt = document.getElementById("total").textContent.trim();
+          const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
+          const response = await fetch('/wallettransaction', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              amount: amount
+            })
+          });
+          const data = await response.json();
+          if (data.success) {
+            document.getElementById("amount").value = `${amount}`;
+            formsubmit(amount);
+          } else {
+            const discountRow = document.querySelector('.wallet-row');
+            discountRow.style.display = '';
+            document.getElementById("walletReduce").innerText = `${data.amount}`
+            document.getElementById("amount").value = `${amount}`;
+            const amount1 = document.getElementById("amount").value;
+            console.log(amount1);
+
+            document.getElementById("total").innerText = `₹${amount1 - data.amount}`;
+            document.getElementById("amount").value = `${amount1 - data.amount}`;
+            document.getElementById("test").value = `${data.amount}`;
+            Swal.fire({
+              text: "You Don't have Enough money in Wallet",
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                title: 'text-danger',
+                popup: 'swal2-popup-custom',
+                confirmButton: 'btn btn-danger'
+              },
+              showCancelButton: false,
+              showCloseButton: true,
+              showLoaderOnConfirm: false,
+              timer: 3000
+            });
+          }
+        } catch (error) {
+          console.error('An error has occured')
+        }
+        function formsubmit(amount) {
+          document.getElementById("pay").value = "wallet";
+          console.log(amount);
+          document.getElementById("wallet").value = amount;
+          document.getElementById("orderform").method = "post";
+          document.getElementById("orderform").action = "/order";
+          document.getElementById("orderform").submit();
+        }
+      }
+    }
+  </script>
+
+
+
+  <!-- =========================  Coupon ======================================================== -->
+
+  <script>
+    console.log("called me =----------------->> I am script ");
+
+    function couponApply() {
+      const couponCode = document.getElementById('c_code').value;
+      const subtotal = document.getElementById('total').innerText
+
+      console.log("called me =----------------->> 11 ", couponCode, subtotal);
+
+
+      fetch('/applyCoupon', {
+        method: "POST",
+        headers: {
+          'Content-Type': "application/json"
+        },
+        body: JSON.stringify({ couponCode, subtotal })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire({
+              text: "coupon applied",
+              icon: 'success',
+              confirmButtonText: 'OK',
+              customClass: {
+                title: 'text-danger',
+                popup: 'swal2-popup-custom',
+                confirmButton: 'btn btn-danger'
+              },
+              showCancelButton: false,
+              showCloseButton: true,
+              showLoaderOnConfirm: false,
+              timer: 3000
+            });
+
+            console.log("reache to here --------> || ------------->> ")
+
+            document.getElementById('dicprice').innerText = "-" + data.dicprice
+            document.getElementById('total').innerText = `${data.price}`
+            document.getElementById('amount').value = `${data.price}`
+
+          } else {
+            Swal.fire({
+              text: data.message,
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                title: 'text-danger',
+                popup: 'swal2-popup-custom',
+                confirmButton: 'btn btn-danger'
+              },
+              showCancelButton: false,
+              showCloseButton: true,
+              showLoaderOnConfirm: false,
+              timer: 3000
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error applying coupon:------------->  ', error);
+          alert('An error occurred while applying the coupon. Please try again.');
+        });
+    }
+
+    function couponRevoke() {
+
+      console.log('script revock reached ---------> ')
+
+      const couponCode = document.getElementById('c_code').value;
+      const subtotal = document.getElementById('subt').innerText
+
+      fetch('/revokeCoupon', {
+        method: "POST",
+        headers: {
+          'Content-Type': "application/json"
+        },
+        body: JSON.stringify({ couponCode, subtotal })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire({
+              text: "coupon revoked",
+              icon: 'success',
+              confirmButtonText: 'OK',
+              customClass: {
+                title: 'text-danger',
+                popup: 'swal2-popup-custom',
+                confirmButton: 'btn btn-danger'
+              },
+              showCancelButton: false,
+              showCloseButton: true,
+              showLoaderOnConfirm: false,
+              timer: 3000
+            });
+            document.getElementById('dicprice').innerText = 0
+            document.getElementById('total').innerText = `${data.price}`
+            document.getElementById('amount').value = `${data.price}`
+            document.getElementById('c_code').value = ""
+
+          } else {
+            console.log('script revock reached ---------> 1 ')
+
+            Swal.fire({
+              text: data.message,
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                title: 'text-danger',
+                popup: 'swal2-popup-custom',
+                confirmButton: 'btn btn-danger'
+              },
+              showCancelButton: false,
+              showCloseButton: true,
+              showLoaderOnConfirm: false,
+              timer: 3000
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Error applying coupon:----------> ', error);
+          alert('An error occurred while applying the coupon. Please try again.');
+        });
+    }
+
+
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <!-- Js Plugins -->
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="js/jquery.nicescroll.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/jquery.countdown.min.js"></script>
+  <script src="js/jquery.slicknav.js"></script>
+  <script src="js/mixitup.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/main.js"></script>
+
+  </body>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  </html>

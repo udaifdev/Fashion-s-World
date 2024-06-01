@@ -1,0 +1,135 @@
+ 
+
+ <%- include('adminHead.ejs') %>
+
+
+
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Orders History</h2>
+            </div>
+
+            <div class="card mb-4">
+                <header class="card-header">
+                    <h4 class="card-title">Order Details</h4>
+                    <div class="row align-items-center">
+                        <div class="col-md-2 col-6">
+                            <input type="date" value="02.05.2021" class="form-control">
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-dark fs-4 text-center">
+                                <tr>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Image</h6>
+                                    </th>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Product Name</h6>
+                                    </th>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Total Sold</h6>
+                                    </th>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Total Price</h6>
+                                    </th>
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Total Discount</h6>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center align-middle">
+                                <% products.forEach(product=> { %>
+                                    <tr>
+                                        <td class="border-bottom-0 align-middle">
+                                            <img src="/<%= product.productImage[0] %>" width="55"
+                                                class="img-thumbnail" alt="image">
+                                        </td>
+                                        <td class="border-bottom-0 align-middle">
+                                            <h6 class="fw-semibold mb-1">
+                                                <%= product.productName %>
+                                            </h6>
+                                        </td>
+                                        <td class="border-bottom-0 align-middle">
+                                            <p class="fw-normal">
+                                                <%= product.totalSold %>
+                                            </p>
+                                        </td>
+                                        <td class="border-bottom-0 align-middle">
+                                            <h6 class="">₹<%= product.totalPrice %>
+                                            </h6>
+                                        </td>
+                                        <td class="border-bottom-0 align-middle">
+                                            <h6 class="">₹<%= product.totalDiscount %>
+                                            </h6>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="pagination-area mt-30 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <% if (currentPage> 1) { %>
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true"><i class="material-icons md-chevron_left"></i></span>
+                            </a>
+                        </li>
+                        <% } %>
+
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <% if (totalPages> 3 && currentPage < totalPages - 2) { %>
+                                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page=<%= totalPages %>">
+                                                    <%= totalPages %>
+                                                </a>
+                                            </li>
+                                            <% } %>
+
+                                                <li
+                                                    class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                                    <a class="page-link" href="?page=<%= currentPage + 1 %>"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true"><i
+                                                                class="material-icons md-chevron_right"></i></span>
+                                                    </a>
+                                                </li>
+                </ul>
+            </nav>
+        </div>
+
+
+
+
+
+        
+    </main>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Scr/public/ipt -->
+    <script src="/public/assets/js/main.js" type="text/javascript"></script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-transactions-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+</html>

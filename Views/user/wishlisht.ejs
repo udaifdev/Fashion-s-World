@@ -1,0 +1,195 @@
+<%-include('navbar')-%>
+
+    
+ <!-- Breadcrumb Section Begin -->
+ <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Wish_Lisht</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/">Home</a>
+                        <a href="/shop">Shop</a>
+                        <span>wish_lisht</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Wishlist Section -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <% if (!fav || !fav.items || fav.items.length === 0) { %>
+            <div class="col-md-12 mt-4">
+                <h3 class="text-center">Wishlist is empty.</h3>
+            </div>
+        <% } else { %>
+            <table class="table">
+                <thead>
+                    <tr class="ls-2">
+                        <th scope="col" class="pl-5">PRODUCTS</th>
+                        <th scope="">Product Name</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <% fav.items.forEach(product => { %>
+                        <tr>
+                            <td class="align-middle">
+                                <div class="d-flex align-items-center">
+                                    <img src="<%= product.productId.image[0] %>" alt="<%= product.productId.name %>" style="width: 150px; height: 180px;">
+ 
+                                </div>
+                            </td>
+
+                            <td class="align-middle font-weight-bold"> 
+                               <h5><a href="/<%= product._id %>" style="text-decoration: none; color: black; font-weight: bold;"><%= product.productId.name %></a></h5>
+                            </td>
+
+                            <td class="align-middle font-weight-bold"><%= product.size %></td>
+
+                            <td class="align-middle">
+                                <form action="/add-to-cart/<%= product.productId._id %>?size=<%= product.size %>" method="post">
+                                    <button type="submit" class="btn btn-dark btn-sm">Add to Cart</button>
+                                    <input type="hidden" name="size" value="<%= product.size %>">
+                                    <input type="hidden" name="price" value="<%= product.price %>">
+                                    <input type="hidden" name="discountPrice" value="<%= product.discountPrice %>">
+                                </form>
+                            </td>
+                            
+
+                            <td class="align-middle">
+                                <a href="/removefromfavorites/<%= product.productId._id %>"> 
+                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button>
+                                </a>
+                            </td>
+                         
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
+</div>
+
+
+<!-- Shopping Cart Section -->
+<section class="shopping-cart spad">
+    <div class="container">
+         
+            
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="continue__btn">
+                            <a href="/shop">Continue Shopping</a>
+                        </div>
+                    </div>
+                </div>
+        
+    </div>
+</section>
+
+<!-- Shopping Cart Section End -->
+
+
+
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="#"><img src="img/payment.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Clothing Store</a></li>
+                            <li><a href="#">Trending Shoes</a></li>
+                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Delivary</a></li>
+                            <li><a href="#">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
+        </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

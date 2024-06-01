@@ -1,0 +1,182 @@
+ 
+ <%-include('adminHead.ejs') %>
+
+ <style>
+    /* Style for the status dropdown */
+    select#status {
+        /* Add your desired styles here */
+        /* For example: */
+        width: 100px; /* Adjust width as needed */
+        padding: 5px; /* Add padding for better readability */
+        border: 1px solid #4d855b; /* Add border for visual separation */
+        border-radius: 5px; /* Add border radius for rounded corners */
+    }
+
+    /* Style for the status dropdown options */
+    select#status option {
+        /* Add your desired styles here */
+        /* For example: */
+        font-weight: bold; /* Make options bold */
+        color: #ffffff; /* Set text color */
+        background-color: #000000; /* Set background color */
+    }
+</style>
+
+     
+
+ <section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order List </h2>
+            <p>Fashion World.</p>
+        </div>
+        <div>
+            <input type="text" placeholder="Search order ID" class="form-control bg-white">
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Status</option>
+                        <option>Active</option>
+                        <option>Disabled</option>
+                        <option>Show all</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Show 20</option>
+                        <option>Show 30</option>
+                        <option>Show 40</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+        <!-- card-header end// -->
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Order-ID</th>
+                            <th scope="col">User-ID</th>
+                            <th scope="col">Products</th>
+                            <th scope="col">D.Address</th>
+                            <th scope="col">Payment</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Date</th>
+                            <!-- <th scope="col" class="text-end"> Action </th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(order && order.length > 0) { %> 
+                            <% order.forEach(function(data) { %>
+                                <tr>
+                                    <td  width="10%"><%= data.orderId %> <br>
+                                        <a style="text-decoration: underline;" href="/admin/viewOrder/<%= data._id %>">View Details</a>
+                                    </td>
+
+                                    <td  width="20%"><%= data.userId %></td>
+                                    <td  width="10%">
+                                        <% data.items.forEach(function(item) { %>
+                                            <% if (item.productId && item.productId.name) { %>
+                                                <b><%= item.productId.name %></b> =
+                                            <% } else { %>
+                                                Product Name Not Available.
+                                            <% } %>
+                                            <%= item.quantity %><br>
+                                        <% }) %>
+                                    </td>
+                                    <td  width="12%">
+                                        <%= data.address[0].save_as %><br>
+                                        <%= data.address[0].housename %><br>
+                                        <%= data.address[0].city %>
+                                        <%= data.address[0].pincode %>
+                                    </td>
+                                    <td  width="10%"><%= data.payment %></td>
+                                    <td ><%= data.amount %></td>
+                                    <td width="10%">
+                                        <form action="/admin/updateOrderStatus" method="post" id="orderStatusForm_<%= data._id %>">
+                                            <input type="hidden" name="orderId" value="<%= data._id %>">
+                                            <% if (data.status === 'paymentPending') { %> 
+                                                <span class="text-danger">PaymentPending</span>
+                                            <% } else if (data.status === 'Cancelled') { %> 
+                                                <span>cancelled</span>
+                                            <% } else if (data.status === 'returned') { %> 
+                                                <span>Returned</span>
+                                            <% } else { %> 
+                                                <select name="status" id="status" onchange="submitForm('<%= data._id %>')">
+                                                    <% const statuses = ['pending', 'processing', 'shipping', 'Delivered', 'Cancelled', 'returned'] %>
+
+                                                    <% statuses.forEach(function(status) { %>
+                                                        <option value="<%= status %>" <%= data.status === status ? 'selected' : '' %>> <%= status.charAt(0).toUpperCase() + status.slice(1) %></option>
+                                                    <% }) %>
+                                                </select>
+                                            <% } %>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <%= data.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                                        <br>
+                                        <%= data.createdAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false }) %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8">No results found.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive //end -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+</section>
+
+
+
+             
+<!-- ============ pagination ==================== -->
+
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+       
+    </main>
+
+
+
+    <script>
+        function submitForm(orderId) {
+            document.getElementById(`orderStatusForm_${orderId}`).submit();
+        }
+    </script>
+
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Scr/public/ipt -->
+    <script src="/public/assets/js/main.js" type="text/javascript"></script>
+ 
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+</html>

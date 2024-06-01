@@ -1,0 +1,124 @@
+<%-include('adminHead.ejs') %>
+
+<section class="content-main">
+    <div class="content-header">
+        <h2 class="content-title">Selling Reports</h2>
+    </div>
+
+    <style>
+        
+
+        
+
+        
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <a type="button" class="btn btn-primary btn-option active" data-page="page1"><i class="text-muted material-icons md-post_add"></i>Best Selling Products</a>
+            </div>
+            <div class="col">
+                <a type="button" class="btn btn-primary btn-option" data-page="page2"><i class="text-muted material-icons md-post_add"></i>Best Selling Categories</a>
+            </div>
+            <!-- <div class="col">
+                <a type="button" class="btn btn-primary btn-option" data-page="page3"><i class="text-muted material-icons md-post_add"></i>Worst Selling Products</a>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div id="page1" class="page-content">
+            <div class="table-responsive">
+                <% if(bestProducts !="" ) { %>
+                <table class="table table-hover text-center align-items-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>SR.NO.</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Total Sold</th>
+                            <th>Stock Left</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% bestProducts.forEach((row, index) => { %>
+                        <tr>
+                            <td class="align-middle"><%= index+1 %></td>
+                            <td class="align-middle"><img src="/<%= row.productImage[0] %>" width="55" class="img-thumbnail" alt="image"></td>
+                            <td class="align-middle"><%= row.productName %></td>
+                            <td class="align-middle"><%= row.productCategory %></td>
+                            <td class="align-middle"><%= row.totalSold %></td>
+                            <td class="align-middle"><%= row.stockLeft %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } else { %>
+                <h1 class="text-center text-secondary mt-5">No Product found in the database</h1>
+                <% } %>
+            </div>
+        </div>
+        <div id="page2" class="page-content" style="display: none;">
+            <div class="table-responsive">
+                <% if(bestCategories !="" ) { %>
+                <table class="table table-hover text-center align-items-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>SR.NO.</th>
+                            <th>Name</th>
+                            <th>Total Sold (Number of Orders)</th>
+                            <th>Number of Products Sold</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% bestCategories.forEach((row, index) => { %>
+                        <tr>
+                            <td class="align-middle"><%= index+1 %></td>
+                            <td class="align-middle"><%= row._id %></td>
+                            <td class="align-middle"><%= row.totalSold %></td>
+                            <td class="align-middle"><%= row.numProducts %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+                <% } else { %>
+                <h1 class="text-center text-secondary mt-5">No Product found in the database</h1>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+        <div id="page3" class="page-content" style="display: none;">
+ 
+    </div>
+</section> <!-- content-main end// -->
+
+<script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="/public/assets/js/vendors/select2.min.js"></script>
+<script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+<!-- Main Script -->
+<script src="/public/assets/js/main.js" type="text/javascript"></script>
+
+<script>
+    const buttons = document.querySelectorAll('.btn-option');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const selectedPage = this.getAttribute('data-page');
+
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.style.display = 'none';
+            });
+
+            document.getElementById(selectedPage).style.display = 'block';
+
+            // Add active class to the clicked button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>

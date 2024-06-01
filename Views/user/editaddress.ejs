@@ -1,0 +1,514 @@
+
+
+
+     
+
+
+ <!-- ================== Nav Bar ========================  -->
+
+ <!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Male-Fashion | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-section {
+            padding: 50px 0;
+        }
+
+        /* .container {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+} */
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+            background-color: #ffffff;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 1px;
+            /* height: 100vh; This will make the card take the full height of the viewport */
+        }
+
+        .card-title {
+            color: #000000;
+            font-size: 35px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;            
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #141414;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ad8b8b;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .text-danger {
+            color: red;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 15px;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                <!-- <a href="/signup">Sign in</a> -->
+                <a href="/login">Login</a>
+            </div>
+            <div class="offcanvas__top__hover">
+                <span><a href="/logout"> logout </a></span>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href="#" class="search-switch"><img src="/img/icon/search.png" alt=""></a>
+            <a href="#"><img src="/img/icon/heart.png" alt=""></a>
+            <a href="#"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
+            <div class="price">$0.00</div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>Free shipping, 30-day return or refund guarantee.</p>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                         <img src="/img/logo.png" alt=""> 
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="./about.html">About Us</a></li>
+                                    <li><a href="/Cart">Shopping Cart</a></li>
+                                    <li><a href="/profile">profile</a></li>
+                                </ul>
+                            </li>
+                            <!-- <li><a href="./blog.html">Blog</a></li> -->
+                            <li><a href="./contact.html">Contacts</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a href="#" class="search-switch"><img src="/img/icon/search.png" alt="Search"></a>
+                        <a href="/wishlisht"><img src="/img/icon/heart.png" alt="Favorites"></a>
+                        <a href="/Cart">
+                            <img src="/img/icon/cart.png" alt="Cart" > 
+                            <% if (itemCount && itemCount > 0 ) { %> 
+                                <span><%= itemCount %></span> 
+                            <% } else { %>
+                                <span>0</span> 
+                            <% } %>
+                        </a>
+                        <% if (Cart_total && Cart_total > 0 ) { %> 
+                            <div class="price">₹ <%= Cart_total %></div>
+                        <% } else { %> 
+                             <div class="price">₹0</div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                
+                    
+                </div>
+            </div>
+            <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+
+  <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Edit Address</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/profile">Profile</a>
+                        <span>address</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+ 
+ 
+    <section class="profile-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h2 class="card-title">Edit Address</h2>
+                            
+
+                            <form action="/addressUpdated/<%= addrs.address._id %>" method="post" id="addressForm"   onsubmit="return validateAddress()">
+
+                                <div class="form-group">
+                                    <label for="saveas" class="form-label">Save as</label>
+                                    <input type="text" id="saveas" name="saveas" class="form-control" value="<%= addrs.address.save_as %>">
+                                    <span id="saveasError" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fullname" class="form-label">Full Name</label>
+                                    <input type="text" id="fullname" name="name" class="form-control" value="<%= addrs.address.name %>">
+                                    <span id="fullnameError" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" id="email" name="email" class="form-control" value="<%= addrs.address.email %>">
+                                        <span id="emailError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="adname" class="form-label">House Name / Flat No</label>
+                                        <input type="text" id="adname" name="housename" class="form-control" value="<%= addrs.address.housename %>">
+                                        <span id="adnameError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="street" class="form-label">Street</label>
+                                        <input type="text" id="street" name="street" class="form-control" value="<%= addrs.address.street %>">
+                                        <span id="streetError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="pincode" class="form-label">Pincode</label>
+                                        <input type="number" id="pincode" name="pincode" class="form-control" value="<%= addrs.address.pincode %>" >
+                                        <span id="pincodeError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" id="city" name="city" class="form-control" value="<%= addrs.address.city %>" >
+                                        <span id="cityError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="state" class="form-label">State:</label>
+                                        <input type="text" id="state" name="state" class="form-control"  value="<%= addrs.address.state %>">
+                                        <span id="stateError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <select id="country" name="country" class="form-control" value="<%= addrs.address.country %>">
+                                            <option value="India">India</option>
+                                            <option value="India">USA</option>
+                                            <option value="India">Afganistan</option>
+                                            <option value="India">Saudi-Arabia</option>
+                                            <option value="India">UAE</option>
+                                            <option value="India">Paris</option>
+                                        </select>
+                                        <span id="countryError" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="mobile" class="form-label">Phone Number</label>
+                                        <input type="number" id="mobile" name="mobile" class="form-control" value="<%= addrs.address.mobile %>">
+                                        <span id="mobileError" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center">
+                                    <button id="saveChangesButton" class="btn btn-primary" type="submit"> Done </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      <!-- Footer Section Begin -->
+ <footer class="footer mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="footer__about">
+                    <div class="footer__logo">
+                        <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                    </div>
+                    <p>The customer is at the heart of our unique business model, which includes design.</p>
+                    <a href="#"><img src="img/payment.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Clothing Store</a></li>
+                        <li><a href="#">Trending Shoes</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Payment Methods</a></li>
+                        <li><a href="#">Delivary</a></li>
+                        <li><a href="#">Return & Exchanges</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                <div class="footer__widget">
+                    <h6>NewLetter</h6>
+                    <div class="footer__newslatter">
+                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                        <form action="#">
+                            <input type="text" placeholder="Your email">
+                            <button type="submit"><span class="icon_mail_alt"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="footer__copyright__text">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <p>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>2020
+                        All rights reserved | This template is made with <i class="fa fa-heart-o"
+                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>
+  <!-- Footer Section End -->
+  
+  <!-- Search Begin -->
+  <div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+  </div>
+  <!-- Search End -->
+
+
+    <script>
+        
+        function validateAddress() {
+                var errors = '';
+                var saveas = document.getElementById('saveas').value;
+                var fullname = document.getElementById('fullname').value;
+                var email = document.getElementById('email').value;
+                var adname = document.getElementById('adname').value;
+                var street = document.getElementById('street').value;
+                var pincode = document.getElementById('pincode').value;
+                var city = document.getElementById('city').value;
+                var state = document.getElementById('state').value;
+                var country = document.getElementById('country').value;
+                var mobile = document.getElementById('mobile').value;
+    
+                var saveasError = document.getElementById('saveasError');
+                var fullnameError = document.getElementById('fullnameError');
+                var emailError = document.getElementById('emailError');
+                var adnameError = document.getElementById('adnameError');
+                var streetError = document.getElementById('streetError');
+                var pincodeError = document.getElementById('pincodeError');
+                var cityError = document.getElementById('cityError');
+                var stateError = document.getElementById('stateError');
+                var countryError = document.getElementById('countryError');
+                var mobileError = document.getElementById('mobileError');
+    
+                saveasError.innerHTML = '';
+                fullnameError.innerHTML = '';
+                emailError.innerHTML = '';
+                adnameError.innerHTML = '';
+                streetError.innerHTML = '';
+                pincodeError.innerHTML = '';
+                cityError.innerHTML = '';
+                stateError.innerHTML = '';
+                countryError.innerHTML = '';
+                mobileError.innerHTML = '';
+    
+                var spacesRegex = /^\s*$/; // Regex to check for only spaces
+    
+                if (spacesRegex.test(saveas)) {
+                    saveasError.innerHTML = 'Save as is required.';
+                    errors += 'Save as is required.\n';
+                }
+                if (spacesRegex.test(fullname)) {
+                    fullnameError.innerHTML = 'Full name is required.';
+                    errors += 'Full name is required.\n';
+                }
+                if (spacesRegex.test(email)) {
+                    emailError.innerHTML = 'Email is required.';
+                    errors += 'Email is required.\n';
+                } else if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                    emailError.innerHTML = 'Invalid email address.';
+                    errors += 'Invalid email address.\n';
+                }
+                if (spacesRegex.test(adname)) {
+                    adnameError.innerHTML = 'House name/Flat no is required.';
+                    errors += 'House name/Flat no is required.\n';
+                }
+                if (spacesRegex.test(street)) {
+                    streetError.innerHTML = 'Street is required.';
+                    errors += 'Street is required.\n';
+                }
+                if (spacesRegex.test(pincode)) {
+                    pincodeError.innerHTML = 'Pincode is required.';
+                    errors += 'Pincode is required.\n';
+                } else if (!pincode.match(/^\d{6}$/)) {
+                    pincodeError.innerHTML = 'Invalid pincode.';
+                    errors += 'Invalid pincode.\n';
+                }
+                if (spacesRegex.test(city)) {
+                    cityError.innerHTML = 'City is required.';
+                    errors += 'City is required.\n';
+                }
+                if (spacesRegex.test(state)) {
+                    stateError.innerHTML = 'State is required.';
+                    errors += 'State is required.\n';
+                }
+                if (spacesRegex.test(country)) {
+                    countryError.innerHTML = 'Country is required.';
+                    errors += 'Country is required.\n';
+                }
+                if (spacesRegex.test(mobile)) {
+                    mobileError.innerHTML = 'Mobile number is required.';
+                    errors += 'Mobile number is required.\n';
+                } else if (!mobile.match(/^\d{10}$/)) {
+                    mobileError.innerHTML = 'Invalid mobile number.';
+                    errors += 'Invalid mobile number.\n';
+                }
+    
+                if (errors) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+    
+            document.getElementById('saveChangesButton').addEventListener('click', function (event) {
+                if (!validateAddress()) {
+                    event.preventDefault();
+                }
+            });
+    </script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.nice-select.min.js"></script>
+<script src="/js/jquery.nicescroll.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/jquery.countdown.min.js"></script>
+<script src="/js/jquery.slicknav.js"></script>
+<script src="/js/mixitup.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/main.js"></script>
+   
+</body>
+</html>

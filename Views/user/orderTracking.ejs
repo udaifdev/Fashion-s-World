@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fashion</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css"> -->
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <style>
+        .box:hover {
+            box-shadow: 0px 0px 20px rgba(63, 63, 63, 0.5);
+        }
+
+        .payment-option {
+            padding: 1rem;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .payment-option:hover,
+        .payment-option input[type="radio"]:checked+span {
+            border-color: #007bff;
+            /* Primary color */
+            background-color: #f8f9fa;
+            /* Light background */
+        }
+
+        .payment-option input[type="radio"] {
+            margin-right: 1rem;
+        }
+
+        .payment-option span {
+            font-size: 1.1rem;
+            color: #343a40;
+            /* Dark color */
+        }
+
+        .payment-option.btn-outline-primary:hover {
+            border-color: #0056b3;
+            /* Darker primary color */
+        }
+
+        .payment-option.btn-outline-success:hover {
+            border-color: #28a745;
+            /* Darker success color */
+        }
+
+        .payment-option.btn-outline-info:hover {
+            border-color: #17a2b8;
+            /* Darker info color */
+        }
+
+        .payment-heading {
+            font-family: 'Arial', sans-serif;
+            /* Change font family as needed */
+            font-weight: bold;
+            background-color: #f8f9fa;
+            /* Light grey background color */
+            padding: 1rem;
+            border-radius: 0.25rem;
+            /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Default shadow */
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            /* Smooth transitions */
+        }
+
+        .payment-heading:hover {
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.5);
+            /* Deeper shadow on hover */
+            transform: translateY(-2px);
+            /* Slight lift on hover */
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas-menu-overlay"></div>
+    <div class="offcanvas-menu-wrapper">
+        <div class="offcanvas__option">
+            <div class="offcanvas__links">
+                <!-- <a href="/signup">Sign in</a> -->
+                <a href="/login">Login</a>
+            </div>
+            <div class="offcanvas__top__hover">
+                <span><a href="/logout"> logout </a></span>
+            </div>
+        </div>
+        <div class="offcanvas__nav__option">
+            <a href="#" class="search-switch"><img src="/img/icon/search.png" alt=""></a>
+            <a href="#"><img src="/img/icon/heart.png" alt=""></a>
+            <a href="#"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
+            <div class="price">$0.00</div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+        <div class="offcanvas__text">
+            <p>Free shipping, 30-day return or refund guarantee.</p>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__logo">
+                        <img src="/img/logo.png" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li class="active"><a href="/">Home</a></li>
+                            <li><a href="/shop">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="./about.html">About Us</a></li>
+                                    <li><a href="/Cart">Shopping Cart</a></li>
+                                    <li><a href="/profile">profile</a></li>
+                                </ul>
+                            </li>
+                            <!-- <li><a href="./blog.html">Blog</a></li> -->
+                            <li><a href="./contact.html">Contacts</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-lg-3 col-md-3">
+                    <div class="header__nav__option">
+                        <a href="#" class="search-switch"><img src="/img/icon/search.png" alt="Search"></a>
+                        <a href="/wishlisht"><img src="/img/icon/heart.png" alt="Favorites"></a>
+                        <a href="/Cart">
+                            <img src="/img/icon/cart.png" alt="Cart">
+                            <% if (itemCount && itemCount> 0 ) { %>
+                                <span>
+                                    <%= itemCount %>
+                                </span>
+                                <% } else { %>
+                                    <span>0</span>
+                                    <% } %>
+                        </a>
+                        <% if (Cart_total && Cart_total> 0 ) { %>
+                            <div class="price">₹ <%= Cart_total %>
+                            </div>
+                            <% } else { %>
+                                <div class="price">₹0</div>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Order Tracking!</h4>
+                        <div class="breadcrumb__links">
+                            <a href="/orders">Orders</a>
+                            <span>Shop</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+
+    <% if(orderSuccess && orderSuccess.length> 0){ %>
+        <div id="successMessage">
+            <h2 class="text-success">
+                <%= orderSuccess %>
+            </h2>
+        </div>
+        <% } %>
+
+
+            <!-- Order Tracking Section Begin -->
+            <div class="container mt-5 text-center">
+                <% if(order){ %>
+                    <!-- Place your order tracking code here -->
+                    <div class="row">
+                        <div class="col-12 col-md-10 hh-grayBox mx-auto text-center pt-4 pb-4">
+                            <div class="order-tracking-flow">
+                                <% if (order.status==='pending' ) { %>
+                                    <!-- Order tracking items for pending status -->
+                                    <div class="order-tracking-item completed ">
+                                        <span class="is-complete"></span>
+                                        <p class="bg-success  rounded p-1 text-white font-weight-bold">
+                                            <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short'
+                                                , day: 'numeric' }) %>
+                                                <br>
+                                                Ordered
+                                        </p>
+                                    </div>
+                                    <div class="order-tracking-item">
+                                        <span class="is-complete"></span>
+                                        <p class="text-dark font-weight-bold">Processing</p>
+                                    </div>
+                                    <div class="order-tracking-item">
+                                        <span class="is-complete"></span>
+                                        <p class="text-dark font-weight-bold">Shipped</p>
+                                    </div>
+                                    <div class="order-tracking-item">
+                                        <span class="is-complete"></span>
+                                        <p class="text-dark font-weight-bold">Delivered</p>
+                                    </div>
+                                    <% } else if (order.status==='processing' ) { %>
+                                        <!-- Order tracking items for processing status -->
+                                        <div class="order-tracking-item completed">
+                                            <span class="is-complete"></span>
+                                            <p class="text-dark font-weight-bold">Ordered</p>
+                                        </div>
+                                        <div class="order-tracking-item completed">
+                                            <span class="is-complete"></span>
+                                            <p class="bg-success rounded p-1 text-white font-weight-bold">
+                                                <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
+                                                    month: 'short' , day: 'numeric' }) %><br>Processing
+                                            </p>
+                                        </div>
+                                        <div class="order-tracking-item">
+                                            <span class="is-complete"></span>
+                                            <p class="text-dark font-weight-bold">Shipped</p>
+                                        </div>
+                                        <div class="order-tracking-item">
+                                            <span class="is-complete"></span>
+                                            <p class="text-dark font-weight-bold">Delivered</p>
+                                        </div>
+                                        <% } else if (order.status==='shipping' ) { %>
+                                            <!-- Order tracking items for shipped status -->
+                                            <div class="order-tracking-item completed ">
+                                                <span class="is-complete"></span>
+                                                <p class="text-dark font-weight-bold">Ordered</p>
+                                            </div>
+                                            <div class="order-tracking-item completed">
+                                                <span class="is-complete"></span>
+                                                <p class="text-dark font-weight-bold">Processing</p>
+                                            </div>
+                                            <div class="order-tracking-item completed">
+                                                <span class="is-complete"></span>
+                                                <p class="bg-success rounded p-1 text-white">
+                                                    <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
+                                                        month: 'short' , day: 'numeric' }) %><br>Shipped
+                                                </p>
+                                            </div>
+                                            <div class="order-tracking-item">
+                                                <span class="is-complete"></span>
+                                                <p class="text-dark font-weight-bold">Delivered</p>
+                                            </div>
+                                            <% } else if (order.status==='Delivered' ) { %>
+                                                <!-- Order tracking items for delivered status -->
+                                                <div class="order-tracking-item completed">
+                                                    <span class="is-complete"></span>
+                                                    <p class="text-dark font-weight-bold">Ordered</p>
+                                                </div>
+                                                <div class="order-tracking-item completed">
+                                                    <span class="is-complete"></span>
+                                                    <p class="text-dark font-weight-bold">Processing</p>
+                                                </div>
+                                                <div class="order-tracking-item completed">
+                                                    <span class="is-complete"></span>
+                                                    <p class="text-dark font-weight-bold">Shipped</p>
+                                                </div>
+                                                <div class="order-tracking-item completed">
+                                                    <span class="is-complete "></span>
+                                                    <p class="bg-success font-weight-bold rounded px-3 text-white">
+                                                        <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
+                                                            month: 'short' , day: 'numeric' }) %><br>Delivered
+                                                    </p>
+                                                </div>
+                                                <% } else if (order.status==='Cancelled' ) { %>
+                                                    <!-- Order tracking items for cancelled status -->
+                                                    <div class="order-tracking-item completed cancelled">
+                                                        <span class="is-complete"></span>
+                                                        <p class="text-dark font-weight-bold">Ordered</p>
+                                                    </div>
+                                                    <div class="order-tracking-item completed cancelled">
+                                                        <span class="is-complete"></span>
+                                                        <p class="text-dark font-weight-bold">Cancel Requested</p>
+                                                    </div>
+                                                    <div class="order-tracking-item completed cancelled">
+                                                        <span class="is-complete"></span>
+                                                        <p class="text-dark font-weight-bold">Accepted</p>
+                                                    </div>
+                                                    <div class="order-tracking-item completed  cancelled">
+                                                        <span class="is-complete"></span>
+                                                        <p class="bg-success rounded text-white font-weight-bold p-1">
+                                                            <%= order.updated.toLocaleString('en-US', { year: 'numeric'
+                                                                , month: 'short' , day: 'numeric' }) %><br>Cancelled
+                                                        </p>
+                                                    </div>
+                                                    <% } else if (order.status==='paymentPending' ) { %>
+                                                        <!-- Order tracking items for paymentPending status -->
+                                                        <div>
+                                                            <h2 class="text-danger font-weight-bold mb-4">"Your Order is Pending due to
+                                                                Unfinished
+                                                                Payment."</h2>
+                                                        </div>
+                                                        <% } else { %>
+                                                            <h2 class="text-dark">No Order Details</h2>
+                                                            <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+
+
+            <!-- ================= Address =================================  -->
+
+            <div class="container">
+
+                <div class="text-center box mb-4"
+                    style="border: 1px solid rgb(85, 85, 85); padding: 10px; display: inline-block;">
+                    <h5 class="text-dark font-weight-bold mt-1">Order ID: <span id="orderId">
+                            <%= order.orderId %>
+                        </span></h5>
+                    <p class="text-dark mt-1">Delivery Address:- <br>
+                        <%= order.address[0].save_as %>, <br>
+                            <%= order.address[0].housename %>, <%= order.address[0].city %>, <%=
+                                        order.address[0].pincode %>
+                    </p>
+                </div>
+
+
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <!-- Table headers -->
+                        <thead>
+                            <tr>
+                                <th class="text-dark">Product Name</th>
+                                <th class="text-dark">Size</th>
+                                <th class="text-dark">Quantity</th>
+                                <th class="text-dark">Price</th>
+                                <th class="text-dark">Total</th>
+                                <th class="text-dark">Payment</th>
+                            </tr>
+                        </thead>
+                        <!-- Table body -->
+                        <tbody>
+                            <% order.items.forEach(item=> { %>
+                                <tr>
+                                    <td class="text-dark">
+                                        <%= item.productId.name %>
+                                    </td>
+                                    <td class="text-dark">
+                                        <%= item.size %>
+                                    </td>
+                                    <td class="text-dark">
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td class="text-dark">
+                                        <%= item.price %>
+                                    </td>
+                                    <td class="text-dark">
+                                        <%= item.quantity * item.price %>
+                                    </td>
+                                    <td class="text-dark">
+                                        <%= order.payment %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                                    <!-- Total amount row -->
+                                    <tr>
+                                        <td colspan="4" class="text-dark"></td> <!-- Colspan to merge cells -->
+                                        <td class="text-dark ">Total Amount </td>
+                                        <td class="text-dark font-weight-bold">₹<span id="total">
+                                                <%= order.amount %>
+                                            </span></td>
+                                    </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <% if(order.status=="Delivered" ){ %>
+                <div class="text-center mt-4">
+                    <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-info mb-5  font-weight-bold btn-lg" download>
+                        Download Invoice
+                    </a>
+                </div>
+                
+                <% } else if(order.status=="paymentPending" ){ %>
+                    <!-- Payment options -->
+                    <div class="container mt-5 text-center">
+                        <h2 class="payment-heading text-dark mb-3">Proceed with Payment</h2>
+
+                        <!-- Payment form -->
+                        <form id="orderform" class="needs-validation" novalidate>
+
+                            <input type="hidden" id="pay" name="pay" value="0" />
+                            <input type="hidden" id="wallet" name="wallet" value="0" />
+
+                            <div class="row justify-content-center mb-4">
+                                <div class="col-md-4 mb-3">
+                                    <div class="payment-option btn btn-outline-primary">
+                                        <label class="d-flex align-items-center mb-0">
+                                            <input type="radio" name="paymentOption" value="cashOnDelivery"
+                                                onclick="handlePaymentMethodSelection()" class="mr-3">
+                                            <span>Cash on Delivery</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="payment-option btn btn-outline-success">
+                                        <label class="d-flex align-items-center mb-0">
+                                            <input type="radio" name="paymentOption" value="wallet"
+                                                onclick="handlePaymentMethodSelection()" class="mr-3">
+                                            <span>Wallet Payment</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="payment-option btn btn-outline-info">
+                                        <label class="d-flex align-items-center mb-0">
+                                            <input type="radio" name="paymentOption" value="upi"
+                                                onclick="handlePaymentMethodSelection()" class="mr-3">
+                                            <span>Online Payment</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Button to proceed payment -->
+                            <button id="placeOrderBtn" class="btn btn-outline-dark btn-lg py-3" type="submit">Proceed
+                                Payment</button>
+                        </form>
+                        <hr>
+                    </div>
+                    <% } %>
+                        <% } else { %>
+                            <h2 class="text-dark text-center mt-4">No Order Found</h2>
+                            <% } %>
+
+                                <!-- Order Tracking Section End -->
+
+
+
+
+
+
+
+
+
+                                <!-- Footer Section Begin -->
+                                <footer class="footer">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                                <div class="footer__about">
+                                                    <div class="footer__logo">
+                                                        <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                                                    </div>
+                                                    <p>The customer is at the heart of our unique business model, which
+                                                        includes
+                                                        design.</p>
+                                                    <a href="#"><img src="img/payment.png" alt=""></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                                                <div class="footer__widget">
+                                                    <h6>Shopping</h6>
+                                                    <ul>
+                                                        <li><a href="#">Clothing Store</a></li>
+                                                        <li><a href="#">Trending Shoes</a></li>
+                                                        <li><a href="#">Accessories</a></li>
+                                                        <li><a href="#">Sale</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2 col-md-3 col-sm-6">
+                                                <div class="footer__widget">
+                                                    <h6>Shopping</h6>
+                                                    <ul>
+                                                        <li><a href="#">Contact Us</a></li>
+                                                        <li><a href="#">Payment Methods</a></li>
+                                                        <li><a href="#">Delivary</a></li>
+                                                        <li><a href="#">Return & Exchanges</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                                                <div class="footer__widget">
+                                                    <h6>NewLetter</h6>
+                                                    <div class="footer__newslatter">
+                                                        <p>Be the first to know about new arrivals, look books, sales &
+                                                            promos!
+                                                        </p>
+                                                        <form action="#">
+                                                            <input type="text" placeholder="Your email">
+                                                            <button type="submit"><span
+                                                                    class="icon_mail_alt"></span></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 text-center">
+                                                <div class="footer__copyright__text">
+                                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                                    <p>Copyright ©
+                                                        <script>
+                                                            document.write(new Date().getFullYear());
+                                                        </script>2020
+                                                        All rights reserved | This template is made with <i
+                                                            class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                                                            href="https://colorlib.com" target="_blank">Colorlib</a>
+                                                    </p>
+                                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </footer>
+                                <!-- Footer Section End -->
+
+                                <!-- Search Begin -->
+                                <div class="search-model">
+                                    <div class="h-100 d-flex align-items-center justify-content-center">
+                                        <div class="search-close-switch">+</div>
+                                        <form class="search-model-form">
+                                            <input type="text" id="search-input" placeholder="Search here.....">
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- Search End -->
+
+                                <!-- Js Plugins -->
+                                <script src="/js/jquery-3.3.1.min.js"></script>
+                                <script src="/js/bootstrap.min.js"></script>
+                                <script src="/js/jquery.nice-select.min.js"></script>
+                                <script src="/js/jquery.nicescroll.min.js"></script>
+                                <script src="/js/jquery.magnific-popup.min.js"></script>
+                                <script src="/js/jquery.countdown.min.js"></script>
+                                <script src="/js/jquery.slicknav.js"></script>
+                                <script src="/js/mixitup.min.js"></script>
+                                <script src="/js/owl.carousel.min.js"></script>
+                                <script src="/js/main.js"></script>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const successMessage = document.getElementById("successMessage");
+        if (successMessage) {
+            setTimeout(function () {
+                successMessage.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
+
+
+<script>
+    function handlePaymentMethodSelection() {
+        const selectedPaymentMethod = document.querySelector(
+            'input[name="paymentOption"]:checked'
+        );
+        if (selectedPaymentMethod) {
+            const hiddenInput = document.getElementById("pay");
+            hiddenInput.value = selectedPaymentMethod.value;
+        }
+    }
+    document.getElementById('placeOrderBtn').addEventListener('click', function (event) {
+        event.preventDefault();
+        proceedToOrder();
+    });
+    async function proceedToOrder() {
+        var selectedPayment = document.querySelector('input[name="paymentOption"]:checked');
+        myOrder = document.getElementById('orderId').textContent;
+        console.log(myOrder);
+        if (!selectedPayment) {
+            console.log("Payment option not selected");
+            Swal.fire({
+                text: "Select a Payment option",
+                icon: "error",
+                confirmButtonText: "OK",
+                customClass: {
+                    title: "text-danger",
+                    popup: "swal2-popup-custom",
+                    confirmButton: "btn btn-danger",
+                },
+                showCancelButton: false,
+                showCloseButton: true,
+                showLoaderOnConfirm: false
+            });
+        } else if (selectedPayment.value == 'upi') {
+            const amt = document.getElementById("total").textContent
+            const amount = parseFloat(amt);
+            console.log(typeof amount)
+            var options = {
+                key: 'rzp_test_Q0LnymZbvUcLVu',
+                amount: amount * 100,
+                currency: "INR",
+                name: "male Fashion's",
+                description: "Test Transaction",
+                image: "img/logo.png",
+                order_id: orderId,
+                handler: function (response) {
+                    // alert(response.razorpay_payment_id);
+                    document.getElementById("orderform").method = "post";
+                    document.getElementById("orderform").action = `/reOrder/${myOrder}`;
+                    document.getElementById("orderform").submit();
+                },
+
+                theme: {
+                    color: "#4285F4",
+                },
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.on("payment.failed", function (response) {
+                Swal.fire({
+                    title: 'Payment Failed',
+                    text: 'There was an issue processing your payment.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            });
+
+            rzp1.open();
+            event.preventDefault();
+
+            var orderId;
+            $(document).ready(function () {
+                var settings = {
+                    url: "/create/orderId",
+                    method: "POST",
+                    timeout: 0,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify({
+                        amount: parseFloat(amount) * 100,
+                    }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                    orderId = response.orderId;
+                    console.log(orderId);
+                    $("button").show();
+                });
+            });
+        } else if (selectedPayment.value == "cashOnDelivery") {
+            console.log("Cash on Delivery selected");
+            const amt = document.getElementById("total").textContent;
+            const amount = parseFloat(amt);
+            console.log(amount);
+            if (amount > 1000) {
+                Swal.fire({
+                    title: 'COD Not Available',
+                    text: "Cash on Delivery Not available for order above ₹1000.",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        title: "text-danger",
+                        popup: "swal2-popup-custom",
+                        confirmButton: "btn btn-danger",
+                    },
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    showLoaderOnConfirm: false,
+                });
+                return false;
+            }
+            document.getElementById("orderform").action = `/reOrder/${myOrder}`;
+            document.getElementById("orderform").method = "post";
+            document.getElementById("orderform").submit();
+        } else if (selectedPayment.value == 'wallet') {
+            const amt = document.getElementById("total").textContent;
+            const amount = parseFloat(amt);
+            console.log(amt);
+            try {
+                const response = await fetch('/wallettransaction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        amount: amount
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log(data);
+
+                if (data.success) {
+                    document.getElementById("orderform").method = "post";
+                    document.getElementById("orderform").action = `/reOrder/${myOrder}`;
+                    document.getElementById("pay").value = "wallet";
+                    document.getElementById("wallet").value = amount;
+                    document.getElementById("orderform").submit();
+                } else {
+                    Swal.fire({
+                        text: "You Don't have Enough money in Wallet",
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            title: 'text-danger',
+                            popup: 'swal2-popup-custom',
+                            confirmButton: 'btn btn-danger'
+                        },
+                        showCancelButton: false,
+                        showCloseButton: true,
+                        showLoaderOnConfirm: false,
+                        timer: 3000
+                    });
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+            }
+
+        }
+    }
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</html>

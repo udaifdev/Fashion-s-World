@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #7a6a6a;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('/public/login\ img.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            background: linear-gradient(-135deg, #1d1d1d, #888888);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        input[type="text"] {
+            /* width: 200px; */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .resend-btn {
+            background-color: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+            box-shadow: #333;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .resend-btn:hover {
+            background-color: #dfb3b3;
+            color: black;
+        }
+
+        .otp {
+            color: red;
+            margin-top: 10px;
+            font-size: small;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        label,
+        .verification-label {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: small;
+            color: white;
+        }
+
+
+        .otp-input {
+            width: 40px;
+            height: 40px;
+            margin: 0 5px;
+            text-align: center;
+            font-size: 20px;
+            border: 2px solid #000000;
+            border-radius: 5px;
+        }
+
+        .otp-input:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        #timer {
+            color: rgb(250, 250, 250);
+
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Enter OTP</h2>
+        <form action="/verifyotp" method="post">
+            <label for="otp" class="verification-label">Enter your 4-digit OTP </label> <br>
+
+            <input type="text" maxlength="1" class="otp-input" name="otp" id="digit1"
+                onkeyup="moveToNext(this, 'digit2')">
+            <input type="text" maxlength="1" class="otp-input" name="otp" id="digit2"
+                onkeyup="moveToNext(this, 'digit3')">
+            <input type="text" maxlength="1" class="otp-input" name="otp" id="digit3"
+                onkeyup="moveToNext(this, 'digit4')">
+            <input type="text" maxlength="1" class="otp-input" name="otp" id="digit4">
+
+
+            <input type="submit" value="Submit">
+        </form>
+        <br>
+        <% if(expressFlash.otperror && expressFlash.otperror.length> 0){%>
+            <div style="color: red; font-size: 16px; font-weight: bold;">
+                <%= expressFlash.otperror%>
+            </div>
+            <% } %>
+                <br>
+                <p>
+                <form action="/resendotp" method="post" style="display: none;" id="resend-form">
+                    <button type="submit" class="resend-btn btn-block" id="verification-resend">Resend OTP</button>
+                </form>
+                </p>
+                <br>
+                <div id="timer"></div>
+    </div>
+</body>
+
+<script>
+
+    (function startTimer() {
+        timerInterval = setInterval(function () {
+            var expiryTime = '<%= otp.expiry.getTime() %>';
+            var currTime = new Date().getTime()
+            var Timeleft = Math.round((expiryTime - currTime) / 1000)
+            document.getElementById('timer').innerHTML = 'OTP Expires in ' + Timeleft + ' sec';
+
+            if (Timeleft < 0) {
+                clearInterval(timerInterval);
+                document.getElementById('timer').innerHTML = ''
+                document.getElementById('resend-form').style.display = 'block'
+            }
+        }, 1000)
+    })()
+
+
+    function moveToNext(currentInput, nextInputId) {
+        if (currentInput.value.length >= 1) {
+            document.getElementById(nextInputId).focus();
+        }
+    }
+
+
+</script>
+
+</html>

@@ -1,0 +1,165 @@
+ 
+
+
+
+<%-include('adminHead.ejs') %>
+
+
+
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Coupons</h2>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                            <body>
+                                <div class="container form-container">
+                                    <h1 class="mb-4">Add Coupons</h1>
+                                    
+                                    <% if(couponExists){%>
+                                        <div style="color: red; font-size: 16px; font-weight: bold;">
+                                            <%= couponExists%>
+                                        </div>
+                                        <%}%>
+
+                                    <div class="col-lg-9">
+                                        <section class="content-body p-xl-4">
+
+                                            <form id="addCouponForm" action="/admin/add_coupon_Post" method="post" onsubmit="return validateForm()">
+
+                                                <div class="row mb-4">
+                                                    <label for="couponCode" class="col-lg-3 col-form-label">Coupon Code*</label>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" class="form-control" id="couponCode" name="couponCode" required placeholder="Type here">
+                                                        <span id="couponCodeError" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="row mb-4">
+                                                    <label for="couponType" class="col-lg-3 col-form-label">Coupon Type*</label>
+                                                    <div class="col-lg-9">
+                                                        <small class="text-muted font-sm mb-10">Select</small>
+                                                        <select class="form-select" id="couponType" name="couponType" onchange="updateMaxRedeem()" required>
+                                                            <option value="percentageDiscount">Percentage Discount</option>
+                                                            <option value="flatDiscount">Flat Discount</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="row mb-4">
+                                                    <label for="minimumPrice" class="col-lg-3 col-form-label">Minimum Price</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="number" class="form-control" id="minimumPrice" name="minimumPrice" required placeholder="000">
+                                                        <span id="minimumPriceError" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="row mb-4">
+                                                    <label for="discount" class="col-lg-3 col-form-label">Discount Price</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="number" class="form-control" id="discount" name="discount" oninput="updateMaxRedeem()" required placeholder="000">
+                                                        <span id="discountError" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="row mb-4">
+                                                    <label for="maxRedeem" class="col-lg-3 col-form-label">Max Redeemable Amount</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="number" class="form-control" id="maxRedeem" name="maxRedeem" required placeholder="000">
+                                                        <span id="maxRedeemError" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                            
+                                                <div class="row mb-4">
+                                                    <label for="expiry" class="col-lg-3 col-form-label">Expiry</label>
+                                                    <div class="col-lg-4">
+                                                        <input type="date" class="form-control" id="expiry" name="expiry" required>
+                                                        <span id="expiryError" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                            
+                                                <br>
+                                                <button class="btn btn-primary" type="submit">Done</button>
+                                            </form>
+                                        </section>
+                                    </div>
+                                </div>
+                            
+                                <!-- Bootstrap JS -->
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+                                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                            
+                                <script>
+                                    function validateForm() {
+                                        var couponCode = document.getElementById('couponCode').value;
+                                        var minimumPrice = document.getElementById('minimumPrice').value;
+                                        var discount = document.getElementById('discount').value;
+                                        var maxRedeem = document.getElementById('maxRedeem').value;
+                                        var expiry = document.getElementById('expiry').value;
+                            
+                                        var couponCodeError = document.getElementById('couponCodeError');
+                                        var minimumPriceError = document.getElementById('minimumPriceError');
+                                        var discountError = document.getElementById('discountError');
+                                        var maxRedeemError = document.getElementById('maxRedeemError');
+                                        var expiryError = document.getElementById('expiryError');
+                            
+                                        couponCodeError.innerHTML = '';
+                                        minimumPriceError.innerHTML = '';
+                                        discountError.innerHTML = '';
+                                        maxRedeemError.innerHTML = '';
+                                        expiryError.innerHTML = '';
+                            
+                                        if (!/^[a-zA-Z0-9]+$/.test(couponCode)) {
+                                            couponCodeError.innerHTML = 'Coupon code must be alphanumeric without spaces.';
+                                            return false;
+                                        }
+                            
+                                        if (isNaN(discount) || parseFloat(discount) <= 0 || parseFloat(discount) > 100) {
+                                            discountError.innerHTML = 'Discount must be a positive number less than or equal to 100.';
+                                            return false;
+                                        }
+                            
+                                        if (isNaN(minimumPrice) || parseFloat(minimumPrice) <= 0) {
+                                            minimumPriceError.innerHTML = 'Minimum price must be a positive number.';
+                                            return false;
+                                        }
+                            
+                                        if (isNaN(maxRedeem) || parseFloat(maxRedeem) <= 0) {
+                                            maxRedeemError.innerHTML = 'Max redeemable amount must be a positive number.';
+                                            return false;
+                                        }
+                            
+                                        return true;
+                                    }
+                            
+                                    function updateMaxRedeem() {
+                                        var couponType = document.getElementById("couponType").value;
+                                        var maxRedeemInput = document.getElementById("maxRedeem");
+                                        var discountInput = document.getElementById("discount");
+                            
+                                        if (couponType === "flatDiscount") {
+                                            var discountAmount = parseFloat(discountInput.value);
+                                            var minimumPrice = parseFloat(document.getElementById("minimumPrice").value);
+                            
+                                            if (discountAmount >= minimumPrice) {
+                                                discountInput.value = minimumPrice - 1;
+                                            }
+                                            maxRedeemInput.value = parseFloat(discountInput.value);
+                                            maxRedeemInput.readOnly = true;
+                                        } else if (couponType === "percentageDiscount") {
+                                            discountInput.min = 1;
+                                            discountInput.max = 100;
+                                            maxRedeemInput.value = "";
+                                            maxRedeemInput.readOnly = false;
+                                        }
+                                    }
+                                </script>
+                            </body>
+                            

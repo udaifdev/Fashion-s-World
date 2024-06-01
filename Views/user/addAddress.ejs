@@ -1,0 +1,372 @@
+ 
+<%-include('navbar')-%>
+ 
+    <style>
+        body {
+            
+            background-color: #ffffff;
+        }
+        
+        .cart-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 14px 16px rgba(82, 79, 79, 0.1);
+            /* width: 400px; */
+            background-color: #c7c7c7;;
+        }
+        .card-body {
+            padding: 40px;
+         }
+        .card-body {
+           background-color: #c7c7c7; /* Set the background color */
+           border-radius: 10px;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add the box shadow */
+           padding: 20px;
+           margin-bottom: 20px;
+         }
+
+        .card-title {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            margin-bottom: 15px;
+            padding: 10px;
+            width: 100%;
+        }
+        .text-danger {
+            font-size: 14px;
+            font-style: italic;
+            color: red;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+     <!-- Breadcrumb Section Begin -->
+  <section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>Add-Address</h4>
+                    <div class="breadcrumb__links">
+                        <a href="/profile">Profile</a>
+                        <span>address</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+
+    <div class="container">
+        <div class="cart-container">
+        <div class="card mt-5">
+            <div class="card-body">
+                <h3 class="card-title">Add Your Address</h3>
+
+                <form action="/addressPost" id="addressForm" method="POST" onsubmit="return validateAddress()">
+                    
+                    <div class="form-group">
+                        <label for="saveas" class="form-label">Save as</label>
+                        <input type="text" id="saveas" name="saveas" class="form-control">
+                        <span id="saveasError" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullname" class="form-label">Full Name</label>
+                        <input type="text" id="fullname" name="name" class="form-control">
+                        <span id="fullnameError" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control">
+                            <span id="emailError" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="adname" class="form-label">House Name / Flat No</label>
+                            <input type="text" id="adname" name="housename" class="form-control">
+                            <span id="adnameError" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="street" class="form-label">Street</label>
+                            <input type="text" id="street" name="street" class="form-control">
+                            <span id="streetError" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="pincode" class="form-label">Pincode</label>
+                            <input type="number" id="pincode" name="pincode" class="form-control">
+                            <span id="pincodeError" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" id="city" name="city" class="form-control">
+                            <span id="cityError" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <select id="state" name="state" class="form-control" required>
+                                <option value="" disabled selected>Select a state</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="TamilNadu">Tamil Nadu</option>
+                            </select>
+                            <span id="stateError" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            <select id="country" name="country" class="form-control" required>
+                                <option value="India">India</option>
+                            </select>
+                            <span id="countryError" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="mobile" class="form-label">Phone Number</label>
+                            <input type="number" id="mobile" name="mobile" class="form-control">
+                            <span id="mobileError" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <button id="saveChangesButton" class="btn btn-primary" type="submit">Save Changes</button>
+                    </div>
+
+                    
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
+     <!-- Footer Section Begin -->
+ <footer class="footer mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="footer__about">
+                    <div class="footer__logo">
+                        <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                    </div>
+                    <p>The customer is at the heart of our unique business model, which includes design.</p>
+                    <a href="#"><img src="img/payment.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Clothing Store</a></li>
+                        <li><a href="#">Trending Shoes</a></li>
+                        <li><a href="#">Accessories</a></li>
+                        <li><a href="#">Sale</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-6">
+                <div class="footer__widget">
+                    <h6>Shopping</h6>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Payment Methods</a></li>
+                        <li><a href="#">Delivary</a></li>
+                        <li><a href="#">Return & Exchanges</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                <div class="footer__widget">
+                    <h6>NewLetter</h6>
+                    <div class="footer__newslatter">
+                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                        <form action="#">
+                            <input type="text" placeholder="Your email">
+                            <button type="submit"><span class="icon_mail_alt"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="footer__copyright__text">
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    <p>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>2020
+                        All rights reserved | This template is made with <i class="fa fa-heart-o"
+                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    </p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </div>
+            </div>
+        </div>
+    </div>
+  </footer>
+  <!-- Footer Section End -->
+  
+  <!-- Search Begin -->
+  <div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+  </div>
+  <!-- Search End -->
+
+    <script>
+        // JavaScript validation function here
+        function validateAddress() {
+                var errors = '';
+                var saveas = document.getElementById('saveas').value;
+                var fullname = document.getElementById('fullname').value;
+                var email = document.getElementById('email').value;
+                var adname = document.getElementById('adname').value;
+                var street = document.getElementById('street').value;
+                var pincode = document.getElementById('pincode').value;
+                var city = document.getElementById('city').value;
+                var state = document.getElementById('state').value;
+                var country = document.getElementById('country').value;
+                var mobile = document.getElementById('mobile').value;
+    
+                var saveasError = document.getElementById('saveasError');
+                var fullnameError = document.getElementById('fullnameError');
+                var emailError = document.getElementById('emailError');
+                var adnameError = document.getElementById('adnameError');
+                var streetError = document.getElementById('streetError');
+                var pincodeError = document.getElementById('pincodeError');
+                var cityError = document.getElementById('cityError');
+                var stateError = document.getElementById('stateError');
+                var countryError = document.getElementById('countryError');
+                var mobileError = document.getElementById('mobileError');
+    
+                saveasError.innerHTML = '';
+                fullnameError.innerHTML = '';
+                emailError.innerHTML = '';
+                adnameError.innerHTML = '';
+                streetError.innerHTML = '';
+                pincodeError.innerHTML = '';
+                cityError.innerHTML = '';
+                stateError.innerHTML = '';
+                countryError.innerHTML = '';
+                mobileError.innerHTML = '';
+    
+                var spacesRegex = /^\s*$/; // Regex to check for only spaces
+    
+                if (spacesRegex.test(saveas)) {
+                    saveasError.innerHTML = 'Save as is required.';
+                    errors += 'Save as is required.\n';
+                }
+                if (spacesRegex.test(fullname)) {
+                    fullnameError.innerHTML = 'Full name is required.';
+                    errors += 'Full name is required.\n';
+                }
+                if (spacesRegex.test(email)) {
+                    emailError.innerHTML = 'Email is required.';
+                    errors += 'Email is required.\n';
+                } else if (!email.match(/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+                    emailError.innerHTML = 'Invalid email address.';
+                    errors += 'Invalid email address.\n';
+                }
+                if (spacesRegex.test(adname)) {
+                    adnameError.innerHTML = 'House name/Flat no is required.';
+                    errors += 'House name/Flat no is required.\n';
+                }
+                if (spacesRegex.test(street)) {
+                    streetError.innerHTML = 'Street is required.';
+                    errors += 'Street is required.\n';
+                }
+                if (spacesRegex.test(pincode)) {
+                    pincodeError.innerHTML = 'Pincode is required.';
+                    errors += 'Pincode is required.\n';
+                } else if (!pincode.match(/^\d{6}$/)) {
+                    pincodeError.innerHTML = 'Invalid pincode.';
+                    errors += 'Invalid pincode.\n';
+                }
+                if (spacesRegex.test(city)) {
+                    cityError.innerHTML = 'City is required.';
+                    errors += 'City is required.\n';
+                }
+                if (spacesRegex.test(state)) {
+                    stateError.innerHTML = 'State is required.';
+                    errors += 'State is required.\n';
+                }
+                if (spacesRegex.test(country)) {
+                    countryError.innerHTML = 'Country is required.';
+                    errors += 'Country is required.\n';
+                }
+                if (spacesRegex.test(mobile)) {
+                    mobileError.innerHTML = 'Mobile number is required.';
+                    errors += 'Mobile number is required.\n';
+                } else if (!mobile.match(/^\d{10}$/)) {
+                    mobileError.innerHTML = 'Invalid mobile number.';
+                    errors += 'Invalid mobile number.\n';
+                }
+    
+                if (errors) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+    
+            document.getElementById('saveChangesButton').addEventListener('click', function (event) {
+                if (!validateAddress()) {
+                    event.preventDefault();
+                }
+            });
+    </script>
+
+<script src="/public/js/jquery-3.3.1.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/jquery.nice-select.min.js"></script>
+<script src="/public/js/jquery.nicescroll.min.js"></script>
+<script src="/public/js/jquery.magnific-popup.min.js"></script>
+<script src="/public/js/jquery.countdown.min.js"></script>
+<script src="/public/js/jquery.slicknav.js"></script>
+<script src="/public/js/mixitup.min.js"></script>
+<script src="/public/js/owl.carousel.min.js"></script>
+<script src="/public/js/main.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+       
