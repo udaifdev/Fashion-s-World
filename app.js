@@ -31,7 +31,7 @@ app.use(express.static(__dirname + "/public"))
 console.log(__dirname, '>>>>>>>>>')
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('Views', path.join(__dirname, 'Views'));
 
 // view engine 
 app.set("view engine", "ejs");
