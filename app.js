@@ -19,6 +19,9 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
     console.log(error);
 })
 
+
+console.log("vernnindu");
+
 app.use(flash())
 app.use(express.urlencoded({ extended: true }))
 app.use("/public", express.static(path.join(__dirname, 'public')))
@@ -28,7 +31,7 @@ app.use(express.static(__dirname + "/public"))
 console.log(__dirname, '>>>>>>>>>')
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
-app.set('Views', path.join(__dirname, 'Views'));
+app.set('Views', path.join(__dirname, 'views'));
 
 // view engine 
 app.set("view engine", "ejs");
