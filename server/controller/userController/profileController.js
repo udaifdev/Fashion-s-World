@@ -35,6 +35,7 @@ const order_show = async (req, res) => {
 
     } catch (error) {
         console.log("orders show error undallo ==========>>>>>> ", error);
+        res.render('user/404Error')
     }
 }
 
@@ -48,6 +49,7 @@ const Reset_pass = async (req, res) => {
         res.render('user/ChangePass', { pass, Cart_total, itemCount })
     } catch (error) {
         console.log("Reset Password error undallo...................", error);
+        res.render('user/404Error')
     }
 }
 
@@ -83,6 +85,7 @@ const Reset_Pass_Post = async (req, res) => {
 
     } catch (error) {
         console.log('Reset pass Post error undallo');
+        res.render('user/404Error')
     }
 }
 
@@ -102,6 +105,7 @@ const viewAddress = async (req, res) => {
         })
     } catch (error) {
         console.log("address error undallo >>>  " + error)
+        res.render('user/404Error')
     }
 }
 
@@ -114,6 +118,7 @@ const addAddress = async (req, res) => {
         res.render('user/addAddress', { Cart_total, itemCount })
     } catch (error) {
         console.log('addAddress error undallo bro >>>>>>  ' + error);
+        res.render('user/404Error')
     }
 }
 
@@ -165,7 +170,7 @@ const addAddressPost = async (req, res) => {
             }
             return res.redirect('/move/address')
         }
-        
+
         const newAddress = await addressModel.create({
             userId: userId,
             address: {
@@ -190,6 +195,7 @@ const addAddressPost = async (req, res) => {
 
     } catch (error) {
         console.log("add address post error undallo >>>>>> " + error);
+        res.render('user/404Error')
     }
 }
 
@@ -210,6 +216,7 @@ const deleteAddress = async (req, res) => {
         }
     } catch (error) {
         console.log("delete Address error undallo >>>> " + error);
+        res.render('user/404Error')
     }
 }
 
@@ -233,6 +240,7 @@ const editAddress = async (req, res) => {
 
     } catch (error) {
         console.log("edit Address error undallo mone >>>>>>>>>>> " + error);
+        res.render('user/404Error')
     }
 }
 
@@ -287,6 +295,7 @@ const editPost = async (req, res) => {
         res.redirect('/move/address')
     } catch (error) {
         console.log("addressPost error undallo >>>>>>>> " + error);
+        res.render('user/404Error')
     }
 }
 
@@ -366,6 +375,7 @@ const itemCancel = async (req, res) => {
 
     } catch (error) {
         console.log('item Cancel error undallo ------------>   ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -436,6 +446,7 @@ const order_Cancelling = async (req, res) => {
 
     } catch (error) {
         console.log('oreder Canceling Error undallo ------------->   ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -454,7 +465,7 @@ const order_tracking = async (req, res) => {
         const Cart_total = req.session.Cart_total
         res.render('user/orderTracking', { order: order, itemCount, Cart_total, orderSuccess })
     } catch (error) {
-
+        res.render('user/404Error')
     }
 }
 
@@ -482,6 +493,7 @@ const Return_Reason = async (req, res) => {
 
     } catch (error) {
         console.log('return reason error undallo --------->>  ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -530,7 +542,7 @@ const reOrder = async (req, res) => {
         res.redirect(`/order-tracking/${order._id}`)
     } catch (error) {
         console.log(error);
-        res.render('user/serverError');
+        res.render('user/404Error')
     }
 }
 
@@ -547,6 +559,7 @@ const coupons = async (req, res) => {
 
     } catch (error) {
         console.log('coupons user side profail error undallo -------->>  ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -568,6 +581,7 @@ const wallet = async (req, res) => {
         res.render('user/wallet', { wallet: wallet, user: user, itemCount, Cart_total })
     } catch (error) {
         console.log("wallet error undallo ------------>>   ", error);
+        res.render('user/404Error')
     }
 }
 
@@ -578,38 +592,73 @@ const instance = new Razorpay({
 
 
 const walletupi = async (req, res) => {
-    console.log("walletupi ---------->   ", req.body);
-    var options = {
-        amount: 500,
-        currency: "INR",
-        receipt: "order_rcpt"
-    };
-    instance.orders.create(options, function (err, order) {
-        res.send({ orderId: order.id })
-    })
+    try {
+        console.log("walletupi ---------->   ", req.body);
+        var options = {
+            amount: 500,
+            currency: "INR",
+            receipt: "order_rcpt"
+        };
+        instance.orders.create(options, function (err, order) {
+            res.send({ orderId: order.id })
+        })
+    } catch (error) {
+        console.log('wallet upi error undallo ---->>  ', error);
+        res.render('Views/404Error')
+    }
 }
+
 
 const walletTopup = async (req, res) => {
     try {
         const userId = req.session.userId;
-        const user = await userModel.findOne({ _id: userId })
-        const Amount = parseFloat(req.body.Amount)
-        const wallet = await walletModel.findOne({ userId: userId });
+        if (!userId) {
+            req.flash('error', 'User not authenticated');
+            return res.redirect('/login');
+        }
+
+        const user = await userModel.findOne({ _id: userId });
+        if (!user) {
+            req.flash('error', 'User not found');
+            return res.redirect('/login');
+        }
+
+        const Amount = parseFloat(req.body.Amount);
+        if (isNaN(Amount) || Amount <= 0) {
+            req.flash('error', 'Invalid amount');
+            return res.redirect('/wallet');
+        }
+
+        console.log('amount ------>  ', Amount);
+
+        let wallet = await walletModel.findOne({ userId: userId });
+        if (!wallet) {
+            req.flash('error', 'If you are having the money from a return order in your wallet, then only you can do UPI payment');
+            return res.redirect('/wallet');
+        }
+
+        console.log('wallet ---------->>   ', wallet);
+
         user.wallet += Amount;
         wallet.history.push({
             transaction: "Credited",
             amount: Amount,
             date: new Date(),
-            reason: "Wallet Topup"
+            reason: "Wallet Topup",
         });
 
         await wallet.save();
         await user.save();
-        res.redirect("/wallet")
+
+        req.flash('success', 'Wallet topped up successfully');
+        res.redirect("/wallet");
     } catch (error) {
-        console.error('Error handling Razorpay callback:---------->  ', error);
+        console.error('Error handling wallet topup:---------->  ', error);
+        req.flash('error', 'An error occurred while topping up the wallet');
+        res.redirect('/wallet');
     }
-}
+};
+
 
 
 // Download Invoice 
@@ -636,6 +685,7 @@ const downloadInvoice = async (req, res) => {
     } catch (error) {
         console.error('download invoice error undallo --------->   ', error);
         res.status(500).send('Error generating invoice');
+        res.render('user/404Error')
     }
 };
 
@@ -691,6 +741,7 @@ const generateInvoice = async (order) => {
     } catch (error) {
         console.error('generate invoice function error undalle ----------->  ', error);
         throw error; // Ensure the error is propagated to the caller
+        res.render('user/404Error')
     }
 };
 

@@ -58,6 +58,7 @@ adminRouter.get('/orders' , session.adAuth , orderController.order)
 adminRouter.post('/updateOrderStatus' , session.adAuth , orderController.status)
 adminRouter.get('/Order_Return' , session.adAuth , orderController.return_order_view)
 adminRouter.get('/returnApprove/:id', session.adAuth, orderController.return_Approved)
+adminRouter.get('/returnReject/:id', session.adAuth, orderController.return_Reject)
 adminRouter.get('/viewOrder/:id' , session.adAuth , orderController.view_order_details)
 
 

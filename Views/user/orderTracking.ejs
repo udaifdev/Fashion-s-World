@@ -91,6 +91,35 @@
             transform: translateY(-2px);
             /* Slight lift on hover */
         }
+        .message-container {
+            text-align: center;
+            padding: 1rem;
+            margin: 2rem auto;
+            max-width: 600px;
+            border: 2px solid #ff0707;
+            background-color: #fff3cd;
+            color: #856404;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .message-container h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .message-container p {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .message-container img {
+            width: 200px;
+            height: 150px;
+            margin-bottom: 1rem;
+        }
     </style>
 
 
@@ -327,13 +356,18 @@
                                                                 , month: 'short' , day: 'numeric' }) %><br>Cancelled
                                                         </p>
                                                     </div>
-                                                    <% } else if (order.status==='paymentPending' ) { %>
+                                                    <% }
+                                                    
+                                                     else if (order.status==='paymentPending' ) { %>
                                                         <!-- Order tracking items for paymentPending status -->
-                                                        <div>
-                                                            <h2 class="text-danger font-weight-bold mb-4">"Your Order is Pending due to
-                                                                Unfinished
-                                                                Payment."</h2>
+                                                        <div class="message-container">
+                                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRghHo5esLh9X03nHsUs5SCuMgvavuof9wFK3j082TtFqJ4aRwm3hzp0TVRGqByFaUB8bI&usqp=CAU"
+                                                             alt="Pending Icon">
+                                                            <h1>Your Order is Pending</h1>
+                                                            <p>due to Unfinished Payment.</p>
                                                         </div>
+
+
                                                         <% } else { %>
                                                             <h2 class="text-dark">No Order Details</h2>
                                                             <% } %>
@@ -366,14 +400,14 @@
                 <div class="table-responsive">
                     <table class="table">
                         <!-- Table headers -->
-                        <thead>
+                        <thead style="background-color: rgb(143, 35, 143); color: white;">
                             <tr>
-                                <th class="text-dark">Product Name</th>
-                                <th class="text-dark">Size</th>
-                                <th class="text-dark">Quantity</th>
-                                <th class="text-dark">Price</th>
-                                <th class="text-dark">Total</th>
-                                <th class="text-dark">Payment</th>
+                                <th>Product Name</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Payment</th>
                             </tr>
                         </thead>
                         <!-- Table body -->
@@ -417,7 +451,7 @@
 
             <% if(order.status=="Delivered" ){ %>
                 <div class="text-center mt-4">
-                    <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-info mb-5  font-weight-bold btn-lg" download>
+                    <a href="/downloadInvoice/<%= order.orderId %>" class="btn btn-outline-danger mb-5  font-weight-bold btn-lg" download>
                         Download Invoice
                     </a>
                 </div>
@@ -439,7 +473,7 @@
                                         <label class="d-flex align-items-center mb-0">
                                             <input type="radio" name="paymentOption" value="cashOnDelivery"
                                                 onclick="handlePaymentMethodSelection()" class="mr-3">
-                                            <span>Cash on Delivery</span>
+                                            <span class="font-weight-bold">Cash on Delivery</span>
                                         </label>
                                     </div>
                                 </div>
@@ -448,7 +482,7 @@
                                         <label class="d-flex align-items-center mb-0">
                                             <input type="radio" name="paymentOption" value="wallet"
                                                 onclick="handlePaymentMethodSelection()" class="mr-3">
-                                            <span>Wallet Payment</span>
+                                            <span class="font-weight-bold">Wallet Payment</span>
                                         </label>
                                     </div>
                                 </div>
@@ -457,14 +491,14 @@
                                         <label class="d-flex align-items-center mb-0">
                                             <input type="radio" name="paymentOption" value="upi"
                                                 onclick="handlePaymentMethodSelection()" class="mr-3">
-                                            <span>Online Payment</span>
+                                            <span class="font-weight-bold">Online Payment</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Button to proceed payment -->
-                            <button id="placeOrderBtn" class="btn btn-outline-dark btn-lg py-3" type="submit">Proceed
+                            <button id="placeOrderBtn" class="btn btn-outline-danger btn-lg py-3" type="submit">Proceed To
                                 Payment</button>
                         </form>
                         <hr>
@@ -475,12 +509,6 @@
                             <% } %>
 
                                 <!-- Order Tracking Section End -->
-
-
-
-
-
-
 
 
 

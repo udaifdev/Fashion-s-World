@@ -1,44 +1,50 @@
- 
-
-  <%-include('navbar')-%>
+<%-include('navbar')-%>
 
 
-  <style>
-    .wallet-card {
-        border-radius: 10px;
-        transition: transform 0.2s ease-in-out;
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-    .wallet-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .wallet-card-title {
-        font-size: 1.5rem;
-    }
-    .wallet-card-body {
-        background-color: #dddddd;
-        border-radius: 0 0 10px 10px;
-    }
-    .wallet-card-credited {
-        border-left: 5px solid #28a745;
-    }
-    .wallet-card-debited {
-        border-left: 5px solid #dc3545;
-    }
-    .wallet-no-history {
-        border-radius: 10px;
-        font-size: 1.25rem;
-    }
-    .form-control-custom {
-        border-radius: 10px 0 0 10px;
-    }
-    .btn-custom {
-        border-radius: 0 10px 10px 0;
-    }
+    <style>
+        .wallet-card {
+            border-radius: 10px;
+            transition: transform 0.2s ease-in-out;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
 
-    /* form style */
-    #Form {
+        .wallet-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .wallet-card-title {
+            font-size: 1.5rem;
+        }
+
+        .wallet-card-body {
+            background-color: #dddddd;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .wallet-card-credited {
+            border-left: 5px solid #28a745;
+        }
+
+        .wallet-card-debited {
+            border-left: 5px solid #dc3545;
+        }
+
+        .wallet-no-history {
+            border-radius: 10px;
+            font-size: 1.25rem;
+        }
+
+        .form-control-custom {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .btn-custom {
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* form style */
+        #Form {
             max-width: 500px;
             margin: 50px auto;
             padding: 20px;
@@ -46,23 +52,27 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
+
         .form-control-custom {
             height: 50px;
             border-radius: 4px 0 0 4px;
             border: 1px solid #f5f0f0;
         }
+
         .btn-custom {
             height: 50px;
             border-radius: 0 4px 4px 0;
             border: 1px solid #383838;
         }
+
         .btn-custom:hover {
             background-color: #2e3031;
             color: white;
         }
 
         /* History style  */
-        h3, h4 {
+        h3,
+        h4 {
             background: #ffffff;
             padding: 15px;
             border-radius: 8px;
@@ -70,267 +80,318 @@
             display: inline-block;
             width: 100%;
         }
+
         h3 {
             font-weight: bold;
             color: #343a40;
         }
+
         h4 {
             font-weight: normal;
             color: #495057;
         }
+
         .balance {
             color: #28a745;
             font-weight: bold;
         }
-</style>
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+    </style>
 
 
 
-  <!-- Breadcrumb Section Begin -->
-  <section class="breadcrumb-option">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-12">
-                  <div class="breadcrumb__text">
-                      <h2>Wallet</h2>
-                      <div class="breadcrumb__links">
-                          <a href="/profile">Profile</a>
-                          <span> Wallet </span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  <!-- Breadcrumb Section End -->
-
-
-
-
-  <div class="container mt-5">
-    <h3 class="mb-4 text-center">Wallet History</h3>
-    <h4 class="mb-4 text-center">Balance: ₹<%= user.wallet %></h4>
-
-    <form id="Form" class="mb-4">
-        <div class="input-group">
-            <input type="number" id="Amount" name="Amount" class="form-control form-control-custom" placeholder="Enter Amount" min="0">
-            <button type="button" class="btn btn-outline-dark btn-custom" onclick="RazorpayWallet(event)">Add To Wallet</button>
-        </div>
-    </form>
-
-    <% if(wallet && wallet.length > 0) { %>
-        <div class="row">
-            <% wallet.forEach((entry, index) => { %>
-                <div class="col-md-6 mb-4">
-                    <div class="card wallet-card <%= entry.history.transaction === 'Credited' ? 'wallet-card-credited' : 'wallet-card-debited' %>">
-                        <div class="card-body wallet-card-body">
-                            <h5 class="card-title wallet-card-title <%= entry.history.transaction === 'Credited' ? 'text-success' : 'text-danger' %>">
-                                <%= entry.history.transaction %>
-                            </h5>
-                            <p class="card-text text-black">Reason: <%= entry.history.reason %></p>
-                            <p class="card-text text-black">Amount: ₹<%= entry.history.amount %></p>
-                            <p class="card-text text-black">Date: <%= new Date(entry.history.date).toLocaleString() %></p>
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h2>Wallet</h2>
+                        <div class="breadcrumb__links">
+                            <a href="/profile">Profile</a>
+                            <span> Wallet </span>
                         </div>
                     </div>
                 </div>
-                <% if((index + 1) % 2 === 0 && (index + 1) !== wallet.length) { %>
+            </div>
         </div>
-        <div class="row">
+    </section>
+    <!-- Breadcrumb Section End -->
+
+
+
+
+    <div class="container mt-5">
+        <h3 class="mb-4 text-center">Wallet History</h3>
+        <h4 class="mb-4 text-center">Balance: ₹<%= user.wallet %>
+        </h4>
+
+        <!-- Display Success Message -->
+        <% if (typeof success !=='undefined' && success.length> 0) { %>
+            <div class="alert alert-success">
+                <%= success %>
+            </div>
             <% } %>
-            <% }); %>
+
+                <!-- Display Error Message -->
+                <% if (typeof error !=='undefined' && error.length> 0) { %>
+                    <div class="alert alert-danger">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <!-- Your form and other content here -->
+
+                        <form id="Form" class="mb-4">
+                            <div class="input-group">
+                                <input type="number" id="Amount" name="Amount" class="form-control form-control-custom"
+                                    placeholder="Enter Amount" min="0">
+                                <button type="button" class="btn btn-outline-danger font-weight-bold"
+                                    onclick="RazorpayWallet(event)">Add To Wallet</button>
+                            </div>
+                        </form>
+
+                        <% if(wallet && wallet.length> 0) { %>
+                            <div class="row">
+                                <% wallet.forEach((entry, index)=> { %>
+                                    <div class="col-md-6 mb-4">
+                                        <div
+                                            class="card wallet-card <%= entry.history.transaction === 'Credited' ? 'wallet-card-credited' : 'wallet-card-debited' %>">
+                                            <div class="card-body wallet-card-body">
+                                                <h5
+                                                    class="card-title wallet-card-title <%= entry.history.transaction === 'Credited' ? 'text-success' : 'text-danger' %>">
+                                                    <%= entry.history.transaction %>
+                                                </h5>
+                                                <p class="card-text text-black">Reason: <%= entry.history.reason %>
+                                                </p>
+                                                <p class="card-text text-black">Amount: ₹<%= entry.history.amount %>
+                                                </p>
+                                                <p class="card-text text-black">Date: <%= new
+                                                        Date(entry.history.date).toLocaleString() %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% if((index + 1) % 2===0 && (index + 1) !==wallet.length) { %>
+                            </div>
+                            <div class="row">
+                                <% } %>
+                                    <% }); %>
+                            </div>
+                            <% } else { %>
+                                <div class="mb-3">
+                                    <h4 class="text-center text-danger font-weight-bold p-2 wallet-no-history">No Wallet History
+                                        Available.</h4>
+                                        <p class="font-weight-bold text-center m-3 text-danger">'If you are having the money
+                                             from a return order in your wallet, then only you can do UPI payment'
+                                            </p>
+                                </div>
+                                <% } %>
+    </div>
+
+
+
+
+
+
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo">
+                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="#"><img src="img/payment.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Clothing Store</a></li>
+                            <li><a href="#">Trending Shoes</a></li>
+                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Delivary</a></li>
+                            <li><a href="#">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright ©
+                            <script>
+                                document.write(new Date().getFullYear());
+                            </script>2020
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        </p>
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    </div>
+                </div>
+            </div>
         </div>
-    <% } else { %>
-        <div class="mb-3">
-            <h5 class="text-center bg-danger text-light p-2 wallet-no-history">No Wallet History Available.</h5>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Begin -->
+    <div class="search-model">
+        <div class="h-100 d-flex align-items-center justify-content-center">
+            <div class="search-close-switch">+</div>
+            <form class="search-model-form">
+                <input type="text" id="search-input" placeholder="Search here.....">
+            </form>
         </div>
-    <% } %>
-</div>
-
- 
-
-   
-  
-
-  <!-- Footer Section Begin -->
-  <footer class="footer">
-      <div class="container">
-          <div class="row">
-              <div class="col-lg-3 col-md-6 col-sm-6">
-                  <div class="footer__about">
-                      <div class="footer__logo">
-                          <a href="#"><img src="img/footer-logo.png" alt=""></a>
-                      </div>
-                      <p>The customer is at the heart of our unique business model, which includes design.</p>
-                      <a href="#"><img src="img/payment.png" alt=""></a>
-                  </div>
-              </div>
-              <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                  <div class="footer__widget">
-                      <h6>Shopping</h6>
-                      <ul>
-                          <li><a href="#">Clothing Store</a></li>
-                          <li><a href="#">Trending Shoes</a></li>
-                          <li><a href="#">Accessories</a></li>
-                          <li><a href="#">Sale</a></li>
-                      </ul>
-                  </div>
-              </div>
-              <div class="col-lg-2 col-md-3 col-sm-6">
-                  <div class="footer__widget">
-                      <h6>Shopping</h6>
-                      <ul>
-                          <li><a href="#">Contact Us</a></li>
-                          <li><a href="#">Payment Methods</a></li>
-                          <li><a href="#">Delivary</a></li>
-                          <li><a href="#">Return & Exchanges</a></li>
-                      </ul>
-                  </div>
-              </div>
-              <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                  <div class="footer__widget">
-                      <h6>NewLetter</h6>
-                      <div class="footer__newslatter">
-                          <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                          <form action="#">
-                              <input type="text" placeholder="Your email">
-                              <button type="submit"><span class="icon_mail_alt"></span></button>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-12 text-center">
-                  <div class="footer__copyright__text">
-                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      <p>Copyright ©
-                          <script>
-                              document.write(new Date().getFullYear());
-                          </script>2020
-                          All rights reserved | This template is made with <i class="fa fa-heart-o"
-                          aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                      </p>
-                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                  </div>
-              </div>
-          </div>
-      </div>
-  </footer>
-  <!-- Footer Section End -->
-
-  <!-- Search Begin -->
-  <div class="search-model">
-      <div class="h-100 d-flex align-items-center justify-content-center">
-          <div class="search-close-switch">+</div>
-          <form class="search-model-form">
-              <input type="text" id="search-input" placeholder="Search here.....">
-          </form>
-      </div>
-  </div>
-  <!-- Search End -->
+    </div>
+    <!-- Search End -->
 
 
 
-  <script>
-    async function RazorpayWallet(event) {
-        event.preventDefault();
-        console.log("Razorpay reached amount entering ---------->  ");
-        
-        let amountToPay = document.getElementById('Amount').value;
-        console.log('amountToPay --------->   ', amountToPay);
-        
-        if (!amountToPay) {
-            Swal.fire({
-                text: 'Please enter an amount',
-                icon: 'error',
-                confirmButtonText: 'OK',
-                customClass: {
-                    title: 'text-danger',
-                    popup: 'swal2-popup-custom',
-                    confirmButton: 'btn btn-danger'
-                },
-                showCancelButton: false,
-                showCloseButton: true,
-                showLoaderOnConfirm: false,
-                timer: 3000
-            });
-            return;
+    <script>
+        async function RazorpayWallet(event) {
+            event.preventDefault();
+            console.log("Razorpay reached amount entering ---------->  ");
+
+            let amountToPay = document.getElementById('Amount').value;
+            console.log('amountToPay --------->   ', amountToPay);
+
+            if (!amountToPay) {
+                Swal.fire({
+                    text: 'Please enter an amount',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        title: 'text-danger',
+                        popup: 'swal2-popup-custom',
+                        confirmButton: 'btn btn-danger'
+                    },
+                    showCancelButton: false,
+                    showCloseButton: true,
+                    showLoaderOnConfirm: false,
+                    timer: 3000
+                });
+                return;
+            }
+
+            try {
+                const orderId = await createOrder(amountToPay);
+                console.log("Received Order ID: ", orderId);
+
+                var options = {
+                    key: 'rzp_test_Q0LnymZbvUcLVu',
+                    amount: amountToPay * 100,
+                    currency: "INR",
+                    name: "Male Fashion's",
+                    description: "Test Transaction",
+                    image: "img/logo.png",
+                    order_id: orderId,
+                    handler: function (response) {
+                        // alert(response.razorpay_payment_id);
+                        document.getElementById("Form").method = "post";
+                        document.getElementById("Form").action = "/walletTopup";
+                        document.getElementById("Form").submit();
+                    },
+                    theme: {
+                        color: "#4285F4",
+                    },
+                };
+
+                var rzp1 = new Razorpay(options);
+                rzp1.on("payment.failed", function (response) {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.payment_id);
+                });
+                rzp1.open();
+            } catch (error) {
+                console.error("Error creating order: ", error);
+            }
         }
 
-        try {
-            const orderId = await createOrder(amountToPay);
-            console.log("Received Order ID: ", orderId);
+        async function createOrder(amountToPay) {
+            return new Promise((resolve, reject) => {
+                var settings = {
+                    url: "/walletcreate/orderId",
+                    method: "POST",
+                    timeout: 0,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify({ amount: amountToPay * 100 }),
+                };
 
-            var options = {
-                key: 'rzp_test_Q0LnymZbvUcLVu',
-                amount: amountToPay * 100,
-                currency: "INR",
-                name: "Male Fashion's",
-                description: "Test Transaction",
-                image: "img/logo.png",
-                order_id: orderId,
-                handler: function (response) {
-                    // alert(response.razorpay_payment_id);
-                    document.getElementById("Form").method = "post";
-                    document.getElementById("Form").action = "/walletTopup";
-                    document.getElementById("Form").submit();
-                },
-                theme: {
-                    color: "#4285F4",
-                },
-            };
-
-            var rzp1 = new Razorpay(options);
-            rzp1.on("payment.failed", function (response) {
-                alert(response.error.code);
-                alert(response.error.description);
-                alert(response.error.source);
-                alert(response.error.step);
-                alert(response.error.reason);
-                alert(response.error.metadata.payment_id);
+                $.ajax(settings).done(function (response) {
+                    resolve(response.orderId);
+                }).fail(function (error) {
+                    reject(error);
+                });
             });
-            rzp1.open();
-        } catch (error) {
-            console.error("Error creating order: ", error);
         }
-    }
+    </script>
 
-    async function createOrder(amountToPay) {
-        return new Promise((resolve, reject) => {
-            var settings = {
-                url: "/walletcreate/orderId",
-                method: "POST",
-                timeout: 0,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: JSON.stringify({ amount: amountToPay * 100 }),
-            };
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-            $.ajax(settings).done(function (response) {
-                resolve(response.orderId);
-            }).fail(function (error) {
-                reject(error);
-            });
-        });
-    }
-</script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Js Plugins -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/jquery.countdown.min.js"></script>
+    <script src="js/jquery.slicknav.js"></script>
+    <script src="js/mixitup.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+    </body>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-  <!-- Js Plugins -->
-  <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.nice-select.min.js"></script>
-  <script src="js/jquery.nicescroll.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/jquery.countdown.min.js"></script>
-  <script src="js/jquery.slicknav.js"></script>
-  <script src="js/mixitup.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/main.js"></script>
-</body>
-
-</html>
+    </html>

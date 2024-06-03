@@ -527,10 +527,8 @@ const chartData = async (req, res) => {
     }
     catch (err) {
         console.log('chart data error undallo --------------------->>  ', err);
-        // res.send("Error Occured")
         res.render("admin/page-error-404")
     }
-
 }
 
 

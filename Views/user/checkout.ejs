@@ -543,15 +543,8 @@ a {
 
       } else if (selectedPayment.value == 'upi') {
 
-        console.log("upi reached ----------> ");
-
         const amt = document.getElementById("total").textContent.trim();
-
-        console.log("amt reached ---------->  ", amt);
-
         const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
-
-        console.log("amount reached ---------->  ", amount);
 
         var options = {
           key: 'rzp_test_Q0LnymZbvUcLVu',
@@ -561,16 +554,9 @@ a {
           description: "Test Transaction",
           image: "img/logo.png",
           order_id: orderId,
-          handler: function (response) {
-
-            console.log("option reached ---------->  ", options);
-
-            console.log("option response reached ---------->  ", response);
-
+          
+          handler: function (response) {            
             alert(response.razorpay_payment_id);
-
-            console.log("post reached ---------->  ", amount);
-
             document.getElementById("amount").value = `${parseFloat(amount)}`;
             document.getElementById("orderform").method = "post";
             document.getElementById("orderform").action = "/order";

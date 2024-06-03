@@ -31,7 +31,7 @@ const generatorotp = () => {
         return otp;
     } catch (err) {
         console.log(err);
-        // resizeBy.render('Views/serverError')
+        res.render('user/404Error')
     }
 };
 
@@ -68,6 +68,7 @@ const sendmail = async (email, otp) => {
         console.log("Email sent successfully ----------------->> ");
     } catch (err) {
         console.log(err);
+        res.render('user/404Error')
     }
 };
 
@@ -85,6 +86,7 @@ const signup = async (req, res) => {
         });
     } catch (error) {
         console.log("Signup error: >>>>>>>" + error);
+        res.render('user/404Error')
     }
 };
 
@@ -94,13 +96,7 @@ const signupPost = async (req, res) => {
     try {
         const { username, email, mobile: phone, password, confirm_password: cpassword } = req.body;
         const user = await userModel.findOne({ email });
-
-        // console.log("Details =============>> ",
-        //     `username: ${username},
-        //       email: ${email},
-        //        phone: ${phone},
-        //         password: ${password}`);
-
+ 
         if (!user) {
             if (password !== cpassword) {
                 req.flash('passworderror', "Passwords do not match, please try again.");
@@ -132,6 +128,7 @@ const signupPost = async (req, res) => {
         }
     } catch (error) {
         console.error("Signup post error: >>>", error);
+        res.render('user/404Error')
     }
 };
 
@@ -149,6 +146,7 @@ const otp = async (req, res) => {
         })
     } catch (error) {
         console.log(error);
+        res.render('user/404Error')
     }
 };
 
@@ -184,6 +182,7 @@ const verifyotp = async (req, res) => {
         }
     } catch (error) {
         console.log("verifyotp error undallo..>>>>>>>>>>>" + error);
+        res.render('user/404Error')
     }
 }
 
@@ -199,6 +198,7 @@ const resendotp = async (req, res) => {
         res.redirect("/otp")
     } catch (error) {
         console.log("resend otp error undallo" + error);
+        res.render('user/404Error')
     }
 }
 
@@ -243,6 +243,7 @@ const index = async (req, res) => {
         res.render('user/index', { products, itemCount, Cart_total , categories })
     } catch (error) {
         console.log("index error undallo >>>>" + error);
+        res.render('user/404Error')
     }
 }
 
@@ -260,6 +261,7 @@ const login = async (req, res) => {
         });
     } catch (error) {
         console.log("error in login: " + error);
+        res.render('user/404Error')
     }
 };
 
@@ -289,7 +291,7 @@ const loginPost = async (req, res) => {
         console.log(error);
         req.flash('invaliduser', "Invalid Email or Password")
         res.redirect('/login')
-
+        res.render('user/404Error')
     }
 }
 
@@ -307,6 +309,7 @@ const profile = async (req, res) => {
         res.render('user/profile', { name, email, success, itemCount, Cart_total })
     } catch (error) {
         console.log('profile error undallo >>>>>>>>>  ' + error);
+        res.render('user/404Error')
     }
 }
 
@@ -325,6 +328,7 @@ const logout = async (req, res) => {
         })
     } catch (error) {
         console.log("log Out error ind :::::::::::::::::::::::::::::::::::::::::::::");
+        res.render('user/404Error')
     }
 }
 
@@ -337,6 +341,7 @@ const contact = async (req,res) => {
         res.render('user/contact' , { itemCount, Cart_total })
     } catch (error) {
         console.log('conatct error undallo --------->> ',error);
+        res.render('user/404Error')
     }
 }
 

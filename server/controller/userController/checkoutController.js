@@ -78,6 +78,7 @@ const checkout = async (req, res) => {
 
     } catch (error) {
         console.log('check out error undallo ..................  ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -98,6 +99,7 @@ const wallet = async (req, res) => {
         }
     } catch (error) {
         console.log("wallet error undallo -----------> ", error);
+        res.render('user/404Error')
     }
 }
 
@@ -203,7 +205,7 @@ const order_post = async (req, res) => {
 
     } catch (error) {
         console.log("Order_post error undallo =========>>>>>  ", error);
-        return res.status(500).send("Internal Server Error");
+        res.render('user/404Error')
     }
 }
 
@@ -228,6 +230,7 @@ const upi = async (req, res) => {
 
     } catch (error) {
         console.log('upi error undallo -------> ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -277,6 +280,7 @@ const order_conform_page = async (req, res) => {
         res.render('user/Thank_You', { order: orderConformation, Cart_total: Cart_total, itemCount: itemCount, deliveryCharge: deliveryCharge })
     } catch (error) {
         console.log('order_conform_page error undallo =====>>>> ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -343,7 +347,7 @@ const applyCoupon = async (req, res) => {
         }
     } catch (err) {
         console.error("Error applying coupon:---------->>  ", err);
-        res.status(500).json({ success: false, message: "Server error" });
+        res.render('user/404Error')
     }
 };
 
@@ -356,13 +360,10 @@ const revokeCoupon = async (req, res) => {
         console.log('----------------------------> Revoke coupon reached --------->> ');
 
         const { couponCode, subtotal } = req.body;
-        const userId = req.session.userId;  
+        const userId = req.session.userId;
         const coupon = await couponModel.findOne({ couponCode: couponCode });
 
-        console.log('subtotal --------->>  ', subtotal);
-
         const numericSubtotal = typeof subtotal === 'string' ? parseFloat(subtotal.replace(/[^\d.-]/g, '')) : subtotal;
-        console.log('numeric subtotal ---------->>  ', numericSubtotal);
 
         if (coupon) {
             const user = await userModel.findOne({ userId: userId });
@@ -371,7 +372,6 @@ const revokeCoupon = async (req, res) => {
 
                 // Calculate the discount price
                 const discountPrice = (numericSubtotal * coupon.discount) / 100;
-                console.log('Discount price --->  ', discountPrice);
 
                 // Set discount price to 0 since the coupon is being revoked
                 const dicprice = 0;
@@ -380,16 +380,12 @@ const revokeCoupon = async (req, res) => {
                 const deliveryCharge = 99;
                 const price = numericSubtotal + deliveryCharge;
 
-                console.log("Price checking----------->  ", price);
-
                 // Remove the coupon code from user's usedCoupons
                 await userModel.findByIdAndUpdate(
                     userId,
                     { $pull: { usedCoupons: couponCode } },
                     { new: true }
                 );
-
-                console.log("Discount price ------->>  ", dicprice, "Total price with delivery charge ---------->>  ", price);
 
                 // Send response with updated prices
                 res.json({ success: true, dicprice, price, });
@@ -401,8 +397,8 @@ const revokeCoupon = async (req, res) => {
             res.json({ success: false, message: "Coupon not found" });
         }
     } catch (error) {
-        console.log(error);
-        res.render("user/serverError");
+        console.log('revock coupon undallo error ----------------->> ', error);
+        res.render('user/404Error')
     }
 };
 

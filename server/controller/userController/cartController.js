@@ -67,8 +67,8 @@ const view_Cart = async (req, res) => {
             res.render("user/Cart", { cart: cart, itemCount: itemCount, Cart_total: Cart_total });
         }
     } catch (error) {
-        console.log('view cart page error:', error);
-        res.status(500).send('Error viewing cart');
+        console.log('view cart page error:------->>  ', error);
+        res.render('user/404Error')
     }
 }
 
@@ -157,7 +157,7 @@ const add_cart_post = async (req, res) => {
         }
     } catch (error) {
         console.log("add cart post error-------------->  ", error);
-        res.status(500).send('Error adding item to cart ADD cart post error');
+        res.render('user/404Error')
     }
 };
 
@@ -183,6 +183,7 @@ const Product_Remove = async (req, res) => {
         res.status(200).redirect('/cart')
     } catch (error) {
         console.log("Product Remove error undallo ..........................  ", error);
+        res.render('user/404Error')
     }
 
 }
@@ -253,7 +254,7 @@ const updateQtys = async (req, res) => {
 
     } catch (error) {
         console.error("updateCart error:-------------->>  ", error);
-        res.status(500).json({ success: false, error: 'Server Error' });
+        res.render('user/404Error')
     }
 }
 

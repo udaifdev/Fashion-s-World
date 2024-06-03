@@ -4,14 +4,14 @@ const productModel = require('../../model/productModel')
 const userModel = require('../../model/userModel')
 
 
-const order = async (req,res) => {
+const order = async (req, res) => {
     try {
-        let order ;
-        order = await orderModel.find({}).sort({createdAt : -1 }).populate({
-            path : 'items.productId',
-            select : 'name'
+        let order;
+        order = await orderModel.find({}).sort({ createdAt: -1 }).populate({
+            path: 'items.productId',
+            select: 'name'
         })
-        res.render('admin/orders' , { order : order })
+        res.render('admin/orders', { order: order })
     } catch (error) {
         console.log('order error undallo >>>>>>>>>>  ' + error)
         res.render("admin/page-error-404")
@@ -25,7 +25,7 @@ const view_order_details = async (req, res) => {
         const order = await orderModel.findOne({ _id: id }).populate({
             path: 'items.productId',
             select: 'name image discount',
-           
+
         });
 
         res.render('admin/viewOrders', { order });
@@ -37,39 +37,39 @@ const view_order_details = async (req, res) => {
 
 
 
-const status = async (req,res) => {
+const status = async (req, res) => {
     console.log('status reached --------->>>>>>>>>>> ');
     try {
-        const {orderId , status } = req.body
-        const updateOrder = await orderModel.updateOne({_id:orderId} , {status : status , updated : new Date() })
-        console.log('reched ------>>>>>>>> ' , updateOrder);
+        const { orderId, status } = req.body
+        const updateOrder = await orderModel.updateOne({ _id: orderId }, { status: status, updated: new Date() })
+        console.log('reched ------>>>>>>>> ', updateOrder);
 
         res.redirect('/admin/orders')
-        
+
     } catch (error) {
-        console.log(' admin status error undallo --------->>  ' , error);
+        console.log(' admin status error undallo --------->>  ', error);
         res.render("admin/page-error-404")
     }
 }
 
 
 //  Return Order Page view 
-const return_order_view = async (req,res) => {
+const return_order_view = async (req, res) => {
     try {
-        const order = await orderModel.find({ 'return' : {$exists : true , $ne : [] }}).sort({ createAt: -1 }).populate({
-            path : 'items.productId' ,
-            select : 'name'
+        const order = await orderModel.find({ 'return': { $exists: true, $ne: [] } }).sort({ createAt: -1 }).populate({
+            path: 'items.productId',
+            select: 'name'
         })
-        res.render('admin/Order_Return' , { order : order })
+        res.render('admin/Order_Return', { order: order })
     } catch (error) {
-        console.log("return order view error undallo ----------->>  " , error);
+        console.log("return order view error undallo ----------->>  ", error);
         res.render("admin/page-error-404")
     }
 }
 
 
 // Return Accepct 
-const return_Approved = async (req,res) => {
+const return_Approved = async (req, res) => {
     try {
         const orderId = req.params.id;
         const update = await orderModel.updateOne(
@@ -123,7 +123,23 @@ const return_Approved = async (req,res) => {
 
         res.redirect('/admin/Order_Return');
     } catch (error) {
-        console.log("return approved error undallo ------------>   " , error);
+        console.log("return approved error undallo ------------>   ", error);
+        res.render("admin/page-error-404")
+    }
+}
+
+
+// Reject Return order
+const return_Reject = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const update = await orderModel.updateOne(
+            { _id: orderId, 'return.status': 'Pending' },
+            { $set: { 'return.$.status': 'Rejected' } }
+        );
+        res.redirect('/admin/Order_Return');
+    } catch (error) {
+        console.log('return reject error undallo -------->>   ', error);
         res.render("admin/page-error-404")
     }
 }
@@ -131,4 +147,4 @@ const return_Approved = async (req,res) => {
 
 
 
-module.exports = { order , status , return_order_view , return_Approved , view_order_details}
+module.exports = { order, status, return_order_view, return_Approved,  return_Reject, view_order_details }
