@@ -36,13 +36,14 @@ adminRouter.get('/unblock/:id' , session.adAuth , adminController.unblock)
 
 adminRouter.get('/products', session.adAuth, productController.products)
 adminRouter.get('/addProduct', session.adAuth, productController.addProduct)
-adminRouter.post('/addProduct', session.adAuth, (req, res, next) => req.upload.array('images', 5)(req, res, next), productController.addProductPost)
+adminRouter.post('/addProduct', session.adAuth, (req, res, next) => req.upload.array('images', 5)(req, res, next), productController.addProductPost);
+adminRouter.post('/updateImage/:id', session.adAuth, (req, res, next) => req.upload.single('image')(req, res, next), productController.update_Image);
 adminRouter.get('/unlist/:id', session.adAuth, productController.unlist)
 adminRouter.get('/updateProduct/:id', session.adAuth, productController.updateProduct)
 adminRouter.post('/updateProduct/:id', session.adAuth, productController.updateProductPost)
 adminRouter.get('/edit_img/:id', session.adAuth, productController.edit_img)
 adminRouter.get('/Delete_img', session.adAuth, productController.Delete_img)
-adminRouter.post('/updateImage/:id', session.adAuth, (req, res, next) => req.upload.array('image')(req, res, next), productController.update_Image)
+// adminRouter.post('/updateImage/:id', session.adAuth, (req, res, next) => req.upload.array('image')(req, res, next), productController.update_Image)
 
     
 

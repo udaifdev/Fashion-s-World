@@ -20,13 +20,10 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
 })
 
 
-console.log("vernnindu");
-
 app.use(flash())
 app.use(express.urlencoded({ extended: true }))
 app.use("/public", express.static(path.join(__dirname, 'public')))
 
-app.use("/uploads", express.static(path.join(__dirname, 'uploads')))
 app.use(express.static(__dirname + "/public"))
 console.log(__dirname, '>>>>>>>>>')
 app.get('/favicon.ico', (req, res) => res.status(204).end());
@@ -49,7 +46,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session())
 
-// Multer setup
+// Set up static files serving for uploads
+app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
+
+// Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/')
@@ -57,15 +57,16 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
     }
-})
+});
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage });
 
-// Pass the upload middleware to the routers
+// Middleware to pass multer upload functionality to the routes
 app.use((req, res, next) => {
     req.upload = upload;
     next();
-})
+});
+
 
 // router connecting
 app.use("/admin", adminRouter)
