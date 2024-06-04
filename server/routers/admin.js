@@ -7,18 +7,6 @@ const orderController = require('../controller/adminController/orderController')
 const coupenController = require('../controller/adminController/coupenController')
 const session = require('../../middleware/adminAuth')
 const multer = require('multer');
- 
-// const upload = multer( {dest : 'uploads/'})
-
-// const storage = multer.diskStorage({
-//     destination : function(req,file,cb) {
-//         cb(null , 'uploads/')
-//     },
-//     filename: function(req,file,cb) {
-//         cb(null, Date.now() + '-' + file.originalname) 
-//     }
-// })
-// const upload = multer( {storage : storage} )
 
 
 adminRouter.use(express.urlencoded({ extended : true }))

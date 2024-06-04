@@ -3,11 +3,11 @@
 
  <style>
     /* Ensure background images are applied */
-    /* .set-bg[data-setbg] {
+    .set-bg[data-setbg] {
         background-size: cover;
         background-position: center;
-        background-image: url(attr(data-setbg));
-    } */
+        /* background-image: url(attr(data-setbg)); */
+    }
 
     .product__item {
         position: relative;
@@ -177,8 +177,8 @@
                 <% if (categoryProduct && categoryProduct.image.length > 0) { %>
                     <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
                         <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="<%= categoryProduct.image[0] %>">
-                                <img src="<%= categoryProduct.image[0] %>" alt="" class="img-fluid">
+                            <div class="product__item__pic set-bg">
+                                <img src="<%= categoryProduct.image[0] %>" alt="-- -- images" class="img-fluid">
                                 <span class="label">New</span>
                             </div>
                             <div class="product__item__text">
