@@ -70,6 +70,7 @@ const shop = async (req,res) => {
     
     } catch (error) {
         console.log("shop errro undallo ------------------>>    " + error);
+        res.render('user/404Error')
     }
 }
 
@@ -135,31 +136,42 @@ const categoryCount = async (req,res) => {
 
 
 // Single prooduct viewing 
-const singleProduct = async (req,res) => {
+const singleProduct = async (req, res) => {
     try {
-         const productId = req.params.id ;
-         const categories = await categModel.find()
-         const productOne = await productModel.findById(productId)
+        const productId = req.params.id;
+        const categories = await categModel.find();
+        const productOne = await productModel.findById(productId);
 
         // Check if the request is for favicon
         if (req.url === '/favicon.ico') {
             return; // Ignore favicon requests
         }
 
-        let pass;
-        if (productOne.totalstock == 0 ) {
-            pass = 'Out Of Stocks!'
+        let pass = '';
+        if (productOne.totalstock === 0) {
+            pass = 'Out Of Stock!';
         }
-        const products = await productModel.find({ category : productOne.category })
-        // console.log(products,"_____________________");
-        const itemCount = req.session.cartCount ; 
-        const Cart_total = req.session.Cart_total;
-        res.render('user/shopDetails', {productOne , products , categories , pass , itemCount , Cart_total })
+        const products = await productModel.find({ category: productOne.category });
+
+        // Ensure session variables exist before accessing them
+        const itemCount = req.session.cartCount || 0;
+        const Cart_total = req.session.Cart_total || 0;
+
+        res.render('user/shopDetails', {
+            productOne,
+            products,
+            categories,
+            pass,
+            itemCount,
+            Cart_total
+        });
 
     } catch (error) {
-        console.log("single Product error undallo ----------------->  " + error);
+        console.log("single Product error: " + error);
+        res.status(500).send("Internal Server Error");
     }
 }
+
 
 
 
@@ -196,6 +208,7 @@ const addtofavourites = async (req,res) => {
                 fav.items[existingProduct].price = price; // Updating price here
             }
             console.log('existingProduct -----------> 4   ' , existingProduct);
+            res.render('user/404Error')
         }
 
          
@@ -223,6 +236,7 @@ const viewFav = async (req,res) => {
         res.render('user/wishlisht' , {fav : fav , itemCount , Cart_total} )
     } catch (error) {
         console.log('view fav error undallo check aakiko -------------!  ' , error);
+        res.render('user/404Error')
     }
 }
 
@@ -239,6 +253,7 @@ const remove_Fav = async (req,res) => {
         res.redirect('/wishlisht')
     } catch (error) {
         console.log('remove Fav error undallo poi check chiyyuga ______! ' , error);
+        res.render('user/404Error')
     }
 }
 

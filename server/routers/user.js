@@ -20,6 +20,8 @@ userRouter.get('/auth/failure', userController.authFailure);
 userRouter.get("/" , userController.index)
 userRouter.get('/profile' , Logged , userController.profile)
 userRouter.get('/contact' , userController.contact)
+userRouter.get('/shop' , productController.shop)
+userRouter.get('/singleproduct/:id' , productController.singleProduct)
 
 
 userRouter.get("/login" , ifLogged , userController.login)
@@ -82,10 +84,6 @@ userRouter.get('/orderCornformPage' , Logged , checkoutValid , checkoutControlle
 
 
  
-
-
-userRouter.get('/shop' , productController.shop)
-userRouter.get('/singleproduct/:id' , productController.singleProduct)
  
 
  
