@@ -10,113 +10,106 @@ const favModel = require('../../model/FavModel');
 
 
 
-const shop = async (req, res) => {
+const shop = async (req,res) => {
     try {
-        const perPage = 6;
-        const categoryId = req.query.category;
-        const sortBy = req.query.sortBy;
-        const search = req.query.search;
-        const page = parseInt(req.query.page) || 1;
+        let products;
+        const perPage = 6
+        const id = req.session.userId
+        const categoryId = req.query.category ; 
+        const sortBy = req.query.sortBy
+        const search = req.query.search 
+        const page   = parseInt(req.query.page) || 1 ;
 
-        let searchCriteria = { status: true };
-
-        // Build the search criteria
         if (search) {
-            const searchRegex = new RegExp(search, 'i');
-            searchCriteria.name = searchRegex;
-        }
+            const searcRegex = new RegExp(search, 'i')
+            let searchCriteria = { name : searcRegex , status : true}
 
-        // Category filtering
-        if (categoryId) {
-            searchCriteria.category = new mongoose.Types.ObjectId(categoryId);
-            req.session.filterCat = categoryId;
-        } else if (req.session.filterCat) {
-            searchCriteria.category = new mongoose.Types.ObjectId(req.session.filterCat);
-        }
+            if (req.session.filterCat) {
+                searchCriteria.category = new mongoose.Types.ObjectId(req.session.filterCat) ;
+            }
 
-        // Fetch products with sorting and pagination
-        const products = await getProductsWithSortingAndPagination(searchCriteria, sortBy, page, perPage);
-        const totalProducts = await productModel.countDocuments(searchCriteria);
-        const totalPage = Math.ceil(totalProducts / perPage);
+            if (sortBy) {
+                products = await getProductsWitSorting(searchCriteria , sortBy)
+            } else {
+                products = await productModel.find(searchCriteria).exec()
+            }
+            
+        } else {
+               if (sortBy) {
+                   let filter = {status : true}
+   
+                   if (req.session.filterCat) {
+                       filter.category = new mongoose.Types.ObjectId(req.session.filterCat);
+                   }
 
-        // Fetch other necessary data
-        const categoryCounts = await categoryCount();
-        const categories = await catgModel.find({ status: true });
-        const itemCount = req.session.cartCount;
-        const Cart_total = req.session.Cart_total;
+                   products = await getProductsWitSorting(filter , sortBy)
 
-        // Construct query parameters for pagination links
-        const queryParams = new URLSearchParams({ 
-            category: categoryId || '',
-            sortBy: sortBy || '',
-            search: search || ''
-        });
+               } else {
+                    if (categoryId) {
+                        products = await productModel.find({category : categoryId , status : true}).exec()
+                        req.session.filterCat = categoryId
+                    } else {
+                    delete req.session.filter;
+                    products = await productModel.find({status : true }).exec()
+                    }
+               }
+            } 
+          
+        const totalPage = Math.ceil(products.length / perPage)
+        const startIndex = (page - 1) * perPage
+        const endIndex   = page * perPage
+        const productPaginated = products.slice(startIndex , endIndex)
 
-        res.render('user/shop', {
-            products,
-            categories,
-            categoryCounts,
-            currentPage: page,
-            totalPage,
-            sortBy,
-            categoryId,
-            search,
-            itemCount,
-            Cart_total,
-            queryParams: queryParams.toString()
-        });
+        const categoryCounts = await  categoryCount();
+        const categories = await catgModel.find({status : true})
+        const itemCount = req.session.cartCount
+        const Cart_total = req.session.Cart_total
 
+        res.render('user/shop', { products : productPaginated , categories , categoryCounts ,
+                                  currentPage : page , totalPage , sortBy , categoryId , search , itemCount , Cart_total})
+    
     } catch (error) {
-        console.log("shop error ------------------>>    " + error);
+        console.log("shop errro undallo ------------------>>    " + error);
     }
-};
+}
 
-// Function to handle sorting and pagination
-const getProductsWithSortingAndPagination = async (filter, sortBy, page, perPage) => {
-    const aggregationPipeline = [];
 
-    // Add match stage with filter criteria
+// sorting shop page
+const getProductsWitSorting = async (filter,sortBy) => {
+    const aggregationPipline = [];
+
+    // Push the $match stage with the filter if it's provided
     if (filter) {
-        aggregationPipeline.push({ $match: filter });
+        aggregationPipline.push({ $match: filter } );
     }
 
-    // Add sorting stage based on sortBy parameter
-    if (sortBy) {
-        switch (sortBy) {
-            case 'nameAZ':
-                aggregationPipeline.push(
-                    { $addFields: { name_lower: { $toLower: '$name' } } },
-                    { $sort: { name_lower: 1 } }
-                );
-                break;
-            case 'nameZA':
-                aggregationPipeline.push(
-                    { $addFields: { name_lower: { $toLower: '$name' } } },
-                    { $sort: { name_lower: -1 } }
-                );
-                break;
-            case 'priceHigh':
-                aggregationPipeline.push({ $sort: { price: 1 } });
-                break;
-            case 'priceLow':
-                aggregationPipeline.push({ $sort: { price: -1 } });
-                break;
-            case 'newArrivals':
-                aggregationPipeline.push({ $sort: { _id: -1 } });
-                break;
-            default:
-                break;
-        }
+    if (sortBy === 'nameAZ') {
+        aggregationPipline.push(
+            { $addFields: { name_lower: { $toLower: '$name' } } },
+            { $sort: { name_lower: 1 } }
+        );
+    }
+    if (sortBy === 'nameZA') {
+        aggregationPipline.push(
+            { $addFields: { name_lower: { $toLower: '$name' } } },
+            { $sort: { name_lower: -1 } }
+        );
+    }    
+    if (sortBy === 'priceHigh') {
+        aggregationPipline.push({$sort : { price : 1 } } )
+    }
+    if (sortBy === 'priceLow') {
+        aggregationPipline.push({$sort : { price : -1 } } )
+    }
+    if (sortBy === 'newArrivals') {
+        aggregationPipline.push({$sort : {_id : -1} } , {$limit : 6})
     }
 
-    // Add pagination stages
-    aggregationPipeline.push(
-        { $skip: (page - 1) * perPage },
-        { $limit: perPage }
-    );
-
-    // Execute the aggregation pipeline
-    return productModel.aggregate(aggregationPipeline).exec();
+    // If the aggregation pipeline is empty, return all documents
+    if (aggregationPipline.length === 0) {
+        return productModel.find(filter).exec();
+    }
+    return productModel.aggregate(aggregationPipline).exec()
 }
 
 
@@ -142,21 +135,11 @@ const categoryCount = async (req,res) => {
 
 
 // Single prooduct viewing 
-const singleProduct = async (req, res) => {
+const singleProduct = async (req,res) => {
     try {
-        const productId = req.params.id;
-
-        // Validate ObjectId
-        if (!mongoose.Types.ObjectId.isValid(productId)) {
-            throw new Error(' Single Product Invalid Product ID ------------>> ');
-        }
-
-        const categories = await categModel.find();
-        const productOne = await productModel.findById(productId);
-
-        if (!productOne) {
-            throw new Error('Product not found');
-        }
+         const productId = req.params.id ;
+         const categories = await categModel.find()
+         const productOne = await productModel.findById(productId)
 
         // Check if the request is for favicon
         if (req.url === '/favicon.ico') {
@@ -164,28 +147,20 @@ const singleProduct = async (req, res) => {
         }
 
         let pass;
-        if (productOne.totalstock === 0) {
-            pass = 'Out Of Stock!';
+        if (productOne.totalstock == 0 ) {
+            pass = 'Out Of Stocks!'
         }
-
-        const products = await productModel.find({ category: productOne.category });
-
-        const itemCount = req.session.cartCount;
+        const products = await productModel.find({ category : productOne.category })
+        // console.log(products,"_____________________");
+        const itemCount = req.session.cartCount ; 
         const Cart_total = req.session.Cart_total;
-        res.render('user/shopDetails', {
-            productOne,
-            products,
-            categories,
-            pass,
-            itemCount,
-            Cart_total
-        });
+        res.render('user/shopDetails', {productOne , products , categories , pass , itemCount , Cart_total })
 
     } catch (error) {
-        console.log("single Product error undallo --------------->>  " + error.message);
-        res.status(500).send('An error occurred while fetching the product details.');
+        console.log("single Product error undallo ----------------->  " + error);
     }
 }
+
 
 
 const addtofavourites = async (req,res) => {
