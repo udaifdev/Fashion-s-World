@@ -24,11 +24,12 @@
     <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <link rel="stylesheet" href="/css/magicZoom.css" type="text/css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
-    <link rel="stylesheet" href="css/magicZoom.css" type="text/css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css"> -->
 
 
     <style type="text/css">
@@ -177,7 +178,7 @@
                                                 <a class="nav-link <%= i === 0 ? 'active' : '' %>" data-toggle="tab"
                                                     href="#tabs-<%= i + 1 %>" role="tab">
                                                     <div class="product__thumb__pic mb-4  set-bg" data-setbg="">
-                                                        <img src="<%= productOne.image[i] %>" alt="picure" class="mt-4">
+                                                        <img src="/<%= productOne.image[i] %>" alt="side-picure" class="mt-4">
                                                     </div>
                                                 </a>
                                             </li>
@@ -193,7 +194,7 @@
                                                 role="tabpanel">
                                                 <a href="/<%= productOne.image[i] %>"
                                                     class="MagicZoom product__details__pic__item" id="Mag">
-                                                    <img src="<%= productOne.image[i] %>" alt="image"
+                                                    <img src="/<%= productOne.image[i] %>" alt=" Middle-image"
                                                         style="height:500px;">
                                                 </a>
                                             </div>
@@ -369,7 +370,7 @@
                             <a href="/singleproduct/<%= product._id %>">
                                 <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
                                     <a href="/singleproduct/<%= product._id %>">
-                                        <img src="<%= product.image[0] %>" alt=" ">
+                                        <img src="/<%= product.image[0] %>" alt=" ">
                                     </a>
                                     <ul class="product__hover">
                                         <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
