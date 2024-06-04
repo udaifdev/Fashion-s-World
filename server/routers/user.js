@@ -85,7 +85,7 @@ userRouter.get('/orderCornformPage' , Logged , checkoutValid , checkoutControlle
 
 
 userRouter.get('/shop' , productController.shop)
-userRouter.get('/:id' , productController.singleProduct)
+userRouter.get('/singleproduct/:id' , productController.singleProduct)
  
 
  
