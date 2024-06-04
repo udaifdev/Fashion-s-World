@@ -3,47 +3,84 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
 <style>
-  /* Basic styling */
-  .order {
-    border: 1px solid #161515;
-    margin-bottom: 20px;
-    padding: 10px;
-  }
+/* Basic styling */
+/* Basic styling */
+.order {
+  border: 1px solid #161515;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+.order-item {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.order-item .img-container {
+  flex: 0 0 250px;
+  max-width: 250px;
+}
+.order-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+.order-item .details {
+  flex: 1;
+  padding-left: 20px;
+}
+.cancel-order-button, .order-details-button, .cancel-product-button, .return-order-button {
+  padding: 5px 10px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+.cancel-order-button, .return-order-button {
+  background-color: rgb(233, 49, 49);
+}
+.order-details-button {
+  background-color: rgb(40, 177, 74);
+}
+.cancel-product-button {
+  background-color: rgb(190, 75, 75);
+}
+
+@media (max-width: 768px) {
   .order-item {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: center;
+    max-width: 95%;
   }
   .order-item .img-container {
-    flex: 0 0 250px;
-    max-width: 250px;
-  }
-  .order-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
+    max-width: 34%;
+    flex: none;
+    margin-right: 25px;
   }
   .order-item .details {
-    flex: 1;
-    padding-left: 20px;
+    padding-left: 0;
+    text-align: left; /* Align text to the left */
   }
-  .cancel-order-button, .order-details-button, .cancel-product-button, .return-order-button {
-    padding: 5px 10px;
-    margin-right: 10px;
-    cursor: pointer;
-    color: white;
-    border: none;
-    border-radius: 6px;
+  .bdr {
+    border: 1px solid rgb(211, 211, 211);
+    padding: 10px;
+    margin: 20px;
+    margin-top: -10px;
+    margin-bottom: -10px;
+    border-radius: 20px;
   }
-  .cancel-order-button, .return-order-button {
-    background-color: rgb(233, 49, 49);
+  .bdr p{
+    line-height: 60%;
   }
-  .order-details-button {
-    background-color: rgb(40, 177, 74);
+  .bdr .delv-add{
+    line-height: 20px;
+    font-size: 13px;
   }
-  .cancel-product-button {
-    background-color: rgb(190, 75, 75);
-  }
+
+}
+
 </style>
 
 <!-- Breadcrumb Section Begin -->
@@ -75,7 +112,7 @@
           <h4>Order ID: <%= orderItem.orderId %></h4>
         </div>
 
-        <div class="m-2 mt-4 text-center">
+        <div class="m-2 mt-4 text-center ">
           <% if (orderItem.status == 'paymentPending') { %>
             <h4 class="font-weight-bold">"Move To The Order Details Page To Make a Payment."</h4>
           <% } %>
@@ -83,11 +120,11 @@
 
         <div class="order-item row">
           <% orderItem.items.forEach((item, index) => { %>
-            <div class="col-12 col-md-6 mb-3 d-flex">
+            <div class="col-12 col-md-6 mb-3 d-flex bdr">
               <div class="img-container">
-                <img src="<%= (item.productId && item.productId.image && item.productId.image.length > 0) ? '/' + item.productId.image[0] : 'item-picture.jpg' %>" alt="Item Picture" class="img-fluid">
+                <img class="img-fluid cart-img" src="<%= (item.productId && item.productId.image && item.productId.image.length > 0) ? '/' + item.productId.image[0] : 'item-picture.jpg' %>" alt="Item Picture" >
               </div>
-              <div class="details">
+              <div class="details txt">
                 <% if (item.productId && item.productId.name) { %>
                   <p class="font-weight-bold">Item Name: <%= item.productId.name %></p>
                 <% } else { %>
@@ -96,7 +133,7 @@
                 <p>Amount: ₹ <%= orderItem.amount ? orderItem.amount : 'N/A' %></p>
                 <p>Status: <span class="font-weight-bold"><%= orderItem.status %></span></p>
                 <% orderItem.address.forEach(address => { %>
-                  <p>Delivery Address: <%= address.save_as %>, <%= address.housename %>, <%= address.city %>, <%= address.pincode %></p>
+                  <p class="delv-add">Delivery Address: <%= address.save_as %>, <%= address.housename %>, <%= address.city %>, <%= address.pincode %></p>
                 <% }); %>
                 <p>Quantity: <%= item.quantity ? item.quantity : 'N/A' %></p>
                 <p>Size: <%= item.size ? item.size : 'N/A' %></p>
@@ -114,25 +151,27 @@
         <!-- End of Order Item -->
 
         <!-- Buttons -->
-        <button class="order-details-button" onclick="location.href='/order-tracking/<%= orderItem._id %>'">
-          Order Details
-        </button>
-
-        <% if (orderItem.status !== 'Cancelled' && orderItem.status !== 'Delivered' && orderItem.status !== 'returned') { %>
-          <button class="cancel-order-button" onclick="confirmCancelOrder('/cancelorder/<%= orderItem._id %>')"> 
-            Cancel Order
+        <div class="text-center mt-5 mb-3">
+          <button class="order-details-button" onclick="location.href='/order-tracking/<%= orderItem._id %>'">
+            Order Details
           </button>
-        <% } %>
 
-        <% if (orderItem.return && orderItem.return.length > 0 && orderItem.return[0].status) { %>
-          <span class="bg-warning p-2 rounded font-weight-bold">
-            Return Status: <%= orderItem.return[0].status %>
-          </span>
-        <% } else if (orderItem.status === 'Delivered' && new Date(orderItem.updated.getTime() + 5 * 24 * 60 * 60 * 1000) >= new Date()) { %>
-          <button class="return-order-button" onclick="confirmReturnOrder('<%= orderItem._id %>')">
-            Return Order
-          </button>
-        <% } %>
+          <% if (orderItem.status !== 'Cancelled' && orderItem.status !== 'Delivered' && orderItem.status !== 'returned') { %>
+            <button class="cancel-order-button" onclick="confirmCancelOrder('/cancelorder/<%= orderItem._id %>')"> 
+              Cancel Order
+            </button>
+          <% } %>
+
+          <% if (orderItem.return && orderItem.return.length > 0 && orderItem.return[0].status) { %>
+            <span class="bg-warning p-2 rounded font-weight-bold">
+              Return Status: <%= orderItem.return[0].status %>
+            </span>
+          <% } else if (orderItem.status === 'Delivered' && new Date(orderItem.updated.getTime() + 5 * 24 * 60 * 60 * 1000) >= new Date()) { %>
+            <button class="return-order-button" onclick="confirmReturnOrder('<%= orderItem._id %>')">
+              Return Order
+            </button>
+          <% } %>
+        </div>
         <!-- End of Buttons -->
 
       </div>

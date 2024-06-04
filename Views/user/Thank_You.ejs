@@ -67,7 +67,7 @@
     .small-image {
       width: 50%;
       /* Maximum width for the image */
-      height: 300px;
+      height: 36%;
       margin-bottom: 0px;
       /* Maintain aspect ratio */
     }
@@ -76,9 +76,18 @@
 
 <body>
 
-  <div class="small-image-container mb-0 p-0">
-    <img src="/public/img/successfully order image.webp" alt="Successfully ordered image" class="small-image">
-  </div>
+  <% if(order.payment=="paymentPending" ){ %>
+     <div class="small-image-container mb-0 p-0">
+      <img src="https://st.depositphotos.com/1186248/2405/i/950/depositphotos_24054161-stock-photo-payment-pending.jpg"
+       alt="Pending image" class="small-image">
+     </div>
+  <% } else { %>
+    <div class="small-image-container mb-0 p-0">
+      <img src="/public/img/successfully order image.webp" alt="Successfully ordered image" class="small-image">
+    </div>
+  <% } %>
+
+
 
   <section class="order_details section_gap mt-0 p-0">
     <div class="container">

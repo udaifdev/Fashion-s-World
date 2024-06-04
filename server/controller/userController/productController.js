@@ -167,18 +167,15 @@ const singleProduct = async (req, res) => {
 
 
 
-
 const addtofavourites = async (req,res) => {
     try {
-        console.log('add to favourites reache ----------> 1');
+        
         const size = req.query.size ;
         const pid = req.params.id ;
         // const price = req.params.price
         const userId = req.session.userId ;
         const price = req.body.discountPrice
             
-        console.log('price  ==> 2 ' , price );
-        
         let fav = await favModel.findOne({ userId : userId })
         console.log('fav ------------->  3   ' , fav);
 

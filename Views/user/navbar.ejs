@@ -49,9 +49,20 @@
         </div>
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-            <a href="#"><img src="img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <a href="/wishlisht"><img src="img/icon/heart.png" alt=""></a>
+            <a href="/Cart">
+                <img src="img/icon/cart.png" alt="Cart" > 
+                <% if (itemCount && itemCount > 0 ) { %> 
+                    <span><%= itemCount %></span> 
+                <% } else { %>
+                    <span>0</span> 
+                <% } %>
+            </a>
+            <% if (Cart_total && Cart_total > 0 ) { %> 
+                <div class="price">₹ <%= Cart_total %></div>
+            <% } else { %> 
+                 <div class="price">₹0</div>
+            <% } %>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -67,7 +78,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                         <img src="img/logo.png" alt=""> 
+                         <img src="img/logo.png" alt="image logo"> 
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
@@ -77,7 +88,7 @@
                             <li><a href="/shop">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="/about">About Us</a></li>
+                                    <!-- <li><a href="/about">About Us</a></li> -->
                                     <li><a href="/Cart">Shopping Cart</a></li>
                                     <!-- <li><a href="/profile">profile</a></li> -->
                                 </ul>
@@ -107,9 +118,7 @@
                         <% } %>
                     </div>
                 </div>
-                
-                
-                    
+                     
                 </div>
             </div>
             <div class="canvas__open"><i class="fa fa-bars"></i></div>

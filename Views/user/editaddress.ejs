@@ -136,9 +136,20 @@
         </div>
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="/img/icon/search.png" alt=""></a>
-            <a href="#"><img src="/img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="/img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <a href="/wishlisht"><img src="img/icon/heart.png" alt=""></a>
+            <a href="/Cart">
+                <img src="img/icon/cart.png" alt="Cart" > 
+                <% if (itemCount && itemCount > 0 ) { %> 
+                    <span><%= itemCount %></span> 
+                <% } else { %>
+                    <span>0</span> 
+                <% } %>
+            </a>
+            <% if (Cart_total && Cart_total > 0 ) { %> 
+                <div class="price">₹ <%= Cart_total %></div>
+            <% } else { %> 
+                 <div class="price">₹0</div>
+            <% } %>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
