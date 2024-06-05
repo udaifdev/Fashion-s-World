@@ -1,5 +1,27 @@
+
+
 <%-include('adminHead.ejs') %>
 
+
+<style>
+     @media (max-width: 768px) {
+        .categoryTable {
+            overflow-x: auto;
+        }      
+        
+        .categoryTable tbody tr {
+            /* display: flex; */
+            flex-wrap: nowrap;
+        }
+
+        .categoryTable th,
+        .categoryTable td {
+            flex: 1 1 auto;
+            white-space: nowrap;
+        }
+        
+    }  
+</style>
 
     <section class="content-main">
         <div class="content-header">
@@ -126,7 +148,9 @@
         
             <h5 >Order ID: <span id="orderId"><%= order.orderId %></span></h5>
             <p class="mb-4">Delivery Address: <%= order.address[0].save_as %>, <%= order.address[0].housename %>, <%= order.address[0].city %>, <%= order.address[0].pincode %></p>
-            <div class="table-responsive">
+            
+            
+            <div class="categoryTable">
                 <table class="table">
                     <thead>
                         <tr>

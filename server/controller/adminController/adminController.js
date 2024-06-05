@@ -146,6 +146,7 @@ const isFutureDate = (selectedDate) => {
 }
 
 
+
 // Download Sales
 const downloadsales = async (req, res) => {
     try {
@@ -532,6 +533,129 @@ const chartData = async (req, res) => {
 }
 
 
+// Generate_sales_Report 
+const Generate_sales_Report = async (req, res) => {
+    try {
+        console.log(" Generate sale report reached -------------||");
+
+        const perPage = 5;
+        const page = parseInt(req.query.page) || 1;
+
+        const { startDate, endDate } = req.body;
+
+        // Validate dates
+        if (!startDate || !endDate) {
+            req.flash('derror', 'Choose a date');
+            return res.redirect('/admin/OrderReport');
+        }
+        if (isFutureDate(startDate) || isFutureDate(endDate)) {
+            req.flash('derror', 'Invalid date');
+            return res.redirect('/admin/OrderReport');
+        }
+
+        console.log("startDate:", startDate, "endDate:", endDate);
+        console.log("Parsed startDate:", new Date(startDate), "Parsed endDate:", new Date(endDate));
+
+        // Adjust end date to include the whole day
+        const endDatePlusOne = new Date(new Date(endDate).setDate(new Date(endDate).getDate() + 1));
+
+        const salesData = await orderModel.aggregate([
+            {
+                $match: {
+                    createdAt: {
+                        $gte: new Date(startDate),
+                        $lt: endDatePlusOne,
+                    },
+                    status: {
+                        $nin: ["Cancelled", "returned"]
+                    }
+                },
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalOrders: { $sum: 1 },
+                    totalAmount: { $sum: '$amount' },
+                },
+            },
+        ]);
+
+        console.log('sale data :: ----------->>', salesData);
+
+        if (salesData.length === 0) {
+            req.flash('derror', 'No orders found for the selected dates');
+            return res.redirect('/admin/OrderReport');
+        }
+
+        const products = await orderModel.aggregate([
+            {
+                $match: {
+                    createdAt: {
+                        $gte: new Date(startDate),
+                        $lt: endDatePlusOne,
+                    },
+                },
+            },
+            {
+                $unwind: '$items',
+            },
+            {
+                $lookup: {
+                    from: 'productdetails',
+                    localField: 'items.productId',
+                    foreignField: '_id',
+                    as: 'productDetailses',
+                },
+            },
+            {
+                $unwind: '$productDetailses',
+            },
+            {
+                $group: {
+                    _id: '$items.productId',
+                    productPrice: { $first: '$productDetailses.discountPrice' },
+                    totalSold: { $sum: '$items.quantity' },
+                    totalPrice: { $sum: { $multiply: ['$items.quantity', '$productDetailses.price'] } },
+                    totalDiscountPercent: { $first: '$productDetailses.discount' },
+                    productName: { $first: '$productDetailses.name' },
+                },
+            },
+            {
+                $addFields: {
+                    totalDiscount: { $multiply: ['$totalPrice', { $divide: ['$totalDiscountPercent', 100] }] }
+                },
+            },
+            {
+                $sort: { totalSold: -1 },
+            },
+        ]);
+
+        const totalPages = Math.ceil(products.length / perPage);
+        const startIndex = (page - 1) * perPage;
+        const endIndex = perPage * page;
+        const productPaginated = products.slice(startIndex, endIndex);
+
+
+        console.log('products //////-------------------- :: ----------->>', products);
+
+        res.render('admin/ReportOrders', {
+            flashMessages: req.flash(), // Pass flash messages to the view
+            startDate,
+            endDate,
+            salesData: salesData[0], // Since salesData is an array with one object
+            products : productPaginated,
+            currentPage : page , totalPages
+        });
+
+    } catch (error) {
+        console.error("download sales error ---------->>", error);
+        req.flash('derror', 'Error generating report. Please try again.');
+        res.redirect('/admin/OrderReport');
+    }
+};
+
+
+
 // Order selling Report 
 const order_selling = async (req, res) => {
     try {
@@ -563,7 +687,6 @@ const order_selling = async (req, res) => {
                 $addFields: {
                     totalDiscountPercent: { $toDouble: '$totalDiscountPercent' },
                     totalDiscount: {
-                        // Choose the rounding method here: $round, $ceil, or $floor
                         $round: [
                             { $multiply: ['$totalPrice', { $divide: ['$totalDiscountPercent', 100] }] }, 0
                         ]
@@ -579,7 +702,6 @@ const order_selling = async (req, res) => {
             totalDiscountSum += product.totalDiscount;
         });
 
-        
         const orders = await orderModel.aggregate([
             { $match: { status: { $nin: ['Cancelled', 'returned'] } } },
             { $group: { _id: null, totalOrders: { $sum: 1 }, totalAmount: { $sum: '$amount' } } }
@@ -591,14 +713,19 @@ const order_selling = async (req, res) => {
         const productPaginated = products.slice(startIndex, endIndex);
 
         res.render('admin/ReportOrders', {
+            flashMessages: req.flash(), // Pass flash messages to the view
             products: productPaginated,
-            currentPage: page, totalPages, orders
+             
+            currentPage: page,
+            totalPages,
+            orders
         });
     } catch (error) {
         console.log('order selling error undallo ------------>>   ', error);
-        res.render("admin/page-error-404");
+        req.flash('derror', 'Error generating report. Please try again.');
+        res.redirect('/admin/page-error-404');
     }
-}
+};
 
 
 
@@ -607,4 +734,4 @@ const order_selling = async (req, res) => {
 
 
 
-module.exports = { login, loginPost, adLogout, adminPanel, user, unblock, downloadsales, best_product, chartData, order_selling }
+module.exports = { login, loginPost, adLogout, adminPanel, user, unblock, downloadsales, best_product, chartData, order_selling, Generate_sales_Report }

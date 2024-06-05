@@ -1,4 +1,4 @@
-<%-include('adminHead.ejs') %>
+<%- include('adminHead.ejs') %>
 
 <style>
     .unlist-btn {
@@ -12,18 +12,37 @@
         border-color: #dc3545 !important; /* Red border */
         color: #fff; /* White text */
     }
+
+      @media (max-width: 768px) {
+        .categoryTable {
+            overflow-x: auto;
+        }      
+        
+        .categoryTable tbody tr {
+            /* display: flex; */
+            flex-wrap: nowrap;
+        }
+
+        .categoryTable th,
+        .categoryTable td {
+            flex: 1 1 auto;
+            white-space: nowrap;
+        }
+        
+    }  
 </style>
 
 <section class="content-main">
     <div class="content-header">
         <div>
-            <h2 class="content-title card-title">Categories </h2>
+            <h2 class="content-title card-title">Categories</h2>
             <p>Add, edit, or delete a category</p>
         </div>
         <div>
             <input type="text" placeholder="Search Categories" class="form-control bg-white">
         </div>
     </div>
+
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -41,29 +60,29 @@
                     </div>
                 <% } %>
 
-                <div class="col-md-12 mt-4">
-                    <div class="table-responsive">
-                        <% if(category !="") { %>
-                            <table class="table table-hover col-md-12 ">
+                <div class="categoryTable col-md-12 mt-4">
+                    <div class="">
+                        <% if(category != "") { %>
+                            <table class="table table-hover">
                                 <thead class="table-primary">
-                                    <tr>
-                                        <th>SR.NO.</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Discount</th>
-                                        <th>Status</th>
-                                        <th>Change Status</th>
-                                        <th>Update</th>
+                                    <tr class="text-center">
+                                        <th >SR.NO.</th>
+                                        <th >Name</th>
+                                        <th >Description</th>
+                                        <th >Discount</th>
+                                        <th >Status</th>
+                                        <th >Change Status</th>
+                                        <th >Update</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% category.forEach((row, index) => { %>
-                                        <tr>
-                                            <td><%= index+1 %></td>
+                                        <tr class="text-center">
+                                            <td><%= index + 1 %></td>
                                             <td><%= row.name %></td>
                                             <td><%= row.description %></td>
                                             <td><%= row.discount %> %</td>
-                                            <td><%= row.status? 'Listed' : 'Unlisted' %></td>
+                                            <td><%= row.status ? 'Listed' : 'Unlisted' %></td>
                                             <td>
                                                 <a class="btn btn-sm <%= row.status ? 'unlist-btn' : 'list-btn-danger' %>"
                                                     onclick="confirmUnlistCat('<%= row._id %>')">
@@ -77,12 +96,12 @@
                                     <% }) %>
                                 </tbody>
                             </table>
-                        <% } else { %> 
-                            <h1 class="text-center text-secondary mt-5"> No Categories Found in the database</h1>
+                        <% } else { %>
+                            <h1 class="text-center text-secondary mt-5">No Categories Found in the database</h1>
                         <% } %>
                     </div>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </div> <!-- card body .// -->
     </div> <!-- card .// -->
 </section> <!-- content-main end// -->
@@ -99,8 +118,7 @@
             confirmButtonText: "Confirm",
             cancelButtonText: "Cancel",
             dangerMode: true,
-        })
-        .then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = "/admin/unlistCat/" + itemId;
             } else {
@@ -115,6 +133,7 @@
 <script src="/public/assets/js/vendors/select2.min.js"></script>
 <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
 <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
-<!-- Main Scr/public/ipt -->
+<!-- Main Script -->
 <script src="/public/assets/js/main.js" type="text/javascript"></script>
+
 </html>

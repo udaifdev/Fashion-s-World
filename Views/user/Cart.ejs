@@ -72,14 +72,14 @@
 
                                     <td class="quantity__item">
                                         <div class="quantity">
-                                            <div class="d-flex flex-row plusminus">      
+                                            <div class="d-flex flex-row">      
                                                 
                                                 <!-- =================== BUTTONS Plus and Minus  ================================= -->
                                                 <button onclick="updateQuantity('<%=cart._doc._id %>','<%= item._doc._id %>','<%= item._doc.size %>','<%= item._doc.price %>','<%= index %>', -1)"
                                                     class="btn btn-outline-dark btn-sm" type="button">&minus;</button>
                                                 
                                                 
-                                                <input id="sst<%= index%>" type="text" class="form-control text-center inputbox" style="width: 35px; border: none;"
+                                                <input id="sst<%= index%>" type="text" class="form-control text-center" style="width: 35px; border: none;"
                                                     value="<%= item._doc.quantity %>" placeholder="" aria-label="Quantity" aria-describedby="button-addon1">
                                                 
                                                 <button  onclick="updateQuantity('<%= cart._id %>','<%= item._doc._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , 1)"

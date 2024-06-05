@@ -13,7 +13,7 @@ const { signed , ifLogged , Logged , checkoutValid } = session
 
 
 userRouter.get('/googleSignIn', userController.googleSignIn)
-userRouter.get('/auth/google/callback', userController.googleCallback);
+userRouter.get('/google/callback', userController.googleCallback);
 userRouter.get('/auth/failure', userController.authFailure);
 
 

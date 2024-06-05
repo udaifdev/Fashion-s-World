@@ -4,6 +4,23 @@
     .btns {
         width: 118px;
     }
+    @media (max-width: 768px) {
+        .categoryTable {
+            overflow-x: auto;
+        }      
+        
+        .categoryTable tbody tr {
+            /* display: flex; */
+            flex-wrap: nowrap;
+        }
+
+        .categoryTable th,
+        .categoryTable td {
+            flex: 1 1 auto;
+            white-space: nowrap;
+        }
+        
+    }  
 </style>
 
 <section class="content-main">
@@ -21,8 +38,8 @@
         </div>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
+    <div class="categoryTable mb-4">
+        <div>
 
             <% if(couponExists&&couponExists.length>0){%>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -33,7 +50,7 @@
                 </div>
                 <%}%>
                 
-            <div class="table-responsive">
+            <div>
                 <% if (coupons != "") { %>
                     <table class="table table-striped text-center">
                         <thead>

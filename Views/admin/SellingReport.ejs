@@ -6,16 +6,27 @@
     </div>
 
     <style>
+        @media (max-width: 768px) {
+        .categoryTable {
+            overflow-x: auto;
+        }      
         
+        .categoryTable tbody tr {
+            /* display: flex; */
+            flex-wrap: nowrap;
+        }
 
-        
-
-        
+        .categoryTable th,
+        .categoryTable td {
+            flex: 1 1 auto;
+            white-space: nowrap;
+        }
+    }        
     </style>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col">   
                 <a type="button" class="btn btn-primary btn-option active" data-page="page1"><i class="text-muted material-icons md-post_add"></i>Best Selling Products</a>
             </div>
             <div class="col">
@@ -27,9 +38,9 @@
         </div>
     </div>
 
-    <div class="container mt-3">
+    <div class="container categoryTable mt-3">
         <div id="page1" class="page-content">
-            <div class="table-responsive">
+            <div>
                 <% if(bestProducts !="" ) { %>
                 <table class="table table-hover text-center align-items-center">
                     <thead class="table-primary">

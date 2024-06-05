@@ -58,6 +58,7 @@ adminRouter.post('/updateCoupon', session.adAuth, coupenController.update_Coupon
 
 
 adminRouter.post('/downloadsales', session.adAuth, adminController.downloadsales)
+adminRouter.post('/GenerateReport', session.adAuth, adminController.Generate_sales_Report)
 adminRouter.post('/chartData', session.adAuth, adminController.chartData)
 adminRouter.get('/SellingReport', session.adAuth, adminController.best_product)
 adminRouter.get('/OrderReport', session.adAuth, adminController.order_selling)

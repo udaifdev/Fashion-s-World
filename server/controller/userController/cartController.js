@@ -18,7 +18,6 @@ const view_Cart = async (req, res) => {
         // console.log("cart items ---->>   ", cart);
 
         if (cart) {
-            // console.log("ulli-------------");
             const productIdS = cart.items.map(product => product.productId);
             const products = await productModel.find({ _id: { $in: productIdS } });
 
@@ -37,7 +36,6 @@ const view_Cart = async (req, res) => {
             const Cart_total = enrichedCartData.reduce((total, item) => {
                 return total + (item._doc.price * item._doc.quantity);
             }, 0);
-
 
             // Update session data
             req.session.Cart_total = Cart_total;
