@@ -1,6 +1,21 @@
  
   <%-include('navbar')-%>
 
+  <style>
+    @media (max-width: 768px) {
+        .plusminus button{
+            width: 25px;
+            height: 30px;
+        }
+
+        .plusminus .inputbox{
+            font-weight: bold;
+            text-align: center;
+        }
+
+    }
+  </style>
+
     <!-- Breadcrumb Section Begin -->
     <section class="breadcrumb-option">
         <div class="container">
@@ -57,14 +72,14 @@
 
                                     <td class="quantity__item">
                                         <div class="quantity">
-                                            <div class="d-flex flex-row">      
+                                            <div class="d-flex flex-row plusminus">      
                                                 
                                                 <!-- =================== BUTTONS Plus and Minus  ================================= -->
                                                 <button onclick="updateQuantity('<%=cart._doc._id %>','<%= item._doc._id %>','<%= item._doc.size %>','<%= item._doc.price %>','<%= index %>', -1)"
                                                     class="btn btn-outline-dark btn-sm" type="button">&minus;</button>
                                                 
                                                 
-                                                <input id="sst<%= index%>" type="text" class="form-control text-center" style="width: 35px; border: none;"
+                                                <input id="sst<%= index%>" type="text" class="form-control text-center inputbox" style="width: 35px; border: none;"
                                                     value="<%= item._doc.quantity %>" placeholder="" aria-label="Quantity" aria-describedby="button-addon1">
                                                 
                                                 <button  onclick="updateQuantity('<%= cart._id %>','<%= item._doc._id %>', '<%= item.size %>','<%= item.price %>','<%= index %>' , 1)"

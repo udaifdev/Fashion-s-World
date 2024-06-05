@@ -47,6 +47,12 @@
 .cancel-product-button {
   background-color: rgb(190, 75, 75);
 }
+.card-header{
+  background-color: #1b1b1b;
+}
+.card-header h4 {
+  color: white;
+}
 
 @media (max-width: 768px) {
   .order-item {
@@ -78,7 +84,12 @@
     line-height: 20px;
     font-size: 13px;
   }
-
+.bdr .item-name{
+  line-height: 17px;
+}
+.card-header{
+  background-color: rgb(24, 14, 44);
+}
 }
 
 </style>
@@ -99,7 +110,7 @@
 
   <% if (order.length === 0) { %> 
     <h3 class="p-4 mb-2 text-center font-weight-bold">No Order Found.</h3>
-    <div class="continue__btn text-center mb-4">
+    <div class="continue__btn text-center mb-4" >
       <a href="/shop">Continue Shopping</a>
     </div>
 
@@ -108,7 +119,7 @@
     <% order.forEach(orderItem => { %> 
       <div class="order">
         <!-- Order Item -->
-        <div class="card-header mb-4 p-3 text-center font-weight-bold" style="background-color: #FFF2D7; border-radius: 50px;">
+        <div class="card-header mb-4 p-3 text-center font-weight-bold" style="border-radius: 50px;">
           <h4>Order ID: <%= orderItem.orderId %></h4>
         </div>
 
@@ -120,18 +131,18 @@
 
         <div class="order-item row">
           <% orderItem.items.forEach((item, index) => { %>
-            <div class="col-12 col-md-6 mb-3 d-flex bdr">
+            <div class="col-12 col-md-6 mb-3 mt-1 d-flex bdr">
               <div class="img-container">
                 <img class="img-fluid cart-img" src="<%= (item.productId && item.productId.image && item.productId.image.length > 0) ? '/' + item.productId.image[0] : 'item-picture.jpg' %>" alt="Item Picture" >
               </div>
               <div class="details txt">
                 <% if (item.productId && item.productId.name) { %>
-                  <p class="font-weight-bold">Item Name: <%= item.productId.name %></p>
+                  <p class="font-weight-bold item-name">Item Name: <%= item.productId.name %></p>
                 <% } else { %>
                   <p>Item Name: N/A</p>
                 <% } %>
                 <p>Amount: ₹ <%= orderItem.amount ? orderItem.amount : 'N/A' %></p>
-                <p>Status: <span class="font-weight-bold"><%= orderItem.status %></span></p>
+                <p class="delv-add">Status: <span class="font-weight-bold"><%= orderItem.status %></span></p>
                 <% orderItem.address.forEach(address => { %>
                   <p class="delv-add">Delivery Address: <%= address.save_as %>, <%= address.housename %>, <%= address.city %>, <%= address.pincode %></p>
                 <% }); %>
