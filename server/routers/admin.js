@@ -22,6 +22,14 @@ adminRouter.get('/users', session.adAuth, adminController.user)
 adminRouter.get('/unblock/:id', session.adAuth, adminController.unblock)
 
 
+ 
+adminRouter.get('/searchView', session.adAuth, adminController.search_user_View)
+adminRouter.post('/search', session.adAuth, adminController.search_user_post)
+adminRouter.get('/searchProductView', session.adAuth, productController.search_Product_View)
+adminRouter.post('/searchProduct', session.adAuth, productController.search_Product_post)
+ 
+
+
 adminRouter.get('/products', session.adAuth, productController.products)
 adminRouter.get('/addProduct', session.adAuth, productController.addProduct)
 adminRouter.get('/unlist/:id', session.adAuth, productController.unlist)

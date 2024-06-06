@@ -6,11 +6,20 @@ const userModel = require('../../model/userModel')
 
 const order = async (req, res) => {
     try {
+        const search=req.query.search;
         let order;
-        order = await orderModel.find({}).sort({ createdAt: -1 }).populate({
-            path: 'items.productId',
-            select: 'name'
-        })
+
+        if(search){
+            order=await orderModel.find({
+                orderId: { $regex: new RegExp(`^${search}`, `i`) },
+            })
+        }else{
+            order = await orderModel.find({}).sort({ createdAt: -1 }).populate({
+                path: 'items.productId',
+                select: 'name'
+            })
+        }
+        
         res.render('admin/orders', { order: order })
     } catch (error) {
         console.log('order error undallo >>>>>>>>>>  ' + error)

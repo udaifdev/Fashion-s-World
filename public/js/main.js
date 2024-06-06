@@ -39,16 +39,21 @@
         $(this).css('background-image', 'url(' + bg + ')');
     });
 
-    //Search Switch
-    $('.search-switch').on('click', function () {
-        $('.search-model').fadeIn(400);
-    });
+    // ==========
 
-    $('.search-close-switch').on('click', function () {
-        $('.search-model').fadeOut(400, function () {
-            $('#search-input').val('');
-        });
-    });
+    // $('.search-switch').on('click', function () {
+    //     $('.search-model').fadeIn(400);
+    // });
+    
+    // $('.search-close-switch').on('click', function () {
+    //     $('.search-model').fadeOut(400, function () {
+    //         $('#search-input').val('');
+    //     });
+    // });
+    
+
+    // ===================
+
 
     /*------------------
 		Navigation

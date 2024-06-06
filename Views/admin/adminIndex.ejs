@@ -1,5 +1,3 @@
-
-
 <%-include('adminHead.ejs') %>
 
 
@@ -94,6 +92,19 @@
             </div>
         </div>
 
+         <!-- ========================================================================================================== -->
+
+
+         <% if(flashMessages.derror && flashMessages.derror.length> 0){ %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>
+                    <%= flashMessages.derror %>
+                </strong>
+            </div>
+            <% } %>
+
+                <!-- ==========================================================================================================-->
 
 
         <!-- ========================================= Chart ========================================= -->
@@ -106,6 +117,7 @@
                         <option value="" disabled selected>Select :</option>
                         <option value="month">Monthly</option>
                         <option value="year">Yearly</option>
+                        <option value="week">Weekly</option>
                     </select>
                     <div class="flot-chart" id="flotChart">
                         <canvas id="chart"></canvas>
@@ -123,41 +135,6 @@
             </div>
         </div>
 
-
-
-
-
-
-        <!-- ========================================================================================================== -->
-
-
-        <% if(flashMessages.derror && flashMessages.derror.length> 0){ %>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong>
-                    <%= flashMessages.derror %>
-                </strong>
-            </div>
-            <% } %>
-
-
-                <!-- ==========================================================================================================-->
-
-
-                <footer class="main-footer font-xs">
-                    <div class="row pb-30 pt-15">
-                        <div class="col-sm-6">
-                            <script>
-                                document.write(new Date().getFullYear())
-                            </script> ©, Evara - HTML Ecommerce Template .
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end">
-                                All rights reserved
-                            </div>
-                        </div>
-                    </div>
-                </footer>
                 </main>
 
 
@@ -167,142 +144,152 @@
                     document.getElementById('endDate').setAttribute('placeholder', 'End Date');
                 </script>
 
+<script>
+    // Initial call to updateChart with 'week' as the default selection
+    document.addEventListener('DOMContentLoaded', function() {
+        updateChart(document.getElementById('selectType'));
+    });
 
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    function getMonthName(month) {
-                        const monthNames = [
-                            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                        ];
-                        return monthNames[month - 1];
+    async function updateChart(select) {
+        let selected = select.value;
+        if (!selected) {
+            selected = 'week'; // Default to 'week' if no option selected
+        }
+        console.log(selected);
+        try {
+            const response = await fetch('/admin/chartData', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    selected: selected
+                })
+            });
+            if (response.ok) {
+                const data = await response.json();
+                chart(data, selected);
+            } else {
+                console.error('Error fetching chart data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching chart data:', error);
+        }
+    }
+
+    function chart(data, selected) {
+        data.sales.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
+        data.order.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
+
+        if (window.myChart) {
+            window.myChart.destroy();
+        }
+        if (window.stackedBar2) {
+            window.stackedBar2.destroy();
+        }
+
+        const months = [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        const labelsSales = [];
+        const dataSales = [];
+        const labelsOrders = [];
+        const dataOrders = [];
+
+        if (selected === 'month') {
+            for (let i = 0; i < 12; i++) {
+                const monthDataSales = data.sales.find(entry => entry._id.month === i + 1);
+                labelsSales.push(months[i]);
+                dataSales.push(monthDataSales ? monthDataSales.totalAmount : 0);
+
+                const monthDataOrders = data.order.find(entry => entry._id.month === i + 1);
+                labelsOrders.push(months[i]);
+                dataOrders.push(monthDataOrders ? monthDataOrders.count : 0);
+            }
+        } else if (selected === 'year') {
+            const years = Array.from(new Set([...data.sales.map(entry => entry._id.year), ...data.order.map(entry => entry._id.year)]));
+            years.sort((a, b) => a - b);
+            for (const year of years) {
+                const yearDataSales = data.sales.find(entry => entry._id.year === year);
+                labelsSales.push(year.toString());
+                dataSales.push(yearDataSales ? yearDataSales.totalAmount : 0);
+
+                const yearDataOrders = data.order.find(entry => entry._id.year === year);
+                labelsOrders.push(year.toString());
+                dataOrders.push(yearDataOrders ? yearDataOrders.count : 0);
+            }
+        } else if (selected === 'week') {
+            // Adjust this part to match your weekly chart rendering logic
+            const weeks = Array.from(new Set([...data.sales.map(entry => entry._id.week), ...data.order.map(entry => entry._id.week)]));
+            weeks.sort((a, b) => a - b);
+            for (const week of weeks) {
+                const weekDataSales = data.sales.find(entry => entry._id.week === week);
+                labelsSales.push(`Week ${week}`);
+                dataSales.push(weekDataSales ? weekDataSales.totalAmount : 0);
+
+                const weekDataOrders = data.order.find(entry => entry._id.week === week);
+                labelsOrders.push(`Week ${week}`);
+                dataOrders.push(weekDataOrders ? weekDataOrders.count : 0);
+            }
+        }
+
+        const ctx = document.getElementById('chart').getContext('2d');
+        window.myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelsSales,
+                datasets: [{
+                    label: 'Total Sales',
+                    data: dataSales,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
+                }
+            }
+        });
 
-                    async function updateChart(select) {
-                        const selected = select.value;
-                        console.log(selected);
-                        try {
-                            const response = await fetch('/admin/chartData', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    selected: selected
-                                })
-                            });
-                            if (response.ok) {
-                                const data = await response.json();
-                                chart(data, selected);
-                            } else {
-                                console.error('Error fetching chart data:', response.status);
-                            }
-                        } catch (error) {
-                            console.error('Error fetching chart data:', error);
-                        }
+        const ctl2 = document.getElementById('chart2').getContext('2d');
+        window.stackedBar2 = new Chart(ctl2, {
+            type: 'bar',
+            data: {
+                labels: labelsOrders,
+                datasets: [{
+                    label: 'Number of Orders',
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 2,
+                    data: dataOrders
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
+                }
+            }
+        });
+    }
+</script>
 
-                    function chart(data, selected) {
-                        data.sales.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
-                        data.order.sort((a, b) => a._id.month - b._id.month || a._id.year - b._id.year);
-
-                        if (window.myChart) {
-                            window.myChart.destroy();
-                        }
-                        if (window.stackedBar2) {
-                            window.stackedBar2.destroy();
-                        }
-
-                        const months = [
-                            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-                        ];
-
-                        const labelsSales = [];
-                        const dataSales = [];
-                        const labelsOrders = [];
-                        const dataOrders = [];
-
-                        if (selected === 'month') {
-                            for (let i = 0; i < 12; i++) {
-                                const monthDataSales = data.sales.find(entry => entry._id.month === i + 1);
-                                labelsSales.push(months[i]);
-                                dataSales.push(monthDataSales ? monthDataSales.totalAmount : 0);
-
-                                const monthDataOrders = data.order.find(entry => entry._id.month === i + 1);
-                                labelsOrders.push(months[i]);
-                                dataOrders.push(monthDataOrders ? monthDataOrders.count : 0);
-                            }
-                        } else if (selected === 'year') {
-                            const years = Array.from(new Set([...data.sales.map(entry => entry._id.year), ...data.order.map(entry => entry._id.year)]));
-                            years.sort((a, b) => a - b);
-                            for (const year of years) {
-                                const yearDataSales = data.sales.find(entry => entry._id.year === year);
-                                labelsSales.push(year.toString());
-                                dataSales.push(yearDataSales ? yearDataSales.totalAmount : 0);
-
-                                const yearDataOrders = data.order.find(entry => entry._id.year === year);
-                                labelsOrders.push(year.toString());
-                                dataOrders.push(yearDataOrders ? yearDataOrders.count : 0);
-                            }
-                        }
-
-                        const ctx = document.getElementById('chart').getContext('2d');
-                        window.myChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: labelsSales,
-                                datasets: [{
-                                    label: 'Total Sales',
-                                    data: dataSales,
-                                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    borderWidth: 2
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-
-                        const ctl2 = document.getElementById('chart2').getContext('2d');
-                        window.stackedBar2 = new Chart(ctl2, {
-                            type: 'bar',
-                            data: {
-                                labels: labelsOrders,
-                                datasets: [{
-                                    label: 'Number of Orders',
-                                    backgroundColor: [
-                                        'rgba(255, 99, 132, 0.2)',
-                                        'rgba(54, 162, 235, 0.2)',
-                                        'rgba(255, 206, 86, 0.2)'
-                                    ],
-
-                                    borderColor: [
-                                        'rgba(255, 99, 132, 1)',
-                                        'rgba(54, 162, 235, 1)',
-                                        'rgba(255, 206, 86, 1)'
-                                    ],
-                                    borderWidth: 2,
-                                    data: dataOrders
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-
-                </script>
 
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
                 <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>

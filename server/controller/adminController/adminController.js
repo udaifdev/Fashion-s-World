@@ -83,6 +83,33 @@ const unblock = async (req, res) => {
 }
 
 
+// Search 
+const search_user_post = async (req, res) => {
+    try {
+        const searchName = req.body.search;
+        const data = await adminModel.find({
+            username: { $regex: new RegExp(`^${searchName}`, `i`) },
+        });
+        req.session.searchUser = data;
+        res.redirect('/admin/searchView')
+    } catch (err) {
+        console.log(err);
+        res.render("user/serverError");
+    }
+}
+
+const search_user_View = async (req, res) => {
+    try {
+        const user = req.session.searchUser;
+        res.render('admin/users', { users: user })
+    } catch (err) {
+        console.log(err);
+        res.render("user/serverError");
+    }
+}
+
+
+
 // DashBoard Report 
 const adminPanel = async (req, res) => {
     try {
@@ -464,9 +491,10 @@ const best_product = async (req, res) => {
 // Chart Data 
 const chartData = async (req, res) => {
     try {
-        console.log("reached Chart data ------------------>> ");
-        const selected = req.body.selected
-        if (selected == 'month') {
+        const selected = req.body.selected;
+        
+        if (selected === 'month') {
+            // Aggregate by month
             const orderByMonth = await orderModel.aggregate([
                 {
                     $group: {
@@ -476,28 +504,25 @@ const chartData = async (req, res) => {
                         count: { $sum: 1 },
                     }
                 }
-            ])
+            ]);
             const salesByMonth = await orderModel.aggregate([
                 {
                     $group: {
                         _id: {
                             month: { $month: '$createdAt' },
                         },
-
                         totalAmount: { $sum: '$amount' },
-
                     }
                 }
-            ])
+            ]);
             const responseData = {
                 order: orderByMonth,
                 sales: salesByMonth
             };
-
-
             res.status(200).json(responseData);
-        }
-        else if (selected == 'year') {
+
+        } else if (selected === 'year') {
+            // Aggregate by year
             const orderByYear = await orderModel.aggregate([
                 {
                     $group: {
@@ -507,7 +532,7 @@ const chartData = async (req, res) => {
                         count: { $sum: 1 },
                     }
                 }
-            ])
+            ]);
             const salesByYear = await orderModel.aggregate([
                 {
                     $group: {
@@ -517,20 +542,48 @@ const chartData = async (req, res) => {
                         totalAmount: { $sum: '$amount' },
                     }
                 }
-            ])
+            ]);
             const responseData = {
                 order: orderByYear,
                 sales: salesByYear,
-            }
+            };
+            res.status(200).json(responseData);
+
+        } else if (selected === 'week') {
+            // Aggregate by week
+            const orderByWeek = await orderModel.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            week: { $isoWeek: '$createdAt' },
+                        },
+                        count: { $sum: 1 },
+                    }
+                }
+            ]);
+            const salesByWeek = await orderModel.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            week: { $isoWeek: '$createdAt' },
+                        },
+                        totalAmount: { $sum: '$amount' },
+                    }
+                }
+            ]);
+            const responseData = {
+                order: orderByWeek,
+                sales: salesByWeek,
+            };
             res.status(200).json(responseData);
         }
 
-    }
-    catch (err) {
+    } catch (err) {
         console.log('chart data error undallo --------------------->>  ', err);
-        res.render("admin/page-error-404")
+        res.render("admin/page-error-404");
     }
 }
+
 
 
 
@@ -778,4 +831,4 @@ const order_selling = async (req, res) => {
 
 
 
-module.exports = { login, loginPost, adLogout, adminPanel, user, unblock, downloadsales, best_product, chartData, order_selling, Generate_sales_Report }
+module.exports = { login, loginPost, adLogout, adminPanel, user, unblock, downloadsales, best_product, chartData, order_selling, Generate_sales_Report, search_user_View, search_user_post }

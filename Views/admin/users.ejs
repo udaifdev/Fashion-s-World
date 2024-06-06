@@ -1,134 +1,144 @@
 <%-include('adminHead.ejs') %>
 
-<style>
-    .block {
-        background-color:  rgb(60, 204, 60);
-        color: white;
-        width: 100px;
-    }
-
-    .unblock-btn-danger {
-        background-color: #dc3545 !important; /* Red background */
-        border-color: #dc3545 !important; /* Red border */
-        color: white;
-    }
-    @media (max-width: 768px) {
-        .categoryTable {
-            overflow-x: auto;
-        }      
-        
-        .categoryTable tbody tr {
-            /* display: flex; */
-            flex-wrap: nowrap;
+    <style>
+        .block {
+            background-color: rgb(60, 204, 60);
+            color: white;
+            width: 100px;
         }
 
-        .categoryTable th,
-        .categoryTable td {
-            flex: 1 1 auto;
-            white-space: nowrap;
+        .unblock-btn-danger {
+            background-color: #dc3545 !important;
+            /* Red background */
+            border-color: #dc3545 !important;
+            /* Red border */
+            color: white;
         }
-        
-    }  
-</style>
 
-<section class="content-main">
-    <div class="content-header">
-        <div>
-            <h2 class="content-title card-title">Users </h2>
-            <p>Users management</p>
+        @media (max-width: 768px) {
+            .categoryTable {
+                overflow-x: auto;
+            }
+
+            .categoryTable tbody tr {
+                /* display: flex; */
+                flex-wrap: nowrap;
+            }
+
+            .categoryTable th,
+            .categoryTable td {
+                flex: 1 1 auto;
+                white-space: nowrap;
+            }
+
+        }
+    </style>
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Users </h2>
+                <p>Users management</p>
+            </div>
+            <div>
+                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Add New
+                    users</a>
+            </div>
         </div>
-        <div>
-            <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Add New users</a>
-        </div>
-    </div>
-    <div class="card mb-4">
-        <header class="card-header">
-            <div class="row gx-3">
-                <div class="col-lg-4 mb-lg-0 mb-15 me-auto">
-                    <input type="text" placeholder="Search..." class="form-control">
+        <div class="card mb-4">
+            <header class="card-header">
+
+                <div class="row gx-3">
+                    <div class="col-lg-5 mb-lg-0 mb-15 me-auto">
+                        <form id="searchForm" action="/admin/search" method="POST" class="d-flex">
+                            <input type="text" name="search" placeholder="Search..." class="form-control me-2">
+                            <button type="submit" class="btn btn-primary">
+                                Search
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 
-                
+            </header>
+            <!-- card-header end// -->
+
+            <div class="categoryTable">
+                <% if(users !="" ) { %>
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr class="text-center">
+                                <th>SR.NO.</th>
+                                <th>UserName</th>
+                                <th>Email ID</th>
+                                <th>Mobile No</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach((row,index)=> { %>
+                                <tr class="text-center">
+                                    <td>
+                                        <%= index+1 %>
+                                    </td>
+                                    <td>
+                                        <%= row.username %>
+                                    </td>
+                                    <td>
+                                        <%= row.email %>
+                                    </td>
+                                    <td>
+                                        <%= row.phone %>
+                                    </td>
+                                    <td>
+                                        <%= row.blocked %>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm <%= row.blocked ? 'block unblock-btn-danger' : 'block' %>"
+                                            onclick="confirmUnblock('<%= row._id %>')">
+                                            <%= row.blocked ? 'unblock' : 'Block' %>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } else { %>
+                        <h1 class="text-center text-secondary mt-5"> No users Founded in database</h1>
+                        <%} %>
             </div>
-        </header> 
-        <!-- card-header end// -->
+        </div> <!-- card end// -->
+    </section> <!-- content-main end// -->
 
-        <div class="categoryTable"> 
-            <% if(users != "" ) { %>
-            <table class="table table-hover">
-                <thead class="table-primary">
-                    <tr>
-                        <th>SR.NO.</th>
-                        <th>UserName</th>
-                        <th>Email ID</th>
-                        <th>Mobile No</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% users.forEach((row,index) => { %> 
-                    <tr>
-                        <td>
-                            <%= index+1 %> 
-                        </td>
-                        <td> 
-                            <%= row.username %>
-                        </td>
-                        <td>
-                            <%= row.email %>
-                        </td>
-                        <td> 
-                            <%= row.phone %>
-                        </td>
-                        <td>
-                            <%= row.blocked %>
-                        </td>
-                        <td>
-                            <a class="btn btn-sm <%= row.blocked ? 'block unblock-btn-danger' : 'block' %>"
-                                onclick="confirmUnblock('<%= row._id %>')"> 
-                                <%= row.blocked ? 'unblock' : 'Block' %>
-                            </a>
-                        </td>
-                    </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-            <% } else { %> 
-            <h1 class="text-center text-secondary mt-5"> No users Founded in database</h1>
-            <%} %>
-        </div>
-    </div> <!-- card end// -->
-</section> <!-- content-main end// -->
-
-<script>
+    <script>
         function confirmUnblock(itemId) {
             Swal.fire({
-                title : 'Are you sure?',
-                text : 'Are you sure you want proceed?',
-                icons : 'warning',
-                showCancelButton : true,
-                confirmBottonColor : "#3085d6",
-                cancelButtonColor : "#d33" ,
-                confirmBottonText : "confirm",
-                cancelBottonText : "cancel" ,
-                dangerMode : true,
+                title: 'Are you sure?',
+                text: 'Are you sure you want proceed?',
+                icons: 'warning',
+                showCancelButton: true,
+                confirmBottonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmBottonText: "confirm",
+                cancelBottonText: "cancel",
+                dangerMode: true,
             })
-            .then ((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/admin/unblock/' + itemId
-                } else {
-                    console.log("user is canceled.! >>>>>>>>>>>>>.");
-                }
-            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/admin/unblock/' + itemId
+                    } else {
+                        console.log("user is canceled.! >>>>>>>>>>>>>.");
+                    }
+                })
         }
     </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
-<script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
-<script src="/public/assets/js/vendors/select2.min.js"></script>
-<script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
-<script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
-<!-- Main Scr/public/ipt -->
-<script src="/public/assets/js/main.js" type="text/javascript"></script>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/public/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/js/vendors/select2.min.js"></script>
+    <script src="/public/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Scr/public/ipt -->
+    <script src="/public/assets/js/main.js" type="text/javascript"></script>
+
+    </html>

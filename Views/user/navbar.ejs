@@ -11,9 +11,9 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
-    rel="stylesheet">
+        rel="stylesheet">
 
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
 
     <!-- Css Styles -->
@@ -26,6 +26,56 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
+    <style>
+        /* Adjust form container styles */
+        /* .site-block-top-search {
+} */
+
+        /* Style for search input container */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Style for the search input */
+        .form-control.border-1 {
+            padding-right: 30px;
+            /* Ensure space for the search icon */
+            height: 40px;
+            /* Adjust height as needed */
+            border: 1px solid #ccc;
+            /* Example border style */
+            border-radius: 4px;
+            /* Example border radius */
+            font-size: 14px;
+            /* Example font size */
+        }
+
+        /* Style for the search button */
+        .search-button {
+            position: absolute;
+            right: 10px;
+            /* Adjust to align the search icon */
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Style for the search icon */
+        .search-button img {
+            width: 20px;
+            /* Adjust size of the search icon */
+            height: 20px;
+            /* Adjust size of the search icon */
+        }
+
+        /* Placeholder text style (optional) */
+        .form-control.border-1::placeholder {
+            color: #999;
+            /* Example placeholder color */
+        }
+    </style>
 
 </head>
 
@@ -47,22 +97,30 @@
                 <span><a href="/logout"> logout </a></span>
             </div>
         </div>
+
         <div class="offcanvas__nav__option">
+
+
             <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
+
+
             <a href="/wishlisht"><img src="img/icon/heart.png" alt=""></a>
             <a href="/Cart">
-                <img src="img/icon/cart.png" alt="Cart" > 
-                <% if (itemCount && itemCount > 0 ) { %> 
-                    <span><%= itemCount %></span> 
-                <% } else { %>
-                    <span>0</span> 
-                <% } %>
+                <img src="img/icon/cart.png" alt="Cart">
+                <% if (itemCount && itemCount> 0 ) { %>
+                    <span>
+                        <%= itemCount %>
+                    </span>
+                    <% } else { %>
+                        <span>0</span>
+                        <% } %>
             </a>
-            <% if (Cart_total && Cart_total > 0 ) { %> 
-                <div class="price">₹ <%= Cart_total %></div>
-            <% } else { %> 
-                 <div class="price">₹0</div>
-            <% } %>
+            <% if (Cart_total && Cart_total> 0 ) { %>
+                <div class="price">₹ <%= Cart_total %>
+                </div>
+                <% } else { %>
+                    <div class="price">₹0</div>
+                    <% } %>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -73,12 +131,12 @@
 
     <!-- Header Section Begin -->
     <header class="header">
-        
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                         <img src="img/logo.png" alt="image logo"> 
+                        <img src="img/logo.png" alt="image logo">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
@@ -90,7 +148,8 @@
                                 <ul class="dropdown">
                                     <!-- <li><a href="/about">About Us</a></li> -->
                                     <li><a href="/Cart">Shopping Cart</a></li>
-                                    <!-- <li><a href="/profile">profile</a></li> -->
+                                    <!-- <li><a href="/profile">Profile</a></li>
+                                    <li><a href="/contact">Contacts</a></li> -->
                                 </ul>
                             </li>
                             <li><a href="/profile">Profile</a></li>
@@ -98,30 +157,80 @@
                         </ul>
                     </nav>
                 </div>
-                
+
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="img/icon/search.png" alt="Search"></a>
+
+
+
+                        <form action="/shop" method="get" class="site-block-top-search" id="searchForm">
+                            <!-- Hidden input for the search query -->
+                            <input type="hidden" name="search" id="searchInput">
+                        </form>
+                        
+                        <a href="#" class="search-switch">
+                            <img src="img/icon/search.png" alt="Search" onclick="showSearchModel(); return false;">
+                        </a>
+                        
+                        <div class="search-model">
+                            <!-- Your search model content here, can include search options, filters, etc. -->
+                            <button class="search-close-switch">Close</button>
+                            <div class="search-option" data-search-query="your_search_query_here">Option 1</div>
+                            <div class="search-option" data-search-query="another_query_here">Option 2</div>
+                        </div>
+                        
+                        
+                        
+
+
+
+
+
                         <a href="/wishlisht"><img src="img/icon/heart.png" alt="Favorites"></a>
                         <a href="/Cart">
-                            <img src="img/icon/cart.png" alt="Cart" > 
-                            <% if (itemCount && itemCount > 0 ) { %> 
-                                <span><%= itemCount %></span> 
-                            <% } else { %>
-                                <span>0</span> 
-                            <% } %>
+                            <img src="img/icon/cart.png" alt="Cart">
+                            <% if (itemCount && itemCount> 0 ) { %>
+                                <span>
+                                    <%= itemCount %>
+                                </span>
+                                <% } else { %>
+                                    <span>0</span>
+                                    <% } %>
                         </a>
-                        <% if (Cart_total && Cart_total > 0 ) { %> 
-                            <div class="price">₹ <%= Cart_total %></div>
-                        <% } else { %> 
-                             <div class="price">₹0</div>
-                        <% } %>
+                        <% if (Cart_total && Cart_total> 0 ) { %>
+                            <div class="price">₹ <%= Cart_total %>
+                            </div>
+                            <% } else { %>
+                                <div class="price">₹0</div>
+                                <% } %>
                     </div>
                 </div>
-                     
-                </div>
+
             </div>
-            <div class="canvas__open"><i class="fa fa-bars"></i></div>
         </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+        </div>
+
+
+        <script>
+            function showSearchModel() {
+                $('.search-model').fadeIn(400);
+            }
+            
+            $('.search-close-switch').on('click', function () {
+                $('.search-model').fadeOut(400, function () {
+                    $('#searchInput').val(''); // Clear search query if needed
+                });
+            });
+            
+            $('.search-model').on('click', '.search-option', function () {
+                var searchQuery = $(this).data('search-query'); // Get search query from option clicked
+                $('#searchInput').val(searchQuery); // Set the search query to the hidden input field
+                $('#searchForm').submit(); // Submit the form
+            });
+            </script>
+            
+            
+
     </header>
     <!-- Header Section End -->

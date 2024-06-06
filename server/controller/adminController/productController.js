@@ -90,6 +90,38 @@ const addProductPost = async (req, res) => {
 };
 
 
+// Search
+const search_Product_post = async (req, res) => {
+    try {
+        const searchName = req.body.search;
+        const data = await  productModel.find({
+            name: { $regex: new RegExp(`^${searchName}`, `i`) },
+        }).populate({
+            path: 'category',
+            select: 'name'
+        });
+
+        req.session.searchProduct = data;
+        res.redirect('/admin/searchProductView')
+    } catch (err) {
+        console.log(err);
+        res.render("user/serverError")
+    }
+}
+
+const search_Product_View = async (req, res) => {
+    try {
+        const productSuccess = req.flash('productSuccess');
+        const updateSuccess = req.flash('updateSuccess');
+        const product = req.session.searchProduct;
+        res.render('admin/products', { product, productSuccess, updateSuccess })
+    } catch (err) {
+        console.log(err);
+        res.render("user/serverError")
+    }
+}
+
+
 
 const unlist = async (req,res) => {
     try {
@@ -244,5 +276,7 @@ module.exports = {
          updateProductPost ,
           edit_img ,
            Delete_img , 
-            update_Image
+            update_Image ,
+             search_Product_View ,
+              search_Product_post
          }

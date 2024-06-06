@@ -54,12 +54,27 @@
         <div class="col-9">
             <div class="content-header">
                 <h2 class="content-title">Products</h2>
-                <div>
-                    <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
-                    <button class="btn btn-md rounded font-sm hover-up"><a href="/admin/addProduct" class="font-weight">Add Product</a></button>
-                </div>
             </div>
         </div>
+
+         
+            <div class="row gx-3">
+                <div class="col-lg-5 mb-lg-0 mb-15 me-auto">
+                    <form id="searchForm" action="/admin/searchProduct" method="POST" class="d-flex">
+                        <input type="text" name="search" placeholder="Search..." class="form-control me-2">
+                        <button type="submit" class="btn btn-primary">
+                            Search
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="m-3 ">
+                <button class="btn btn-md btn-lg rounded hover-up"><a href="/admin/addProduct" class="font-weight-bold">
+                    Add Products</a>
+                </button>
+            </div>
+
         <div class="categoryTable col-lg-12">
             <div class="mb-4">
                 <div>
