@@ -236,7 +236,7 @@ const editAddress = async (req, res) => {
         ]);
         const Cart_total = req.session.Cart_total
         const itemCount = req.session.cartCount
-        res.render('user/editAddress', { addrs: address[0], Cart_total: Cart_total, itemCount: itemCount })
+        res.render('user/editaddress', { addrs: address[0], Cart_total: Cart_total, itemCount: itemCount })
 
     } catch (error) {
         console.log("edit Address error undallo mone >>>>>>>>>>> " + error);

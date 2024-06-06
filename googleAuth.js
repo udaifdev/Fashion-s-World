@@ -24,6 +24,7 @@ passport.use(new GoogleStrategy({
         },
         { upsert: true, new: true }
       );
+      
       return done(null, user);
 
     } catch (error) {
