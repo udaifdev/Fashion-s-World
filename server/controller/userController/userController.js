@@ -249,7 +249,31 @@ const index = async (req, res) => {
 
 
 
-// Login page 
+const loginPost = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+
+        const user = await userModel.findOne({ email: email });
+
+        if (user && user.blocked === false && await bcrypt.compare(password, user.password)) {
+            req.session.userId = user._id;
+            req.session.username = user.username;
+            req.session.user = user;
+            req.session.isAuth = true;
+            res.redirect('/');
+        } else {
+            req.flash('invalidpassword', "Invalid Email or Password");
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.log("login Post error undallo -------->  ", error);
+        req.flash('invaliduser', "Invalid Email or Password");
+        res.redirect('/login');
+    }
+};
+
+// Login page
 const login = async (req, res) => {
     try {
         res.render('user/login', {
@@ -261,39 +285,10 @@ const login = async (req, res) => {
         });
     } catch (error) {
         console.log("error in login: " + error);
-        res.render('user/404Error')
+        res.render('user/404Error');
     }
 };
 
-
-
-
-//  Login data posting
-const loginPost = async (req, res) => {
-    try {
-        const email = req.body.email
-        const password = req.body.password
-        // console.log(req.body);
-
-        const user = await userModel.findOne({ email: email })
-        
-        if (user.blocked == false && await bcrypt.compare(password, user.password)) {
-            req.session.userId = user._id
-            req.session.username = user.username
-            req.session.user = user
-            req.session.isAuth = true
-            res.redirect('/')
-        } else {
-            req.flash('invalidpassword', "Invalid Email or Password")
-            res.redirect('/login')
-        }
-    } catch (error) {
-        console.log(error);
-        req.flash('invaliduser', "Invalid Email or Password")
-        res.redirect('/login')
-        res.render('user/404Error')
-    }
-}
 
 //  Profile Users
 const profile = async (req, res) => {

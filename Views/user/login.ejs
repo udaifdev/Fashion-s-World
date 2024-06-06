@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Created By CodingNepal -->
 <html lang="en" dir="ltr">
 
 <head>
@@ -23,8 +22,7 @@
       width: 100%;
       place-items: center;
       background: #f2f2f2;
-      /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
-      background-image: url('/public/login\ img.jpg');
+      background-image: url('/public/login img.jpg');
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center center;
@@ -42,11 +40,8 @@
       border-radius: 15px;
       box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
       flex-direction: column;
-      /* Align children vertically */
       justify-content: center;
-      /* Align children vertically */
       align-items: center;
-      /* Align children horizontally */
       position: absolute;
       top: 50%;
       left: 50%;
@@ -71,6 +66,7 @@
     .wrapper .error-message {
       text-align: center;
       color: red;
+      display: none; /* Initially hide the error message */
     }
 
     .wrapper form .field {
@@ -181,7 +177,6 @@
       text-decoration: underline;
     }
 
-    /* CSS styles for the button */
     .custom-button {
       background-color: #007bff;
       color: #e61818;
@@ -201,43 +196,89 @@
 
     .google {
       background-color: white;
-      /* Background color on hover */
       color: rgb(221, 37, 37);
-      /* Text color on hover */
       border: 2px solid rgb(221, 37, 37);
-      /* Border color on hover */
       border-radius: 8px;
       text-decoration: none;
       align-items: center;
-      padding: 11px 50px;
+      padding: 10px 42px;
       display: inline-block;
       border: 2px solid rgb(221, 37, 37);
-      /* Initial border color */
+      font-weight: bold;
+      letter-spacing: 1px;
     }
 
     .google img {
       display: inline-block;
       vertical-align: middle;
+      margin-right: 4px;
     }
 
     .google:hover {
       background-color: rgb(221, 37, 37);
-      /* Initial background color */
       color: white;
-      /* Initial text color */
     }
 
-    /* Hover effect */
     .custom-button:hover {
       background-color: #0772e4;
     }
 
     .error-message {
       margin: 10px;
-      /* padding: 0px; */
+      text-align: center;
+      color: red;
+      border: 2px solid red;
+      padding: 5px;
+      border-radius: 5px;
+      background-color: #ffe6e6;
+    }
+
+    .text-danger {
+      color: red;
+    }
+
+    .bg-danger {
+      border: 2px solid red;
+      border-radius: 5px;
+      background-color: #ffe6e6;
+      padding: 5px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .text-success {
+      color: green;
+    }
+
+    .bg-success {
+      border: 2px solid green;
+      border-radius: 5px;
+      background-color: #e6ffea;
+      padding: 5px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    /* Media Query for smaller screens */
+    @media (max-width: 768px) {
+      .wrapper {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .wrapper .title {
+        font-size: 28px;
+      }
+
+      .wrapper form {
+        padding: 10px 20px 40px 20px;
+      }
+
+      .wrapper form .field {
+        margin-top: 15px;
+      }
     }
   </style>
-
 </head>
 
 <body>
@@ -247,55 +288,54 @@
     </div>
 
     <form action="/login" method='post'>
-
       <div id="emailError" class="error-message mb-0 p-0"></div>
       <div class="field">
         <input type="email" name="email" id="email" placeholder="Enter your email">
         <label>Email</label>
-
       </div>
 
       <div id="passwordError" class="error-message"></div>
       <div class="field">
-        <input type="password" name="password" id="password" placeholder="Enter your password ">
+        <input type="password" name="password" id="password" placeholder="Enter your password">
         <label>Password</label>
-
       </div>
 
-
-      <% if(expressFlash.invalidpassword && expressFlash.invalidpassword.length> 0) { %>
-        <div class="text-danger bg-danger">
-          <%= expressFlash.invalidpassword %>
+      <% if(expressFlash.invalidpassword && expressFlash.invalidpassword.length > 0) { %>
+        <div class="bg-danger">
+            <%= expressFlash.invalidpassword %>
         </div>
-        <% } %>
-          <% if(expressFlash.invaliduser && expressFlash.invaliduser.length> 0) { %>
-            <div class="text-danger bg-danger">
-              <%= expressFlash.invaliduser %>
-            </div>
-            <% } %>
+      <% } %>
+      <% if(expressFlash.invaliduser && expressFlash.invaliduser.length > 0) { %>
+        <div class="bg-danger">
+            <%= expressFlash.invaliduser %>
+        </div>
+      <% } %>
+      <% if(expressFlash.usersuccess && expressFlash.usersuccess.length > 0) { %>
+        <div class="bg-success">
+            <%= expressFlash.usersuccess %>
+        </div>
+      <% } %>
 
+      <div class="field">
+        <input type="submit" value="Login">
+      </div>
 
-              <div class="field">
-                <input type="submit" value="Login">
-              </div>
+      <div class="goog">
+        <a href="/googleSignIn" class="google">
+          <img src="/public/img/google.png" width="25" height="25" alt="google img"
+            style="display: inline-block; vertical-align: middle;">
+          Log in with Google
+        </a>
+      </div>
 
-              <div class="goog">
-                <a href="/googleSignIn" class="google">
-                  <img src="/public/img/google.png" width="20" height="20" alt="google img"
-                    style="display: inline-block; vertical-align: middle;">
-                  Sign up with Google
-                </a>
-              </div>
-
-              <div class="signup-link mt-0 pt-0">
-                Don't have an account? <a href="/signup" class="signup">Signup Now</a>
-              </div>
+      <div class="signup-link mt-0 pt-0">
+        Don't have an account? <a href="/signup" class="signup font-weight-bold">Signup Now</a>
+      </div>
     </form>
   </div>
 
-
   <script>
-    document.querySelector("form").addEventListener("submit", function (event) {
+    document.querySelector("form").addEventListener("submit", function(event) {
       var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
 
@@ -307,18 +347,21 @@
 
       if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
         emailError.innerHTML = "Invalid email";
-        // emailError.style.margin = "5px"; // Add padding
+        emailError.style.display = "block"; // Show the error message
         event.preventDefault();
+      } else {
+        emailError.style.display = "none"; // Hide the error message
       }
+
       if (password.length < 6) {
         passwordError.innerHTML = "Password at least 6 characters long";
-        // passwordError.style.padding = "5px"; // Add padding
+        passwordError.style.display = "block"; // Show the error message
         event.preventDefault();
+      } else {
+        passwordError.style.display = "none"; // Hide the error message
       }
     });
   </script>
-
-
 </body>
 
 </html>
