@@ -533,10 +533,11 @@ const chartData = async (req, res) => {
 }
 
 
-// Generate_sales_Report 
+
+// Generate Sales Report Displaying
 const Generate_sales_Report = async (req, res) => {
     try {
-        console.log(" Generate sale report reached -------------||");
+        console.log("Generate sale report reached -------------||");
 
         const perPage = 5;
         const page = parseInt(req.query.page) || 1;
@@ -559,6 +560,7 @@ const Generate_sales_Report = async (req, res) => {
         // Adjust end date to include the whole day
         const endDatePlusOne = new Date(new Date(endDate).setDate(new Date(endDate).getDate() + 1));
 
+        // Fetch sales data
         const salesData = await orderModel.aggregate([
             {
                 $match: {
@@ -587,6 +589,7 @@ const Generate_sales_Report = async (req, res) => {
             return res.redirect('/admin/OrderReport');
         }
 
+        // Fetch product details
         const products = await orderModel.aggregate([
             {
                 $match: {
@@ -594,6 +597,7 @@ const Generate_sales_Report = async (req, res) => {
                         $gte: new Date(startDate),
                         $lt: endDatePlusOne,
                     },
+                    'items.productId': { $exists: true } // Ensure items.productId exists
                 },
             },
             {
@@ -618,11 +622,16 @@ const Generate_sales_Report = async (req, res) => {
                     totalPrice: { $sum: { $multiply: ['$items.quantity', '$productDetailses.price'] } },
                     totalDiscountPercent: { $first: '$productDetailses.discount' },
                     productName: { $first: '$productDetailses.name' },
+                    productImage: { $first: '$productDetailses.image' }, // Include product image
                 },
             },
             {
                 $addFields: {
-                    totalDiscount: { $multiply: ['$totalPrice', { $divide: ['$totalDiscountPercent', 100] }] }
+                    totalDiscount: {
+                        $round: {
+                            $multiply: ['$totalPrice', { $divide: ['$totalDiscountPercent', 100] }],
+                        },
+                    },
                 },
             },
             {
@@ -630,29 +639,64 @@ const Generate_sales_Report = async (req, res) => {
             },
         ]);
 
+        console.log("products ------------->>", products);
+
+        const orders = await orderModel.aggregate([
+            {
+                $match: {
+                    createdAt: {
+                        $gte: new Date(startDate),
+                        $lt: endDatePlusOne,
+                    },
+                    status: {
+                        $nin: ['Cancelled', 'returned']
+                    }
+                }
+            },
+            { 
+                $group: { 
+                    _id: null, 
+                    totalOrders: { $sum: 1 }, 
+                    totalAmount: { $sum: '$amount' } 
+                }
+            }
+        ]);
+
+        console.log("orders ------------->>", orders);
+
+        // Calculate total discount sum and round it
+        let totalDiscountSum = 0;
+        products.forEach(product => {
+            totalDiscountSum += product.totalDiscount;
+        });
+        totalDiscountSum = Math.round(totalDiscountSum); // Round the total discount sum
+
         const totalPages = Math.ceil(products.length / perPage);
         const startIndex = (page - 1) * perPage;
         const endIndex = perPage * page;
         const productPaginated = products.slice(startIndex, endIndex);
-
-
-        console.log('products //////-------------------- :: ----------->>', products);
 
         res.render('admin/ReportOrders', {
             flashMessages: req.flash(), // Pass flash messages to the view
             startDate,
             endDate,
             salesData: salesData[0], // Since salesData is an array with one object
-            products : productPaginated,
-            currentPage : page , totalPages
+            products: productPaginated,
+            currentPage: page,
+            totalPages, 
+            orders: orders, // Since orders is an array with one object
+            totalDiscountSum, // Pass totalDiscountSum to the view
         });
 
     } catch (error) {
-        console.error("download sales error ---------->>", error);
+        console.error("Download sales error ---------->>", error);
         req.flash('derror', 'Error generating report. Please try again.');
         res.redirect('/admin/OrderReport');
     }
 };
+
+
+
 
 
 

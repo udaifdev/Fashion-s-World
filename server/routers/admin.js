@@ -63,7 +63,7 @@ adminRouter.post('/chartData', session.adAuth, adminController.chartData)
 adminRouter.get('/SellingReport', session.adAuth, adminController.best_product)
 adminRouter.get('/OrderReport', session.adAuth, adminController.order_selling)
 
-
+    
 
 adminRouter.get('/adLogout', session.adAuth, adminController.adLogout)
 

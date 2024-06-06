@@ -84,10 +84,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center align-middle">
-                                    <% products.forEach((product, index)=> { %>
+                                    <% products.forEach((product, index) => { %>
                                         <tr>
                                             <td class="border-bottom-0 align-middle">
-                                                <img src="/<%= product.productImage[0] %>" width="55" class="img-thumbnail" alt="image-Product">
+                                                <% if (product.productImage && product.productImage.length > 0) { %>
+                                                    <img src="/<%= product.productImage[0] %>" width="55" class="img-thumbnail" alt="Product Image">
+                                                <% } else { %>
+                                                    <div class="text-muted">No Image Available</div>
+                                                <% } %>
                                             </td>
                                             <td class="border-bottom-0 align-middle">
                                                 <h6 class="fw-semibold mb-1">
@@ -100,21 +104,30 @@
                                                 </p>
                                             </td>
                                             <td class="border-bottom-0 align-middle">
-                                                <h6 class="">₹<%= product.totalPrice %>
-                                                </h6>
+                                                <h6 class="">₹<%= product.totalPrice %></h6>
                                             </td>
                                             <td class="border-bottom-0 align-middle">
-                                                <h6 class="">₹<%= product.totalDiscount %>
-                                                </h6>
+                                                <h6 class="">₹<%= product.totalDiscount %></h6>
                                             </td>
                                         </tr>
-                                        <% }); %>
+                                    <% }); %>
+                                    
                                 </tbody>
                             </table>
                         </div>
                     </div>
+               </div>
+                <!-- Total Orders and Amount -->
+    <div class="card mt-4">
+        <header class="card-header">
+            <h4 class="card-title">Total Orders and Amount</h4>
+        </header>
+        <div class="card-body">
+            <p>Total Orders: <%= orders[0] ? orders[0].totalOrders : 0 %></p>
+            <p>Total Amount: ₹ <%= orders[0] ? orders[0].totalAmount.toFixed(2) : '0.00' %></p>
         </div>
-    </section>
+    </div>
+           </section>
 
 
     <div class="pagination-area mt-30 mb-50">
