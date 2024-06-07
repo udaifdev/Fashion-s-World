@@ -112,7 +112,7 @@ const add_cart_post = async (req, res) => {
                 }],
                 Cart_total: quantity * discountPrice
             });
-            res.redirect('/cart');
+            res.redirect('/shop');
         } else {
             // Cart exists & check for product and stock
             const check_stock = product.stock.find(s => s.size === size);
@@ -151,7 +151,7 @@ const add_cart_post = async (req, res) => {
 
                 console.log('added new item to the cart & updating finished !!!!');
             }
-            res.redirect('/cart');
+            res.redirect('/shop');
         }
     } catch (error) {
         console.log("add cart post error-------------->  ", error);

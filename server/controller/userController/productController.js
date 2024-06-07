@@ -10,69 +10,82 @@ const favModel = require('../../model/FavModel');
 
 
 
-const shop = async (req,res) => {
+const shop = async (req, res) => {
     try {
         let products;
-        const perPage = 6
-        const id = req.session.userId
-        const categoryId = req.query.category ; 
-        const sortBy = req.query.sortBy
-        const search = req.query.search 
-        const page   = parseInt(req.query.page) || 1 ;
+        const perPage = 6;
+        const id = req.session.userId;
+
+        console.log('User ID: ', id);
+
+        const categoryId = req.query.category;
+        const sortBy = req.query.sortBy;
+        const search = req.query.search;
+        const page = parseInt(req.query.page) || 1;
 
         if (search) {
-            const searcRegex = new RegExp(search, 'i')
-            let searchCriteria = { name : searcRegex , status : true}
+            const searchRegex = new RegExp(search, 'i');
+            let searchCriteria = { name: searchRegex, status: true };
 
             if (req.session.filterCat) {
-                searchCriteria.category = new mongoose.Types.ObjectId(req.session.filterCat) ;
+                searchCriteria.category = new mongoose.Types.ObjectId(req.session.filterCat);
             }
 
             if (sortBy) {
-                products = await getProductsWitSorting(searchCriteria , sortBy)
+                products = await getProductsWitSorting(searchCriteria, sortBy);
             } else {
-                products = await productModel.find(searchCriteria).exec()
+                products = await productModel.find(searchCriteria).exec();
             }
-            
         } else {
-               if (sortBy) {
-                   let filter = {status : true}
-   
-                   if (req.session.filterCat) {
-                       filter.category = new mongoose.Types.ObjectId(req.session.filterCat);
-                   }
+            let filter = { status: true };
 
-                   products = await getProductsWitSorting(filter , sortBy)
+            if (req.session.filterCat) {
+                filter.category = new mongoose.Types.ObjectId(req.session.filterCat);
+            }
 
-               } else {
-                    if (categoryId) {
-                        products = await productModel.find({category : categoryId , status : true}).exec()
-                        req.session.filterCat = categoryId
-                    } else {
-                    delete req.session.filter;
-                    products = await productModel.find({status : true }).exec()
-                    }
-               }
-            } 
-          
-        const totalPage = Math.ceil(products.length / perPage)
-        const startIndex = (page - 1) * perPage
-        const endIndex   = page * perPage
-        const productPaginated = products.slice(startIndex , endIndex)
+            if (sortBy) {
+                products = await getProductsWitSorting(filter, sortBy);
+            } else if (categoryId) {
+                products = await productModel.find({ category: categoryId, status: true }).exec();
+                req.session.filterCat = categoryId;
+            } else {
+                delete req.session.filterCat;
+                products = await productModel.find({ status: true }).exec();
+            }
+        }
 
-        const categoryCounts = await  categoryCount();
-        const categories = await catgModel.find({status : true})
-        const itemCount = req.session.cartCount
-        const Cart_total = req.session.Cart_total
+        const totalPage = Math.ceil(products.length / perPage);
+        const startIndex = (page - 1) * perPage;
+        const endIndex = page * perPage;
+        const productPaginated = products.slice(startIndex, endIndex);
 
-        res.render('user/shop', { products : productPaginated , categories , categoryCounts ,
-                                  currentPage : page , totalPage , sortBy , categoryId , search , itemCount , Cart_total})
-    
+        const categoryCounts = await categoryCount();
+        const categories = await catgModel.find({ status: true });
+
+        // Fetch cart details
+        const cartProducts = await cartModel.findOne({ userId: id });
+
+        const itemCount = cartProducts ? cartProducts.items.length : 0;
+        const Cart_total = cartProducts ? cartProducts.Cart_total : 0;
+
+        res.render('user/shop', {
+            products: productPaginated,
+            categories,
+            categoryCounts,
+            currentPage: page,
+            totalPage,
+            sortBy,
+            categoryId,
+            search,
+            itemCount,
+            Cart_total
+        });
     } catch (error) {
-        console.log("shop errro undallo ------------------>>    " + error);
-        res.render('user/404Error')
+        console.log("Error in shop function: ", error);
+        res.render('user/404Error');
     }
-}
+};
+
 
 
 // sorting shop page
@@ -117,19 +130,16 @@ const getProductsWitSorting = async (filter,sortBy) => {
 
 // Category count function 
 const categoryCount = async (req,res) => {
-
     const aggregationPipline = [
         { $match : {status:true}},
         { $group : {_id : '$category',count: {$sum:1} } }
     ]
-
     const categoryCount = await productModel.aggregate(aggregationPipline)
     const categoryCountMap = { }
 
     categoryCount.forEach(count => {
         categoryCountMap[count._id] = count.count;
     })
-
     return categoryCountMap
 }
 

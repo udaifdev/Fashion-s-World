@@ -1,137 +1,137 @@
 <%-include('navbar')-%>
 
-<style>
-/* Hide default radio button */
-.radio-container input[type="radio"] {
-  display: none;
-}
+  <style>
+    /* Hide default radio button */
+    .radio-container input[type="radio"] {
+      display: none;
+    }
 
-/* Style for custom square radio button */
-.radio-container {
-  display: inline-block;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
+    /* Style for custom square radio button */
+    .radio-container {
+      display: inline-block;
+      position: relative;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
 
-.radio-container input[type="radio"] + .radio {
-  border: 2px solid #aaa;
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-  position: absolute;
-  cursor: pointer;
-}
+    .radio-container input[type="radio"]+.radio {
+      border: 2px solid #aaa;
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      position: absolute;
+      cursor: pointer;
+    }
 
-.radio-container input[type="radio"]:checked + .radio::before {
-  content: '';
-  width: 10px;
-  height: 10px;
-  display: block;
-  background: #ff0000;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+    .radio-container input[type="radio"]:checked+.radio::before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      display: block;
+      background: #ff0000;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-.form-check-input {
-  width: 20px;
-  height: 20px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: 2px solid rgb(56, 56, 56);
-  padding: 6px;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-left: 1px;
-}
+    .form-check-input {
+      width: 20px;
+      height: 20px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      border: 2px solid rgb(56, 56, 56);
+      padding: 6px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-left: 1px;
+    }
 
-a {
-  text-decoration: none;
-  color: white;
-}
+    a {
+      text-decoration: none;
+      color: white;
+    }
 
-.form-check-input:checked {
-  background-color: rgb(248, 25, 25);
-}
+    .form-check-input:checked {
+      background-color: rgb(248, 25, 25);
+    }
 
-.form-check-input:checked::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 20px;
-  border: solid rgb(212, 14, 14);
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
-}
+    .form-check-input:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 20px;
+      border: solid rgb(212, 14, 14);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
 
-.checkout__address-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
+    .checkout__address-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
 
-.checkout__address-option {
-  border: 2px solid #e2e2e2;
-  border-radius: 5px;
-  padding: 10px;
-  width: calc(50% - 15px); /* 2 per row with gap considered */
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  letter-spacing: 1px;
-  font-family: Arial, Helvetica, sans-serif;
-}
+    .checkout__address-option {
+      border: 2px solid #e2e2e2;
+      border-radius: 5px;
+      padding: 10px;
+      width: calc(50% - 15px);
+      /* 2 per row with gap considered */
+      box-sizing: border-box;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 1px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-.checkout__address-option:hover {
-  background-color: #f5f5f5;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  transform: translateY(-5px);
-}
+    .checkout__address-option:hover {
+      background-color: #f5f5f5;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      transform: translateY(-5px);
+    }
 
-.checkout__address-option.selected {
-  border-color: #333;
-  background-color: #f5f5f5;
-}
+    .checkout__address-option.selected {
+      border-color: #333;
+      background-color: #f5f5f5;
+    }
 
-.checkout__address-details {
-  margin-bottom: 5px;
-}
+    .checkout__address-details {
+      margin-bottom: 5px;
+    }
 
-.checkout__address-details p {
-  font-size: 16px;
-  margin-bottom: 3px;
-}
+    .checkout__address-details p {
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
 
-.site-btn {
-  display: block;
-  padding: 10px 20px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    .site-btn {
+      display: block;
+      padding: 10px 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-.checkout__address-option h4 {
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
+    .checkout__address-option h4 {
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-@media only screen and (max-width: 768px) {
-  .checkout__address-option {
-    width: 100%;
-  }
-}
-
-</style>
+    @media only screen and (max-width: 768px) {
+      .checkout__address-option {
+        width: 100%;
+      }
+    }
+  </style>
 
 
 
@@ -207,36 +207,53 @@ a {
           <div class="row">
 
             <div class="col-lg-8 col-md-6">
-    <h6 class="checkout__title">Choose Your Delivery Address</h6>
-    <button class="site-btn m-3">
-        <a class="p-2" href="/addAddress">Add Address</a>
-    </button>
-    <div class="checkout__address-options">
-        <% if (addresses && addresses.length > 0) { %>
-            <% addresses.forEach((address, index) => { %>
-                <div class="checkout__address-option p-4">
-                    <label for="address<%= index + 1 %>">
-                        <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>" value="<%= index %>" data-address-id="<%= address._id %>">
-                        <h4 class="mb-3 ml-4"><%= address.save_as %></h4>
+              <h6 class="checkout__title">Choose Your Delivery Address</h6>
+              <button class="site-btn m-3">
+                <a class="p-2" href="/addAddress">Add Address</a>
+              </button>
+              <div class="checkout__address-options">
+                <% if (addresses && addresses.length> 0) { %>
+                  <% addresses.forEach((address, index)=> { %>
+                    <div class="checkout__address-option p-4">
+                      <label for="address<%= index + 1 %>">
+                        <input class="form-check-input" type="radio" name="address" id="address<%= index + 1 %>"
+                          value="<%= index %>" data-address-id="<%= address._id %>">
+                        <h4 class="mb-3 ml-4">
+                          <%= address.save_as %>
+                        </h4>
                         <div class="checkout__address-details">
-                            <p><strong>Name:</strong> <%= address.name %></p>
-                            <p><strong>House/Flat No:</strong> <%= address.housename %></p>
-                            <p><strong>Street:</strong> <%= address.street %></p>
-                            <p><strong>City:</strong> <%= address.city %></p>
-                            <p><strong>Pin-code:</strong> <%= address.pincode %></p>
-                            <p><strong>State:</strong> <%= address.state %></p>
-                            <p><strong>Country:</strong> <%= address.country %></p>
+                          <p><strong>Name:</strong>
+                            <%= address.name %>
+                          </p>
+                          <p><strong>House/Flat No:</strong>
+                            <%= address.housename %>
+                          </p>
+                          <p><strong>Street:</strong>
+                            <%= address.street %>
+                          </p>
+                          <p><strong>City:</strong>
+                            <%= address.city %>
+                          </p>
+                          <p><strong>Pin-code:</strong>
+                            <%= address.pincode %>
+                          </p>
+                          <p><strong>State:</strong>
+                            <%= address.state %>
+                          </p>
+                          <p><strong>Country:</strong>
+                            <%= address.country %>
+                          </p>
                         </div>
-                    </label>
-                </div>
-            <% }) %>
-        <% } else { %>
-            <h4 class="p-3 mt-3">No addresses found.</h4>
-        <% } %>
-    </div>
-</div>
+                      </label>
+                    </div>
+                    <% }) %>
+                      <% } else { %>
+                        <h4 class="p-3 mt-3">No addresses found.</h4>
+                        <% } %>
+              </div>
+            </div>
 
-            
+
 
             <!-- ================================ Apply Coupon ========================================= -->
             <div class="col-lg-4 col-md-6 text-white">
@@ -554,8 +571,8 @@ a {
           description: "Test Transaction",
           image: "img/logo.png",
           order_id: orderId,
-          
-          handler: function (response) {            
+
+          handler: function (response) {
             alert(response.razorpay_payment_id);
             document.getElementById("amount").value = `${parseFloat(amount)}`;
             document.getElementById("orderform").method = "post";
@@ -628,8 +645,10 @@ a {
         console.log("Cash on Delivery selected //////////////////////////");
 
         const amt = document.getElementById("total").textContent.trim();
-        const amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
+        let amount = parseFloat(amt.replace(/[^0-9.-]/g, ''));
         console.log(" ejs check out amount =======>>>>>  ", amount);
+
+        
         if (amount > 1000) {
           Swal.fire({
             title: 'COD Not Available',
@@ -647,13 +666,14 @@ a {
           });
           return false;
         }
+
         document.getElementById("orderform").action = "/order";
         document.getElementById("orderform").method = "post";
         document.getElementById("orderform").submit();
         document.getElementById("total").innerText = `${amount}`;
         document.getElementById("amount").value = `${amount}`;
-
       }
+
 
 
       // =========================== Wallet ===================================

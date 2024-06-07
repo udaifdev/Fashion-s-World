@@ -82,7 +82,6 @@ const checkout = async (req, res) => {
     }
 }
 
-
 const wallet = async (req, res) => {
     console.log("reache wallet controller ---------->>");
     try {
@@ -208,7 +207,6 @@ const order_post = async (req, res) => {
         res.render('user/404Error')
     }
 }
-
 
 
 // Upi Part
