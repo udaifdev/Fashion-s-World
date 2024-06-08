@@ -264,7 +264,7 @@
                                     <!-- Order tracking items for pending status -->
                                     <div class="order-tracking-item completed ">
                                         <span class="is-complete"></span>
-                                        <p class="bg-success  rounded p-1 text-white font-weight-bold">
+                                        <p class="rounded p-1 text-white font-weight-bold" style="background-color: #3CB371;">
                                             <%= order.updated.toLocaleString('en-US', { year: 'numeric' , month: 'short'
                                                 , day: 'numeric' }) %>
                                                 <br>
@@ -291,7 +291,7 @@
                                         </div>
                                         <div class="order-tracking-item completed">
                                             <span class="is-complete"></span>
-                                            <p class="bg-success rounded p-1 text-white font-weight-bold">
+                                            <p class=" rounded p-1 text-white font-weight-bold" style="background-color: #3CB371;">
                                                 <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
                                                     month: 'short' , day: 'numeric' }) %><br>Processing
                                             </p>
@@ -316,7 +316,7 @@
                                             </div>
                                             <div class="order-tracking-item completed">
                                                 <span class="is-complete"></span>
-                                                <p class="bg-success rounded p-1 text-white">
+                                                <p class="rounded p-1 text-white" style="background-color: #3CB371;">
                                                     <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
                                                         month: 'short' , day: 'numeric' }) %><br>Shipped
                                                 </p>
@@ -341,7 +341,7 @@
                                                 </div>
                                                 <div class="order-tracking-item completed">
                                                     <span class="is-complete "></span>
-                                                    <p class="bg-success font-weight-bold rounded px-3 text-white">
+                                                    <p class="font-weight-bold rounded px-3 text-white" style="background-color: #3CB371;">
                                                         <%= order.updated.toLocaleString('en-US', { year: 'numeric' ,
                                                             month: 'short' , day: 'numeric' }) %><br>Delivered
                                                     </p>
@@ -395,14 +395,15 @@
             <div class="container">
 
                 <div class="text-center box mb-4"
-                    style="border: 1px solid rgb(85, 85, 85); padding: 10px; display: inline-block;">
+                    style="border: 2px solid rgb(0, 10, 0); padding: 10px; display: inline-block;">
                     <h5 class="text-dark font-weight-bold mt-1">Order ID: <span id="orderId">
                             <%= order.orderId %>
                         </span></h5>
-                    <p class="text-dark mt-1">Delivery Address:- <br>
-                        <%= order.address[0].save_as %>, <br>
-                            <%= order.address[0].housename %>, <%= order.address[0].city %>, <%=
-                                        order.address[0].pincode %>
+                    <p class="text-dark mt-1"> <span style="text-decoration: underline; font-weight: 900;">Delivery Address:</span><br>
+                        SAVE_AS :  <%= order.address[0].save_as %>, <br>
+                          HOUSE : <%= order.address[0].housename %>, <br>
+                          CITY : <%= order.address[0].city %>, <br> 
+                          PIN : <%=  order.address[0].pincode %>
                     </p>
                 </div>
 
@@ -411,7 +412,7 @@
                 <div class="table-responsive">
                     <table class="table">
                         <!-- Table headers -->
-                        <thead style="background-color: rgb(143, 35, 143); color: white;">
+                        <thead style="background-color:#1a5e26	; color: white;">
                             <tr>
                                 <th>Product Name</th>
                                 <th>Size</th>

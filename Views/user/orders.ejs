@@ -42,7 +42,10 @@
   background-color: rgb(233, 49, 49);
 }
 .order-details-button {
-  background-color: rgb(40, 177, 74);
+  background-color: #2E8B57	;
+}
+.order-details-button:hover {
+  background-color: #3CB371;
 }
 .cancel-product-button {
   background-color: rgb(190, 75, 75);
@@ -150,7 +153,7 @@
                 <p>Size: <%= item.size ? item.size : 'N/A' %></p>
                 
                 <% if (orderItem.status !== 'Cancelled' && orderItem.status !== 'Delivered' && orderItem.status !== 'returned') { %>
-                  <a onclick="confirmCancelProduct('<%= orderItem._id %>', '<%= item.productId._id %>')" class="btn cancel-product-button">
+                  <a onclick="confirmCancelProduct('<%= orderItem._id %>', '<%= item.productId._id %>')" class="btn cancel-product-button text-white">
                     Cancel Product
                   </a>
                 <% } %>
