@@ -64,7 +64,7 @@ userRouter.get('/wallet', Logged, profileController.wallet)
 
 
 userRouter.get('/cart', Logged, cartController.view_Cart)
-userRouter.post('/add-to-cart/:id', Logged, cartController.add_cart_post)
+userRouter.post('/add-to-cart/:id', Logged, cartController.add_cart_post);
 userRouter.get('/product-remove-cart/:id/:size', Logged, cartController.Product_Remove)
 userRouter.post('/updateCartQuantity/:productId/:size', Logged, cartController.updateQtys)
 

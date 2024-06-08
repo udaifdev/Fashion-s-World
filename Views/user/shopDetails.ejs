@@ -512,34 +512,47 @@
         });
     </script>
 
+    
+<script>
+    document.getElementById("addToCartForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        if (addToCart()) {
+            // If size is selected and form is valid, show SweetAlert and handle redirection
+            Swal.fire({
+                icon: 'success',
+                title: 'Product added to cart',
+                showConfirmButton: false,
+                timer: 3000 // Display for 3 seconds
+            });
 
-    <script>
-        document.getElementById("addToCartForm").addEventListener("submit", function (event) {
-            if (!addToCart()) {
-                event.preventDefault();
-            }
-        });
-        function addToCart() {
-            var sizes = document.getElementsByName("size");
-            var sizeSelected = false;
-            for (var i = 0; i < sizes.length; i++) {
-                if (sizes[i].checked) {
-                    sizeSelected = true;
-                    break;
-                }
-            }
-
-            if (!sizeSelected) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please select a size.',
-                });
-                return false;
-            }
-            return true;
+            setTimeout(() => {
+                document.getElementById("addToCartForm").submit(); // Submit the form after 3 seconds
+            }, 2000);
         }
-    </script>
+    });
+
+    function addToCart() {
+        var sizes = document.getElementsByName("size");
+        var sizeSelected = false;
+        for (var i = 0; i < sizes.length; i++) {
+            if (sizes[i].checked) {
+                sizeSelected = true;
+                break;
+            }
+        }
+
+        if (!sizeSelected) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please select a size.',
+            });
+            return false;
+        }
+        return true;
+    }
+</script>
+
 
 
 
