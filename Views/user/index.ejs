@@ -113,7 +113,7 @@
 
 
 
-    <!-- Hero Section Begin -->
+    <!-- Product Section Begin -->
     <section class="product spad">
         <div class="container">
             <div class="row">
@@ -122,86 +122,106 @@
                 </div>
             </div>
             <div class="row product__filter">
-                <% categories.forEach(category => { %>
-                    <% const categoryProduct = products.find(product => product.category.toString() === category._id.toString()); %>
-                    <% if (categoryProduct && categoryProduct.image.length > 0) { %>
-                        <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="<%= categoryProduct.image[0] %>">
-                                    <a href="/shop?category=<%= category._id %>">
-                                        <img src="<%= categoryProduct.image[0] %>" alt="<%= category.name %> Image" class="img-fluid">
-                                        <span class="label">New</span>
-                                    </a>
-                                </div>
-                                <div class="product__item__text">
-                                    <h3><%= category.name %></h3>
-                                    <p><%= category.description %></p>
-                                    <a href="/shop?category=<%= category._id %>" class="add-cart">+ View Collection</a>
-                                    <div class="rating">
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                        <i class="fa fa-star-o"></i>
+                <% categories.filter(category=> category.status !== false).forEach(category => { %>
+                    <% const categoryProduct=products.find(product=> product.category.toString() ===
+                        category._id.toString()); %>
+                        <% if (categoryProduct && categoryProduct.image.length> 0) { %>
+                            <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg">
+                                        <a href="/shop?category=<%= category._id %>">
+                                            <img src="<%= categoryProduct.image[0] %>" alt="-- -- images"
+                                                class="img-fluid">
+                                            <span class="label">New</span>
+                                        </a>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h3>
+                                            <%= category.name %>
+                                        </h3>
+                                        <p>
+                                            <%= category.description %>
+                                        </p>
+                                        <a href="/shop?category=<%= category._id %>" class="add-cart">+ View
+                                            Collection</a>
+                                        <div class="rating">
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <% } %>
-                <% }); %>
+                            <% } %>
+                                <% }); %>
             </div>
         </div>
     </section>
-    <!-- Hero Section End -->
+    <!-- Product Section End -->
+
+
+    </div>
+    </div>
+    </section>
+    <!-- Product Section End -->
 
 
 
     <!-- Product Section Begin -->
-<section class="product spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1 class="section-title uppercase">Our Collections</h1>
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="section-title uppercase">Our Collections</h1>
+                </div>
             </div>
-        </div>
-        <div class="row product__filter">
-            <% categories.filter(category => category.status !== false).forEach(category => { %>
-                <% const categoryProduct = products.find(product => product.category.toString() === category._id.toString()); %>
-                <% if (categoryProduct && categoryProduct.image.length > 0) { %>
-                    <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg">
-                               <a href="/shop?category=<%= category._id %>">
-                                 <img src="<%= categoryProduct.image[0] %>"  alt="-- -- images" class="img-fluid">
-                                <span class="label">New</span>
-                            </a>
-                            </div>
-                            <div class="product__item__text">
-                                <h3><%= category.name %></h3>
-                                <p><%= category.description %></p>
-                                <a href="/shop?category=<%= category._id %>" class="add-cart">+ View Collection</a>
-                                <div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
+            <div class="row product__filter">
+                <% categories.filter(category=> category.status !== false).forEach(category => { %>
+                    <% const categoryProduct=products.find(product=> product.category.toString() ===
+                        category._id.toString()); %>
+                        <% if (categoryProduct && categoryProduct.image.length> 0) { %>
+                            <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg">
+                                        <a href="/shop?category=<%= category._id %>">
+                                            <img src="<%= categoryProduct.image[0] %>" alt="-- -- images"
+                                                class="img-fluid">
+                                            <span class="label">New</span>
+                                        </a>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <h3>
+                                            <%= category.name %>
+                                        </h3>
+                                        <p>
+                                            <%= category.description %>
+                                        </p>
+                                        <a href="/shop?category=<%= category._id %>" class="add-cart">+ View
+                                            Collection</a>
+                                        <div class="rating">
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                <% } %>
-            <% }); %>
+                            <% } %>
+                                <% }); %>
+            </div>
         </div>
-    </div>
-</section>
-<!-- Product Section End -->
+    </section>
+    <!-- Product Section End -->
 
-            
-        </div>
+
     </div>
-</section>
-<!-- Product Section End -->
+    </div>
+    </section>
+    <!-- Product Section End -->
 
 
 
@@ -327,64 +347,64 @@
     </section>
     <!-- Latest Blog Section End -->
 
-   <!-- Footer Section Begin -->
-   <footer class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="footer__about">
-                    <div class="footer__logo font-weight-bold" style="font-size: xx-large; letter-spacing: 1px;">
-                        <a href="/"><img src="" alt="">Fashion World</a>
+    <!-- Footer Section Begin -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__logo font-weight-bold" style="font-size: xx-large; letter-spacing: 1px;">
+                            <a href="/"><img src="" alt="">Fashion World</a>
+                        </div>
+                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <a href="/shop"><img src="img/payment.png" alt=""></a>
                     </div>
-                    <p>The customer is at the heart of our unique business model, which includes design.</p>
-                    <a href="/shop"><img src="img/payment.png" alt=""></a>
+                </div>
+                <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="/shop">Clothing Store</a></li>
+                            <li><a href="/shop">Trending Shoes</a></li>
+                            <li><a href="/shop">Accessories</a></li>
+                            <li><a href="/shop">Sale</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>Shopping</h6>
+                        <ul>
+                            <li><a href="/shop">Contact Us</a></li>
+                            <li><a href="/shop">Payment Methods</a></li>
+                            <li><a href="/shop">Delivary</a></li>
+                            <li><a href="/shop">Return & Exchanges</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
+                    <div class="footer__widget">
+                        <h6>NewLetter</h6>
+                        <div class="footer__newslatter">
+                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <form action="#">
+                                <input type="text" placeholder="Your email">
+                                <button type="submit"><span class="icon_mail_alt"></span></button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                <div class="footer__widget">
-                    <h6>Shopping</h6>
-                    <ul>
-                        <li><a href="/shop">Clothing Store</a></li>
-                        <li><a href="/shop">Trending Shoes</a></li>
-                        <li><a href="/shop">Accessories</a></li>
-                        <li><a href="/shop">Sale</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-3 col-sm-6">
-                <div class="footer__widget">
-                    <h6>Shopping</h6>
-                    <ul>
-                        <li><a href="/shop">Contact Us</a></li>
-                        <li><a href="/shop">Payment Methods</a></li>
-                        <li><a href="/shop">Delivary</a></li>
-                        <li><a href="/shop">Return & Exchanges</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-3 offset-lg-1 col-md-6 col-sm-6">
-                <div class="footer__widget">
-                    <h6>NewLetter</h6>
-                    <div class="footer__newslatter">
-                        <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                        <form action="#">
-                            <input type="text" placeholder="Your email">
-                            <button type="submit"><span class="icon_mail_alt"></span></button>
-                        </form>
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="footer__copyright__text">
+                        <!-- you can give your own instas link or snap or youtube -->
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="footer__copyright__text">
-                    <!-- you can give your own instas link or snap or youtube -->
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
+    </footer>
+    <!-- Footer Section End -->
 
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
