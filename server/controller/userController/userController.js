@@ -211,6 +211,7 @@ const index = async (req, res) => {
         const id = req.session.userId;
         const products = await productModel.find().limit(9);
 
+        // Assuming req.user is correctly populated
         if (req.user) {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
@@ -221,8 +222,6 @@ const index = async (req, res) => {
             { $unwind: '$items' },
             { $group: { _id: null, itemCount: { $sum: 1 } } }
         ]);
-
-        console.log(result, '  <---------------- ');
 
         if (result.length > 0) {
             const itemCount = result[0].itemCount;
@@ -240,6 +239,7 @@ const index = async (req, res) => {
 
         req.session.Cart_total = Cart_total;
         const itemCount = req.session.cartCount;
+        
         res.render('user/index', { products, itemCount, Cart_total, categories });
     } catch (error) {
         console.log("index error: " + error);
