@@ -164,48 +164,50 @@
 
 
 
-    <!-- Product Section Begin -->
-    <!-- Product Section -->
-    <section class="product spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="section-title uppercase">Our Collections</h1>
-                </div>
+  <!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="section-title uppercase">Our Collections</h1>
             </div>
-            <div class="row product__filter">
-                <% categories.filter(category => category.status !== false).forEach(category => { %>
-                    <% const categoryProduct = products.find(product => product.category.toString() === category._id.toString()); %>
-                    <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg">
+        </div>
+        <div class="row product__filter">
+            <% categories.filter(category => category.status !== false).forEach(category => { %>
+                <% const categoryProduct = products.find(product => product.category.toString() === category._id.toString()); %>
+                <div class="col-lg-3 col-md-6 col-sm-6 mt-4" data-aos="fade" data-aos-delay="">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg">
+                            <a href="/shop?category=<%= category._id %>">
                                 <% if (categoryProduct && categoryProduct.image.length > 0) { %>
                                     <img src="<%= categoryProduct.image[0] %>" alt="-- -- images" class="img-fluid">
                                     <span class="label">New</span>
                                 <% } else { %>
-                                    <img src="/public/img/blog/blog-2.jpg" alt="No image available" class="img-fluid">
+                                    <img src="path/to/default/image.jpg" alt="No image available" class="img-fluid">
                                 <% } %>
-                            </div>
-                            <div class="product__item__text">
-                                <h3><%= category.name %></h3>
-                                <p><%= category.description %></p>
-                                <a href="/shop?category=<%= category._id %>" class="add-cart">+ View Collection</a>
-                                <div class="rating">
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                    <i class="fa fa-star-o"></i>
-                                </div>
+                            </a>
+                        </div>
+                        <div class="product__item__text">
+                            <h3><%= category.name %></h3>
+                            <p><%= category.description %></p>
+                            <a href="/shop?category=<%= category._id %>" class="add-cart">+ View Collection</a>
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
                             </div>
                         </div>
                     </div>
-                <% }); %>
-            </div>
+                </div>
+            <% }); %>
         </div>
-    </section>
-    <!-- Product Section End -->
-    
+    </div>
+</section>
+<!-- Product Section End -->
+
+
 
 
     <!-- Categories Section Begin -->

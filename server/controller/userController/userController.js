@@ -207,45 +207,47 @@ const resendotp = async (req, res) => {
 // Home page 
 const index = async (req, res) => {
     try {
-        const categories = await catgModel.find()
-        const id = req.session.userId
-        const products = await productModel.find().limit(9)
+        const categories = await catgModel.find();
+        const id = req.session.userId;
+        const products = await productModel.find().limit(9);
+
         if (req.user) {
             req.session.isAuth = true;
             req.session.userId = req.user._id;
         }
+
         const result = await cartModel.aggregate([
             { $match: { userId: new mongoose.Types.ObjectId(id) } },
             { $unwind: '$items' },
             { $group: { _id: null, itemCount: { $sum: 1 } } }
-        ])
+        ]);
 
         console.log(result, '  <---------------- ');
 
         if (result.length > 0) {
             const itemCount = result[0].itemCount;
-            req.session.cartCount = itemCount
+            req.session.cartCount = itemCount;
         } else {
-            console.log('Cart not fount for the user');
+            console.log('Cart not found for the user');
         }
 
-        // Find cart items to calculate total
         const cartItems = await cartModel.findOne({ userId: id });
 
-        // Calculate total cart value
         let Cart_total = 0;
         if (cartItems) {
             Cart_total = cartItems.items.reduce((total, item) => total + item.price, 0);
         }
 
         req.session.Cart_total = Cart_total;
-        const itemCount = req.session.cartCount
-        res.render('user/index', { products, itemCount, Cart_total , categories })
+        const itemCount = req.session.cartCount;
+        res.render('user/index', { products, itemCount, Cart_total, categories });
     } catch (error) {
-        console.log("index error undallo >>>>" + error);
-        res.render('user/404Error')
+        console.log("index error: " + error);
+        res.render('user/404Error');
     }
-}
+};
+
+
 
 
 
