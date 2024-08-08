@@ -88,13 +88,13 @@ const signupPost = async (req, res) => {
     try {
         const { username, email, mobile: phone, password, confirm_password: cpassword } = req.body;
         const user = await userModel.findOne({ email });
- 
+        
         if (!user) {
             if (password !== cpassword) {
                 req.flash('passworderror', "Passwords do not match, please try again.");
                 return res.redirect('/signup');
             }
-
+            
             const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = {
                 username,
@@ -102,13 +102,14 @@ const signupPost = async (req, res) => {
                 phone,
                 password: hashedPassword
             };
-
+            
             req.session.user = newUser;
             req.session.signup = true;
 
             const otp = generatorotp();
             const currTime = Date.now();
             const expTime = currTime + 60 * 1000;
+
 
             await otpModel.updateOne({ email }, { $set: { email, otp, expiry: new Date(expTime) } }, { upsert: true });
             await sendmail(email, otp);
