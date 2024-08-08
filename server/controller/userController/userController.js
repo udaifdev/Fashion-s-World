@@ -14,11 +14,6 @@ const cartModel = require("../../model/cartModel")
 require('dotenv').config();
 
 
-// Environment variables
-const Email = process.env.Email;
-const pass = process.env.pass
-
-
 // OTP generator function
 const generatorotp = () => {
     try {
@@ -42,12 +37,9 @@ const sendmail = async (email, otp) => {
     try {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
             auth: {
-                user: Email,
-                pass: pass,
+                user: process.env.Email,
+                pass: process.env.pass
             },
         });
 
