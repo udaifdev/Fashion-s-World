@@ -200,7 +200,7 @@ const resendotp = async (req, res) => {
 // Home page 
 const index = async (req, res) => {
     try {
-        const categories = await catgModel.find();
+        const categories = await catgModel.find().limit(4)
         const id = req.session.userId;
         const products = await productModel.find().limit(9);
 
